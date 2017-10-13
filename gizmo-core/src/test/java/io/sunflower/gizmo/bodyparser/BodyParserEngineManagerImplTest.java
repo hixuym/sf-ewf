@@ -43,7 +43,7 @@ public class BodyParserEngineManagerImplTest {
     List<String> types = Lists.newArrayList(createBodyParserEngineManager().getContentTypes());
     Collections.sort(types);
     assertThat(types.toString(),
-        equalTo("[application/json, application/x-www-form-urlencoded, application/xml]"));
+        equalTo("[application/json, application/x-www-form-urlencoded]"));
   }
 
   private BodyParserEngineManager createBodyParserEngineManager(final Class<?>... toBind) {
@@ -63,7 +63,6 @@ public class BodyParserEngineManagerImplTest {
 
         bind(BodyParserEnginePost.class);
         bind(BodyParserEngineJson.class);
-        bind(BodyParserEngineXml.class);
 
         bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
 

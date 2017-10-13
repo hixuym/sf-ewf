@@ -29,12 +29,10 @@ import io.sunflower.gizmo.Router;
 import io.sunflower.gizmo.RouterImpl;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineJson;
 import io.sunflower.gizmo.bodyparser.BodyParserEnginePost;
-import io.sunflower.gizmo.bodyparser.BodyParserEngineXml;
 import io.sunflower.gizmo.params.ParamParser;
 import io.sunflower.gizmo.template.TemplateEngineJson;
 import io.sunflower.gizmo.template.TemplateEngineJsonP;
 import io.sunflower.gizmo.template.TemplateEngineText;
-import io.sunflower.gizmo.template.TemplateEngineXml;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.handler.HandlerModule;
@@ -57,12 +55,10 @@ public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>
         bind(Router.class).to(RouterImpl.class).in(Singleton.class);
 
         bind(BodyParserEnginePost.class);
-        bind(BodyParserEngineXml.class);
         bind(BodyParserEngineJson.class);
 
         bind(TemplateEngineJson.class);
         bind(TemplateEngineJsonP.class);
-        bind(TemplateEngineXml.class);
         bind(TemplateEngineText.class);
 
         bind(Context.class).to(UndertowContext.class);

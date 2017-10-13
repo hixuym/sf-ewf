@@ -91,7 +91,7 @@ public class TemplateEngineManagerImplTest {
     List<String> types = Lists.newArrayList(createTemplateEngineManager().getContentTypes());
     Collections.sort(types);
     assertThat(types.toString(),
-        equalTo("[application/javascript, application/json, application/xml, text/plain]"));
+        equalTo("[application/javascript, application/json, text/plain]"));
   }
 
   @Test
@@ -171,7 +171,6 @@ public class TemplateEngineManagerImplTest {
         bind(TemplateEngineText.class);
         bind(TemplateEngineJson.class);
         bind(TemplateEngineJsonP.class);
-        bind(TemplateEngineXml.class);
 
         bind(GizmoConfiguration.class).toInstance(new GizmoConfiguration());
 
