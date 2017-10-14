@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package io.sunflower.gizmo.utils;
+package io.sunflower.gizmo.session.utils;
 
-import static io.sunflower.gizmo.utils.CookieDataCodec.decode;
-import static io.sunflower.gizmo.utils.CookieDataCodec.encode;
+import static io.sunflower.gizmo.session.utils.CookieDataCodec.decode;
+import static io.sunflower.gizmo.session.utils.CookieDataCodec.encode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 

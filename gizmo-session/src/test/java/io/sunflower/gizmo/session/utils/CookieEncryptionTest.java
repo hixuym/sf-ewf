@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.gizmo.utils;
+package io.sunflower.gizmo.session.utils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import io.sunflower.gizmo.GizmoConfiguration;
+import io.sunflower.gizmo.utils.SecretGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

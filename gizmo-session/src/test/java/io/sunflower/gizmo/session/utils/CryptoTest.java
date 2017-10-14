@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.gizmo.utils;
+package io.sunflower.gizmo.session.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;

@@ -83,9 +83,7 @@ public class AbstractContextTest {
   public void setUp() {
     abstractContext = new AbstractContextImpl(
         bodyParserEngineManager,
-        flashCookie,
         configuration,
-        sessionCookie,
         validation,
         null,
         new ParamParsers(new HashSet<>()));
@@ -298,8 +296,8 @@ public class AbstractContextTest {
     // abstract finalizeHeaders does not return anything
     assertThat(streams, is(nullValue()));
 
-    verify(flashCookie, times(1)).save(context);
-    verify(sessionCookie, times(1)).save(context);
+//    verify(flashCookie, times(1)).save(context);
+//    verify(sessionCookie, times(1)).save(context);
     verify(context, times(1)).addCookie(cookie);
   }
 

@@ -25,9 +25,9 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.utils.Clock;
-import io.sunflower.gizmo.utils.CookieDataCodec;
-import io.sunflower.gizmo.utils.CookieEncryption;
-import io.sunflower.gizmo.utils.Crypto;
+import io.sunflower.gizmo.session.utils.CookieDataCodec;
+import io.sunflower.gizmo.session.utils.CookieEncryption;
+import io.sunflower.gizmo.session.utils.Crypto;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import io.sunflower.util.Duration;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class SessionImpl implements Session {
   private final Boolean sessionTransferredOverHttpsOnly;
   private final Boolean sessionHttpOnly;
   private final String applicationCookieDomain;
-  private final Map<String, String> data = new HashMap<String, String>();
+  private final Map<String, String> data = new HashMap<>();
 
   /**
    * Has cookie been changed => only send new cookie stuff has been changed
@@ -67,6 +67,7 @@ public class SessionImpl implements Session {
 
     // read configuration stuff:
     Duration sessionExpireTimeInSeconds = configuration.getSessionExpireTime();
+
     if (sessionExpireTimeInSeconds != null) {
       this.defaultSessionExpireTimeInMs = sessionExpireTimeInSeconds.toMilliseconds();
     } else {
@@ -76,15 +77,12 @@ public class SessionImpl implements Session {
     this.sessionExpireTimeInMs = defaultSessionExpireTimeInMs;
 
     this.sessionSendOnlyIfChanged = configuration.isSessionSendOnlyIfChanged();
-    this.sessionTransferredOverHttpsOnly = configuration
-        .isSessionTransferredOverHttpsOnly();
+    this.sessionTransferredOverHttpsOnly = configuration.isSessionTransferredOverHttpsOnly();
     this.sessionHttpOnly = configuration.isSessionHttpOnly();
 
-    this.applicationCookieDomain = configuration
-        .getCookieDomain();
+    this.applicationCookieDomain = configuration.getCookieDomain();
 
-    String applicationCookiePrefix = configuration
-        .getCookiePrefix();
+    String applicationCookiePrefix = configuration.getCookiePrefix();
     this.sessionCookieName = applicationCookiePrefix + GizmoConstant.SESSION_SUFFIX;
   }
 
@@ -208,8 +206,7 @@ public class SessionImpl implements Session {
 
     // Don't save the cookie nothing has changed, and if we're not expiring or
     // we are expiring but we're only updating if the session changes
-    if (!sessionDataHasBeenChanged
-        && (sessionExpireTimeInMs == null || sessionSendOnlyIfChanged)) {
+    if (!sessionDataHasBeenChanged && (sessionExpireTimeInMs == null || sessionSendOnlyIfChanged)) {
       // Nothing changed and no cookie-expire, consequently send nothing
       // back.
       return;
@@ -243,9 +240,7 @@ public class SessionImpl implements Session {
       String sign = crypto.signHmacSha1(sessionData);
 
       Cookie.Builder cookie = createApplicationCookie(
-          sessionCookieName,
-          sign + "-" + sessionData,
-          context);
+          sessionCookieName, sign + "-" + sessionData, context);
 
       if (sessionExpireTimeInMs != null) {
         cookie.setMaxAge((int) (sessionExpireTimeInMs / 1000L));

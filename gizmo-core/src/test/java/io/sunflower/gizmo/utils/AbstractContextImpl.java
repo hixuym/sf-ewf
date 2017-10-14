@@ -36,10 +36,10 @@ import io.sunflower.gizmo.validation.Validation;
  */
 public class AbstractContextImpl extends AbstractContext {
 
-  public AbstractContextImpl(BodyParserEngineManager bodyParserEngineManager, FlashScope flashScope,
-      GizmoConfiguration configuration, Session session, Validation validation, Injector injector,
+  public AbstractContextImpl(BodyParserEngineManager bodyParserEngineManager,
+      GizmoConfiguration configuration, Validation validation, Injector injector,
       ParamParsers paramParsers) {
-    super(bodyParserEngineManager, flashScope, configuration, session, validation, injector,
+    super(bodyParserEngineManager, configuration, validation, injector,
         paramParsers);
   }
 

@@ -20,15 +20,18 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.ImplementedBy;
 import io.sunflower.gizmo.bodyparser.BodyParserEngine;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineJson;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
+import io.sunflower.gizmo.server.UndertowContext;
 import io.sunflower.gizmo.session.FlashScope;
 import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.uploads.FileItem;
 import io.sunflower.gizmo.utils.ResponseStreams;
 import io.sunflower.gizmo.validation.Validation;
 
+@ImplementedBy(UndertowContext.class)
 public interface Context {
 
   /**

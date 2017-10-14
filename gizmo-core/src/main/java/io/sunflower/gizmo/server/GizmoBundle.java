@@ -60,8 +60,6 @@ public class GizmoBundle<T extends Configuration> implements ConfiguredBundle<T>
         bind(TemplateEngineJson.class);
         bind(TemplateEngineJsonP.class);
         bind(TemplateEngineText.class);
-
-        bind(Context.class).to(UndertowContext.class);
       }
     });
 

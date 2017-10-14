@@ -25,8 +25,6 @@ import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
 import io.sunflower.gizmo.bodyparser.BodyParserEngineManager;
 import io.sunflower.gizmo.params.ParamParsers;
-import io.sunflower.gizmo.session.FlashScope;
-import io.sunflower.gizmo.session.Session;
 import io.sunflower.gizmo.uploads.FileItem;
 import io.sunflower.gizmo.uploads.ParameterFileItem;
 import io.sunflower.gizmo.utils.AbstractContext;
@@ -53,18 +51,14 @@ public class UndertowContext extends AbstractContext {
   @Inject
   public UndertowContext(
       BodyParserEngineManager bodyParserEngineManager,
-      FlashScope flashScope,
       GizmoConfiguration configuration,
-      Session session,
       Validation validation,
       Injector injector,
       ParamParsers paramParsers) {
 
     super(
         bodyParserEngineManager,
-        flashScope,
         configuration,
-        session,
         validation,
         injector,
         paramParsers);
@@ -303,8 +297,7 @@ public class UndertowContext extends AbstractContext {
 
     // copy headers
     for (Map.Entry<String, String> header : result.getHeaders().entrySet()) {
-      exchange.getResponseHeaders()
-          .add(new HttpString(header.getKey()), header.getValue());
+      exchange.getResponseHeaders().add(new HttpString(header.getKey()), header.getValue());
     }
 
     // charset in use

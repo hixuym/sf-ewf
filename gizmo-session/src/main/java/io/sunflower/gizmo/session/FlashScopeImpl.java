@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.utils.CookieDataCodec;
+import io.sunflower.gizmo.session.utils.CookieDataCodec;
 import io.sunflower.gizmo.utils.GizmoConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,15 +40,13 @@ public class FlashScopeImpl implements FlashScope {
 
   @Inject
   public FlashScopeImpl(GizmoConfiguration configuration) {
-    this.applicationCookiePrefix = configuration
-        .getCookiePrefix();
+    this.applicationCookiePrefix = configuration.getCookiePrefix();
   }
 
   @Override
   public void init(Context context) {
     // get flash cookie:
-    Cookie flashCookie = context.getCookie(applicationCookiePrefix
-        + GizmoConstant.FLASH_SUFFIX);
+    Cookie flashCookie = context.getCookie(applicationCookiePrefix + GizmoConstant.FLASH_SUFFIX);
 
     if (flashCookie != null) {
       try {
