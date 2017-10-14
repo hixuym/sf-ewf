@@ -33,7 +33,7 @@
     <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
     <maven.site.deploy.skip>true</maven.site.deploy.skip>
     <junit.version>4.12</junit.version>
-    <sunflower.version>1.0.0-SNAPSHOT</sunflower.version>
+    <sunflower.version>1.0.0</sunflower.version>
   </properties>
 
   <modules>
@@ -53,21 +53,20 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/hixuym/sunflower/gizmo</url>
-    <connection>scm:git:file://localhost/Volumes/DT/git-repos/sf-gizmo.git</connection>
-    <developerConnection>scm:git:file://localhost/Volumes/DT/git-repos/sf-gizmo.git
-    </developerConnection>
+    <url>https://github.com/hixuym/sunflower-gizmo</url>
+    <connection>scm:git:git@github.com:hixuym/sunflower-gizmo.git</connection>
+    <developerConnection>scm:git:git@github.com:hixuym/sunflower-gizmo.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/hixuym/sunflower/gizmo/issues/</url>
+    <url>https://github.com/hixuym/sunflower-gizmo/issues/</url>
   </issueManagement>
 
   <ciManagement>
     <system>Travis CI</system>
-    <url>https://travis-ci.org/sunflower/sunflower/gizmo</url>
+    <url>https://travis-ci.org/sunflower/sunflower-gizmo</url>
   </ciManagement>
 
   <mailingLists>
