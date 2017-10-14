@@ -53,14 +53,18 @@ public abstract class AbstractWebSocketResource extends AbstractWebSocketHandler
 
   public AbstractWebSocketResource() {
     RequestUpgradeStrategy requestUpgradeStrategy = new DefaultRequestUpgradeStrategy(sessions);
-    handshakeHandler = new DefaultHandshakeHandler(requestUpgradeStrategy);
+    this.handshakeHandler = new DefaultHandshakeHandler(requestUpgradeStrategy);
+  }
+
+  public AbstractWebSocketResource(HandshakeHandler handshakeHandler) {
+    this.handshakeHandler = handshakeHandler;
   }
 
   protected void addHandshakeInterceptor(HandshakeInterceptor interceptor) {
     interceptors.add(interceptor);
   }
 
-  public final Result handshake(Context context) {
+  public Result handshake(Context context) {
 
     WebSocketHandler handler = this;
 

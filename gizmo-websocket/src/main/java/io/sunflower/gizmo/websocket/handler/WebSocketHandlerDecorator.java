@@ -15,6 +15,8 @@
 
 package io.sunflower.gizmo.websocket.handler;
 
+import java.io.IOException;
+
 import com.google.common.base.Preconditions;
 import io.sunflower.gizmo.websocket.CloseStatus;
 import io.sunflower.gizmo.websocket.WebSocketHandler;
@@ -63,24 +65,23 @@ public class WebSocketHandlerDecorator implements WebSocketHandler {
   }
 
   @Override
-  public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+  public void afterConnectionEstablished(WebSocketSession session) {
     this.delegate.afterConnectionEstablished(session);
   }
 
   @Override
   public void handleMessage(WebSocketSession session, WebSocketMessage<?> message)
-      throws Exception {
+      throws IOException {
     this.delegate.handleMessage(session, message);
   }
 
   @Override
-  public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+  public void handleTransportError(WebSocketSession session, Throwable exception) {
     this.delegate.handleTransportError(session, exception);
   }
 
   @Override
-  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus)
-      throws Exception {
+  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
     this.delegate.afterConnectionClosed(session, closeStatus);
   }
 

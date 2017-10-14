@@ -107,23 +107,20 @@ public class DefaultRequestUpgradeStrategy implements RequestUpgradeStrategy {
 
       final Handshake selected = handshaker;
 
-      exchange.upgradeChannel(new HttpUpgradeListener() {
-        @Override
-        public void handleUpgrade(StreamConnection streamConnection, HttpServerExchange exchange) {
-          WebSocketChannel channel = selected
-              .createChannel(facade, streamConnection, facade.getBufferPool());
+      exchange.upgradeChannel((streamConnection, exchange1) -> {
+        WebSocketChannel channel = selected
+            .createChannel(facade, streamConnection, facade.getBufferPool());
 
-          peerConnections.add(channel);
+        peerConnections.add(channel);
 
-          WebSocketSession session = new DefaultWebSocketSession(
-              attributes, selectedProtocol, selectedExtensions, channel, context);
+        WebSocketSession session = new DefaultWebSocketSession(
+            attributes, selectedProtocol, selectedExtensions, channel, context);
 
-          sessions.add(session);
+        sessions.add(session);
 
-          wsHandler.afterConnectionEstablished(session);
-          channel.getReceiveSetter().set(new DefaultWebSocketReceiveListener(session, wsHandler));
-          channel.resumeReceives();
-        }
+        wsHandler.afterConnectionEstablished(session);
+        channel.getReceiveSetter().set(new DefaultWebSocketReceiveListener(session, wsHandler));
+        channel.resumeReceives();
       });
 
       handshaker.handshake(facade);

@@ -120,6 +120,15 @@ public class RouterImpl implements Router {
   }
 
   @Override
+  public RouteBuilder WS() {
+
+    RouteBuilderImpl routeBuilder = routeBuilderImplProvider.get().WS();
+    allRouteBuilders.add(routeBuilder);
+
+    return routeBuilder;
+  }
+
+  @Override
   public RouteBuilder POST() {
     RouteBuilderImpl routeBuilder = routeBuilderImplProvider.get().POST();
     allRouteBuilders.add(routeBuilder);

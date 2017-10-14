@@ -15,6 +15,8 @@
 
 package io.sunflower.gizmo.websocket.handler;
 
+import java.io.IOException;
+
 import io.sunflower.gizmo.websocket.BinaryMessage;
 import io.sunflower.gizmo.websocket.CloseStatus;
 import io.sunflower.gizmo.websocket.PongMessage;
@@ -33,7 +35,7 @@ import io.sunflower.gizmo.websocket.WebSocketSession;
 public abstract class AbstractWebSocketHandler implements WebSocketHandler {
 
   @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) {
+  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
     if (message instanceof TextMessage) {
       handleTextMessage(session, (TextMessage) message);
     } else if (message instanceof BinaryMessage) {
@@ -45,13 +47,13 @@ public abstract class AbstractWebSocketHandler implements WebSocketHandler {
     }
   }
 
-  protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+  protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
   }
 
-  protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+  protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws IOException {
   }
 
-  protected void handlePongMessage(WebSocketSession session, PongMessage message) {
+  protected void handlePongMessage(WebSocketSession session, PongMessage message) throws IOException {
   }
 
   @Override

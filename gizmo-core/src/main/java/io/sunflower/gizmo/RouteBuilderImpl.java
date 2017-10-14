@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -51,6 +52,7 @@ public class RouteBuilderImpl implements RouteBuilder {
   private ApplicationFilters globalFilters;
 
   @Inject
+  @VisibleForTesting
   public void setGlobalFilters(ApplicationFilters globalFilters) {
     this.globalFilters = globalFilters;
   }
@@ -64,32 +66,37 @@ public class RouteBuilderImpl implements RouteBuilder {
   }
 
   public RouteBuilderImpl GET() {
-    httpMethod = "GET";
+    httpMethod = Route.HTTP_METHOD_GET;
     return this;
   }
 
   public RouteBuilderImpl POST() {
-    httpMethod = "POST";
+    httpMethod = Route.HTTP_METHOD_POST;
     return this;
   }
 
   public RouteBuilderImpl PUT() {
-    httpMethod = "PUT";
+    httpMethod = Route.HTTP_METHOD_PUT;
     return this;
   }
 
   public RouteBuilderImpl DELETE() {
-    httpMethod = "DELETE";
+    httpMethod = Route.HTTP_METHOD_DELETE;
     return this;
   }
 
   public RouteBuilderImpl OPTIONS() {
-    httpMethod = "OPTIONS";
+    httpMethod = Route.HTTP_METHOD_OPTIONS;
     return this;
   }
 
   public RouteBuilderImpl HEAD() {
-    httpMethod = "HEAD";
+    httpMethod = Route.HTTP_METHOD_HEAD;
+    return this;
+  }
+
+  public RouteBuilderImpl WS() {
+    httpMethod = Route.HTTP_METHOD_GET;
     return this;
   }
 

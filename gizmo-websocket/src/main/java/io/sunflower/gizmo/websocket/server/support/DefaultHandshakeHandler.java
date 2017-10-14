@@ -129,10 +129,12 @@ public class DefaultHandshakeHandler implements HandshakeHandler {
 
     String subProtocol = selectProtocol(
         context.getHeaders().get(WebSocketHttpHeaders.SEC_WEBSOCKET_PROTOCOL), wsHandler);
+
     List<WebSocketExtension> requested = getSecWebSocketExtensions(
         context.getHeaders().get(WebSocketHttpHeaders.SEC_WEBSOCKET_EXTENSIONS));
-    List<WebSocketExtension> supported = this.requestUpgradeStrategy
-        .getSupportedExtensions(context);
+
+    List<WebSocketExtension> supported = this.requestUpgradeStrategy.getSupportedExtensions(context);
+
     List<WebSocketExtension> extensions = filterRequestedExtensions(context, requested, supported);
 
     if (logger.isTraceEnabled()) {

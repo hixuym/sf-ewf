@@ -15,11 +15,11 @@
 
 package io.sunflower.gizmo.websocket.server.support;
 
-import java.io.ByteArrayOutputStream;
+import static io.undertow.websockets.core.WebSockets.mergeBuffers;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import io.sunflower.gizmo.exceptions.GizmoException;
 import io.sunflower.gizmo.websocket.BinaryMessage;
 import io.sunflower.gizmo.websocket.CloseStatus;
 import io.sunflower.gizmo.websocket.PingMessage;
@@ -63,7 +63,7 @@ public class DefaultWebSocketReceiveListener extends AbstractReceiveListener {
 
     ByteBuffer[] byteBuffers = message.getData().getResource();
 
-    wsHandler.handleMessage(session, new BinaryMessage(merge(byteBuffers)));
+    wsHandler.handleMessage(session, new BinaryMessage(mergeBuffers(byteBuffers)));
 
     super.onFullBinaryMessage(channel, message);
   }
@@ -71,7 +71,7 @@ public class DefaultWebSocketReceiveListener extends AbstractReceiveListener {
   @Override
   protected void onCloseMessage(CloseMessage cm, WebSocketChannel channel) {
     wsHandler.afterConnectionClosed(session,
-        new CloseStatus(channel.getCloseCode(), channel.getCloseReason()));
+        new CloseStatus(cm.getCode(), cm.getReason()));
   }
 
   @Override
@@ -79,14 +79,14 @@ public class DefaultWebSocketReceiveListener extends AbstractReceiveListener {
       BufferedBinaryMessage message)
       throws IOException {
     super.onFullPingMessage(channel, message);
-    wsHandler.handleMessage(session, new PingMessage(merge(message.getData().getResource())));
+    wsHandler.handleMessage(session, new PingMessage(mergeBuffers(message.getData().getResource())));
   }
 
   @Override
   protected void onFullPongMessage(WebSocketChannel channel,
       BufferedBinaryMessage message)
       throws IOException {
-    wsHandler.handleMessage(session, new PongMessage(merge(message.getData().getResource())));
+    wsHandler.handleMessage(session, new PongMessage(mergeBuffers(message.getData().getResource())));
     super.onFullPongMessage(channel, message);
   }
 
@@ -96,20 +96,4 @@ public class DefaultWebSocketReceiveListener extends AbstractReceiveListener {
     super.onError(channel, error);
   }
 
-  private ByteBuffer merge(ByteBuffer[] byteBuffers) {
-
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-    try {
-      for (ByteBuffer byteBuffer : byteBuffers) {
-        byte[] buf = new byte[byteBuffer.remaining()];
-        byteBuffer.get(buf);
-        out.write(buf);
-      }
-    } catch (IOException e) {
-      throw new GizmoException(500, "error read bytebuffer from websocket channel.");
-    }
-
-    return ByteBuffer.wrap(out.toByteArray());
-  }
 }

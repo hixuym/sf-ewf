@@ -15,6 +15,8 @@
 
 package io.sunflower.gizmo.websocket;
 
+import java.io.IOException;
+
 /**
  * A handler for WebSocket messages and lifecycle events.
  *
@@ -45,7 +47,7 @@ public interface WebSocketHandler {
    * @throws Exception this method can handle or propagate exceptions; see class-level Javadoc for
    * details.
    */
-  void handleMessage(WebSocketSession session, WebSocketMessage<?> message);
+  void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException;
 
   /**
    * Handle an error from the underlying WebSocket message transport.

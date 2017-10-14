@@ -15,6 +15,8 @@
 
 package io.sunflower.gizmo.websocket.handler;
 
+import java.io.IOException;
+
 import io.sunflower.gizmo.websocket.CloseStatus;
 import io.sunflower.gizmo.websocket.WebSocketHandler;
 import io.sunflower.gizmo.websocket.WebSocketMessage;
@@ -40,7 +42,7 @@ public class LoggingWebSocketHandlerDecorator extends WebSocketHandlerDecorator 
 
 
   @Override
-  public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+  public void afterConnectionEstablished(WebSocketSession session) {
     if (logger.isDebugEnabled()) {
       logger.debug("New " + session);
     }
@@ -48,8 +50,7 @@ public class LoggingWebSocketHandlerDecorator extends WebSocketHandlerDecorator 
   }
 
   @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message)
-      throws Exception {
+  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
     if (logger.isTraceEnabled()) {
       logger.trace("Handling " + message + " in " + session);
     }
@@ -57,7 +58,7 @@ public class LoggingWebSocketHandlerDecorator extends WebSocketHandlerDecorator 
   }
 
   @Override
-  public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+  public void handleTransportError(WebSocketSession session, Throwable exception) {
     if (logger.isDebugEnabled()) {
       logger.debug("Transport error in " + session, exception);
     }
@@ -65,8 +66,7 @@ public class LoggingWebSocketHandlerDecorator extends WebSocketHandlerDecorator 
   }
 
   @Override
-  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus)
-      throws Exception {
+  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
     if (logger.isDebugEnabled()) {
       logger.debug(session + " closed with " + closeStatus);
     }

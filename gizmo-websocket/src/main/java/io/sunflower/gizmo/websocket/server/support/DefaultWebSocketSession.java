@@ -17,7 +17,6 @@ package io.sunflower.gizmo.websocket.server.support;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ import io.sunflower.gizmo.websocket.WebSocketExtension;
 import io.sunflower.gizmo.websocket.handler.AbstractWebSocketSession;
 import io.undertow.websockets.core.CloseMessage;
 import io.undertow.websockets.core.WebSocketChannel;
-import io.undertow.websockets.core.WebSocketFrameType;
+import io.undertow.websockets.core.WebSockets;
 
 /**
  * DefaultWebSocketSession
@@ -71,29 +70,28 @@ public class DefaultWebSocketSession extends AbstractWebSocketSession {
 
   @Override
   protected void sendTextMessage(TextMessage message) throws IOException {
-    channel.send(WebSocketFrameType.TEXT).write(ByteBuffer.wrap(message.asBytes()));
+    WebSockets.sendText(message.getPayload(), channel, null);
   }
 
   @Override
   protected void sendBinaryMessage(BinaryMessage message) throws IOException {
-    channel.send(WebSocketFrameType.BINARY).write(message.getPayload());
+    WebSockets.sendBinary(message.getPayload(), channel, null);
   }
 
   @Override
   protected void sendPingMessage(PingMessage message) throws IOException {
-    channel.send(WebSocketFrameType.PING).write(message.getPayload());
+    WebSockets.sendPing(message.getPayload(), channel, null);
   }
 
   @Override
   protected void sendPongMessage(PongMessage message) throws IOException {
-    channel.send(WebSocketFrameType.PONG).write(message.getPayload());
+    WebSockets.sendPong(message.getPayload(), channel, null);
   }
 
   @Override
   protected void closeInternal(CloseStatus status) throws IOException {
     CloseMessage closeMessage = new CloseMessage(status.getCode(), status.getReason());
-    channel.send(WebSocketFrameType.CLOSE).writeFinal(closeMessage.toByteBuffer());
-    channel.close();
+    WebSockets.sendClose(closeMessage, channel, null);
   }
 
   @Override
