@@ -57,6 +57,8 @@ public class Result {
   public static final int SC_401_UNAUTHORIZED = 401;
   public static final int SC_403_FORBIDDEN = 403;
   public static final int SC_404_NOT_FOUND = 404;
+  public static final int SC_405_METHOD_NOT_ALLOWED = 405;
+  public static final int SC_426_UPGRADE_REQUIRED = 426;
 
   public static final int SC_500_INTERNAL_SERVER_ERROR = 500;
   public static final int SC_501_NOT_IMPLEMENTED = 501;

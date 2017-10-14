@@ -48,6 +48,8 @@ public interface Router {
   // /////////////////////////////////////////////////////////////////////////
   RouteBuilder GET();
 
+  RouteBuilder WS();
+
   RouteBuilder POST();
 
   RouteBuilder PUT();

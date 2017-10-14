@@ -52,9 +52,7 @@ abstract public class AbstractContext implements Context.Impl {
 
   // subclasses need to access these
   final protected BodyParserEngineManager bodyParserEngineManager;
-  final protected FlashScope flashScope;
   final protected GizmoConfiguration configuration;
-  final protected Session session;
   final protected Validation validation;
   final protected Injector injector;
   final protected ParamParsers paramParsers;
@@ -68,16 +66,12 @@ abstract public class AbstractContext implements Context.Impl {
   @Inject
   public AbstractContext(
       BodyParserEngineManager bodyParserEngineManager,
-      FlashScope flashScope,
       GizmoConfiguration configuration,
-      Session session,
       Validation validation,
       Injector injector,
       ParamParsers paramParsers) {
     this.bodyParserEngineManager = bodyParserEngineManager;
-    this.flashScope = flashScope;
     this.configuration = configuration;
-    this.session = session;
     this.validation = validation;
     this.injector = injector;
     this.paramParsers = paramParsers;
@@ -93,11 +87,6 @@ abstract public class AbstractContext implements Context.Impl {
 
     this.requestPath = requestPath;
 
-    // init flash scope:
-    flashScope.init(this);
-
-    // init session scope:
-    session.init(this);
   }
 
   @Override
@@ -117,12 +106,14 @@ abstract public class AbstractContext implements Context.Impl {
 
   @Override
   public FlashScope getFlashScope() {
-    return flashScope;
+    return null;
+//    throw new UnsupportedOperationException("gizmo-core not support flashscope, use sf-gizmo-session");
   }
 
   @Override
   public Session getSession() {
-    return session;
+    return null;
+//    throw new UnsupportedOperationException("gizmo-core not support session, use sf-gizmo-session");
   }
 
   @Override
@@ -289,11 +280,6 @@ abstract public class AbstractContext implements Context.Impl {
   }
 
   protected ResponseStreams finalizeHeaders(Result result, Boolean handleFlashAndSessionCookie) {
-    // copy ninja flash and session data directory to this context
-    if (handleFlashAndSessionCookie) {
-      flashScope.save(this);
-      session.save(this);
-    }
 
     // copy any cookies from result
     for (Cookie cookie : result.getCookies()) {

@@ -184,7 +184,7 @@ public class TemplateEngineFreemarker implements TemplateEngine {
 
     Object object = result.getRenderable();
 
-    Map map;
+    Map<String, Object> map;
     // if the object is null we simply render an empty map...
     if (object == null) {
       map = Maps.newHashMap();
@@ -212,13 +212,11 @@ public class TemplateEngineFreemarker implements TemplateEngine {
     // set language from framework. You can access
     // it in the templates as ${lang}
     Optional<String> language = lang.getLanguage(context, Optional.of(result));
-    if (language.isPresent()) {
-      map.put("lang", language.get());
-    }
+    language.ifPresent(s -> map.put("lang", s));
 
     // put all entries of the session cookie to the map.
     // You can access the values by their key in the cookie
-    if (!context.getSession().isEmpty()) {
+    if (context.getSession() != null && !context.getSession().isEmpty()) {
       map.put("session", context.getSession().getData());
     }
 
@@ -252,22 +250,24 @@ public class TemplateEngineFreemarker implements TemplateEngine {
     //
     // get keys via ${flash.KEYNAME}
     //////////////////////////////////////////////////////////////////////
-    Map<String, String> translatedFlashCookieMap = Maps.newHashMap();
-    for (Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData()
-        .entrySet()) {
+    if (context.getFlashScope() != null) {
+      Map<String, String> translatedFlashCookieMap = Maps.newHashMap();
+      for (Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData()
+          .entrySet()) {
 
-      String messageValue;
+        String messageValue;
 
-      Optional<String> messageValueOptional = messages
-          .get(entry.getValue(), context, Optional.of(result));
+        Optional<String> messageValueOptional = messages
+            .get(entry.getValue(), context, Optional.of(result));
 
-      messageValue = messageValueOptional.orElseGet(entry::getValue);
-      // new way
-      translatedFlashCookieMap.put(entry.getKey(), messageValue);
+        messageValue = messageValueOptional.orElseGet(entry::getValue);
+        // new way
+        translatedFlashCookieMap.put(entry.getKey(), messageValue);
+      }
+
+      // now we can retrieve flash cookie messages via ${flash.MESSAGE_KEY}
+      map.put("flash", translatedFlashCookieMap);
     }
-
-    // now we can retrieve flash cookie messages via ${flash.MESSAGE_KEY}
-    map.put("flash", translatedFlashCookieMap);
 
     // Specify the data source where the template files come from.
     // Here I set a file directory for it:

@@ -21,29 +21,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A route
  */
 public class Route {
 
+  static public final String HTTP_METHOD_GET = "GET";
+  static public final String HTTP_METHOD_POST = "POST";
+  static public final String HTTP_METHOD_PUT = "PUT";
+  static public final String HTTP_METHOD_HEAD = "HEAD";
+  static public final String HTTP_METHOD_DELETE = "DELETE";
+  static public final String HTTP_METHOD_OPTIONS = "OPTIONS";
+  static public final String HTTP_METHOD_WEBSOCKET = "WS";
+
   //Matches: {id} AND {id: .*?}
   // group(1) extracts the name of the group (in that case "id").
   // group(3) extracts the regex if defined
   final static Pattern PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE
-      = Pattern.compile("\\{(.*?)(:\\s(.*?))?\\}");
+      = Pattern.compile("\\{(.*?)(:\\s(.*?))?}");
 
   /**
    * This regex matches everything in between path slashes.
    */
-  final static String VARIABLE_ROUTES_DEFAULT_REGEX = "([^/]*)";
+  private final static String VARIABLE_ROUTES_DEFAULT_REGEX = "([^/]*)";
 
-  //private static final String PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE = "\\{.*?:\\s(.*?)\\}";
   private final String httpMethod;
   private final String uri;
   private final Method resourceMethod;
   private final FilterChain filterChain;
-  private final Map<String, RouteParameter> parameters;
+  private final Map<String,RouteParameter> parameters;
   private final Pattern regex;
 
   public Route(String httpMethod,
@@ -58,11 +66,36 @@ public class Route {
     this.regex = Pattern.compile(convertRawUriToRegex(uri));
   }
 
-  /**
-   * @deprecated Use getUri()
-   */
-  public String getUrl() {
-    return uri;
+  public boolean isHttpMethod(String method) {
+    return StringUtils.equalsIgnoreCase(method, this.httpMethod);
+  }
+
+  public boolean isHttpMethodGet() {
+    return this.isHttpMethod(Route.HTTP_METHOD_GET);
+  }
+
+  public boolean isHttpMethodPost() {
+    return this.isHttpMethod(Route.HTTP_METHOD_POST);
+  }
+
+  public boolean isHttpMethodPut() {
+    return this.isHttpMethod(Route.HTTP_METHOD_PUT);
+  }
+
+  public boolean isHttpMethodDelete() {
+    return this.isHttpMethod(Route.HTTP_METHOD_DELETE);
+  }
+
+  public boolean isHttpMethodHead() {
+    return this.isHttpMethod(Route.HTTP_METHOD_HEAD);
+  }
+
+  public boolean isHttpMethodOptions() {
+    return this.isHttpMethod(Route.HTTP_METHOD_OPTIONS);
+  }
+
+  public boolean isHttpMethodWebSocket() {
+    return this.isHttpMethod(Route.HTTP_METHOD_WEBSOCKET);
   }
 
   public String getHttpMethod() {
@@ -77,15 +110,15 @@ public class Route {
     return resourceMethod != null ? resourceMethod.getDeclaringClass() : null;
   }
 
-  public FilterChain getFilterChain() {
-    return filterChain;
-  }
-
   public Method getResourceMethod() {
     return resourceMethod;
   }
 
-  public Map<String, RouteParameter> getParameters() {
+  public FilterChain getFilterChain() {
+    return filterChain;
+  }
+
+  public Map<String,RouteParameter> getParameters() {
     return parameters;
   }
 
@@ -93,6 +126,7 @@ public class Route {
    * Matches /index to /index or /me/1 to /person/{id}
    *
    * @return True if the actual route matches a raw rout. False if not.
+   *
    */
   public boolean matches(String httpMethod, String uri) {
     if (this.httpMethod.equalsIgnoreCase(httpMethod)) {
@@ -108,7 +142,8 @@ public class Route {
    *
    * If you want to decode you have to do it yourself.
    *
-   * Most likely with: http://docs.oracle.com/javase/6/docs/api/java/net/URI.html
+   * Most likely with:
+   * http://docs.oracle.com/javase/6/docs/api/java/net/URI.html
    *
    * @param uri The whole encoded uri.
    * @return A map with all parameters of that uri. Encoded in => encoded out.
@@ -132,10 +167,12 @@ public class Route {
   /**
    * Gets a raw uri like "/{name}/id/*" and returns "/([^/]*)/id/*."
    *
-   * Also handles regular expressions if defined inside routes: For instance "/users/{username:
-   * [a-zA-Z][a-zA-Z_0-9]}" becomes "/users/([a-zA-Z][a-zA-Z_0-9])"
+   * Also handles regular expressions if defined inside routes:
+   * For instance "/users/{username: [a-zA-Z][a-zA-Z_0-9]}" becomes
+   * "/users/([a-zA-Z][a-zA-Z_0-9])"
    *
-   * @return The converted regex with default matching regex - or the regex specified by the user.
+   * @return The converted regex with default matching regex - or the regex
+   *          specified by the user.
    */
   protected static String convertRawUriToRegex(String rawUri) {
 
