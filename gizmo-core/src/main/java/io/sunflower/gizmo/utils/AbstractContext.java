@@ -106,12 +106,14 @@ abstract public class AbstractContext implements Context.Impl {
 
   @Override
   public FlashScope getFlashScope() {
-    throw new UnsupportedOperationException("gizmo-core not support flashscope, use sf-gizmo-session");
+    return null;
+//    throw new UnsupportedOperationException("gizmo-core not support flashscope, use sf-gizmo-session");
   }
 
   @Override
   public Session getSession() {
-    throw new UnsupportedOperationException("gizmo-core not support session, use sf-gizmo-session");
+    return null;
+//    throw new UnsupportedOperationException("gizmo-core not support session, use sf-gizmo-session");
   }
 
   @Override
