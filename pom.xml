@@ -41,6 +41,7 @@
     <module>gizmo-xml</module>
     <module>gizmo-session</module>
     <module>gizmo-freemarker</module>
+    <module>gizmo-websocket</module>
   </modules>
 
   <licenses>

@@ -34,7 +34,7 @@ import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
 import io.sunflower.gizmo.Result;
-import io.sunflower.gizmo.utils.Clock;
+import io.sunflower.gizmo.session.utils.Clock;
 import io.sunflower.gizmo.session.utils.CookieEncryption;
 import io.sunflower.gizmo.session.utils.Crypto;
 import io.sunflower.gizmo.utils.GizmoConstant;

@@ -24,7 +24,7 @@ import com.google.inject.Inject;
 import io.sunflower.gizmo.Context;
 import io.sunflower.gizmo.Cookie;
 import io.sunflower.gizmo.GizmoConfiguration;
-import io.sunflower.gizmo.utils.Clock;
+import io.sunflower.gizmo.session.utils.Clock;
 import io.sunflower.gizmo.session.utils.CookieDataCodec;
 import io.sunflower.gizmo.session.utils.CookieEncryption;
 import io.sunflower.gizmo.session.utils.Crypto;
