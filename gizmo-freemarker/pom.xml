@@ -12,23 +12,10 @@
 
   <name>Sunflower Gizmo Freemarker Template Engine Module</name>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-bom</artifactId>
-        <version>${sunflower.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>io.sunflower</groupId>
       <artifactId>sf-gizmo-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.freemarker</groupId>
