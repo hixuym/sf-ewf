@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -11,38 +13,38 @@
   </parent>
 
   <groupId>io.sunflower</groupId>
-  <artifactId>sf-gizmo</artifactId>
+  <artifactId>sf-ewf</artifactId>
   <version>1.0.1-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
-  <name>Sunflower Gizmo Project</name>
+  <name>Sunflower Excellent Web Framework Project</name>
 
-  <url>${gizmo.url}</url>
+  <url>${ewf.url}</url>
 
   <description>
-    Sunflower Gizmo Project.
+    Sunflower Excellent Web Framework Project.
   </description>
 
   <properties>
-    <gizmo.url>http://www.sunflower.io/gizmo/${project.version}</gizmo.url>
+    <gizmo.url>http://www.sunflower.io/ewf/${project.version}</gizmo.url>
   </properties>
 
   <scm>
-    <url>https://github.com/hixuym/sf-gizmo</url>
-    <connection>scm:git:git@github.com:hixuym/sf-gizmo.git</connection>
-    <developerConnection>scm:git:git@github.com:hixuym/sf-gizmo.git</developerConnection>
+    <url>https://github.com/hixuym/sf-ewf</url>
+    <connection>scm:git:git@github.com:hixuym/sf-ewf.git</connection>
+    <developerConnection>scm:git:git@github.com:hixuym/sf-ewf.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/hixuym/sf-gizmo/issues/</url>
+    <url>https://github.com/hixuym/sf-ewf/issues/</url>
   </issueManagement>
 
   <ciManagement>
     <system>Travis CI</system>
-    <url>https://travis-ci.org/sunflower/sf-gizmo</url>
+    <url>https://travis-ci.org/sunflower/sf-ewf</url>
   </ciManagement>
 
   <dependencyManagement>
@@ -56,18 +58,19 @@
       </dependency>
       <dependency>
         <groupId>io.sunflower</groupId>
-        <artifactId>sf-gizmo-core</artifactId>
+        <artifactId>sf-ewf-core</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
-<modules>
-    <module>gizmo-core</module>
-    <module>gizmo-xml</module>
-    <module>gizmo-session</module>
-    <module>gizmo-freemarker</module>
-    <module>gizmo-websocket</module>
+  <modules>
+    <module>ewf-core</module>
+    <module>ewf-xml</module>
+    <module>ewf-session</module>
+    <module>ewf-freemarker</module>
+    <module>ewf-websocket</module>
+    <module>ewf-undertow</module>
   </modules>
 
 </project>

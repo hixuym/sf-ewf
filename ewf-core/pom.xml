@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.sunflower</groupId>
+    <artifactId>sf-ewf</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>sf-ewf-core</artifactId>
+
+  <name>sunflower ewf core module</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.sunflower</groupId>
+      <artifactId>sf-guicey</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.sunflower</groupId>
+      <artifactId>sf-jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.sunflower</groupId>
+      <artifactId>sf-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>java-hamcrest</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
