@@ -16,13 +16,11 @@
 package io.sunflower.ewf.session;
 
 import com.google.inject.AbstractModule;
-import io.sunflower.ewf.Context;
 
 /**
  * SessionModule
  *
- * @author michael
- * created on 17/10/14 11:25
+ * @author michael created on 17/10/14 11:25
  */
 public class SessionModule extends AbstractModule {
 
@@ -30,7 +28,6 @@ public class SessionModule extends AbstractModule {
   protected void configure() {
     bind(FlashScope.class).to(FlashScopeImpl.class);
     bind(Session.class).to(SessionImpl.class);
-    bind(Context.class).to(UndertowWithSessionContext.class);
   }
 
 }
