@@ -15,8 +15,6 @@
 
 package io.sunflower.ewf.undertow;
 
-import static io.sunflower.undertow.handler.Handlers.BLOCKING_WRAPPER;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +32,6 @@ import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.UndertowBundle;
 import io.sunflower.undertow.UndertowModule;
-import io.undertow.server.HttpHandler;
 
 public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
@@ -68,9 +65,8 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
     Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
     environment.guicey().registry(settings);
 
-    HttpHandler ewfHttpHandler = BLOCKING_WRAPPER.wrap(new EwfHttpHandler());
-
-    undertowModule.registryApplicationHandler(settings.getHandlerPath(), ewfHttpHandler);
+    undertowModule
+        .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
 
     BasicEwfModule basicEwfModule = new BasicEwfModule() {
 

@@ -80,14 +80,8 @@ abstract public class AbstractContext implements Context.Impl {
 
   protected void init(String contextPath, String requestPath) {
     // contextPath "" or "/" prefix string.
-    if (Strings.isNullOrEmpty(contextPath)) {
-      this.contextPath = "";
-    } else {
-      this.contextPath = StringUtils.prependIfMissing(contextPath, "/");
-    }
-
+    this.contextPath = contextPath;
     this.requestPath = requestPath;
-
   }
 
   @Override

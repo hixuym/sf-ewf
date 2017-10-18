@@ -14,9 +14,6 @@
  */
 package io.sunflower.ewf.undertow;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.google.inject.Injector;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.RouteHandler;
@@ -29,19 +26,20 @@ import org.slf4j.LoggerFactory;
 /**
  * Handles a request from Undertow and then delegates to ewf.
  */
-@Singleton
 public class EwfHttpHandler implements HttpHandler {
 
   private static final Logger log = LoggerFactory.getLogger(EwfHttpHandler.class);
 
-  @Inject
-  private Injector injector;
+  private final Injector injector;
+  private final Settings settings;
+  private final RouteHandler routeHandler;
 
-  @Inject
-  private Settings settings;
-
-  @Inject
-  private RouteHandler routeHandler;
+  public EwfHttpHandler(Injector injector, Settings settings,
+      RouteHandler routeHandler) {
+    this.injector = injector;
+    this.settings = settings;
+    this.routeHandler = routeHandler;
+  }
 
   @Override
   public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -50,7 +48,7 @@ public class EwfHttpHandler implements HttpHandler {
         = (UndertowContext) injector.getProvider(Context.class).get();
 
     // initialize it
-    undertowContext.init(exchange, settings.getHandlerPath());
+    undertowContext.init(exchange, settings.getContextPath());
 
     // invoke routeHandler on it
     routeHandler.handleRequest(undertowContext);

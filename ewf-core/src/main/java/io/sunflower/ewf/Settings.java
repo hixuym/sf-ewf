@@ -26,6 +26,7 @@ import io.sunflower.ewf.utils.Mode;
 import io.sunflower.ewf.utils.ModeHelper;
 import io.sunflower.ewf.utils.SecretGenerator;
 import io.sunflower.util.Duration;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * ewf framework settings
@@ -61,6 +62,8 @@ public class Settings {
 
   private String handlerPath = "/";
 
+  private String contextPath = "";
+
   public Settings() {
   }
 
@@ -71,6 +74,15 @@ public class Settings {
   private void loadSettings(Map<String, String> rawSettings) {
     if (rawSettings.containsKey("ewf.handlerPath")) {
       this.handlerPath = rawSettings.get("ewf.handlerPath");
+    }
+
+    if (rawSettings.containsKey("sf.undertowContextPath")) {
+      String contextPath =
+          StringUtils.removeEnd(rawSettings.get("sf.undertowContextPath"), "/");
+
+      String handlerPath = StringUtils.removeEnd(this.handlerPath, "/");
+
+      this.contextPath = contextPath + handlerPath;
     }
 
     if (rawSettings.containsKey("ewf.mode")) {
@@ -154,6 +166,10 @@ public class Settings {
       }
     }
 
+  }
+
+  public String getContextPath() {
+    return contextPath;
   }
 
   private static final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
