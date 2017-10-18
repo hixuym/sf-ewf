@@ -277,19 +277,19 @@ public class BodyParserEnginePostTest {
         .invoke(context, TestObjectWithCustomType.class);
 
     // and test:
-    assertThat(testObject.dep, equalTo(new Dep("SF__dep1")));
+    assertThat(testObject.dep, equalTo(new Dep("ewf__dep1")));
 
     assertNotNull(testObject.depArray);
     assertThat(testObject.depArray.length, equalTo(2));
-    assertThat(testObject.depArray[0], equalTo(new Dep("SF__depArray1")));
-    assertThat(testObject.depArray[1], equalTo(new Dep("SF__depArray2")));
+    assertThat(testObject.depArray[0], equalTo(new Dep("ewf__depArray1")));
+    assertThat(testObject.depArray[1], equalTo(new Dep("ewf__depArray2")));
 
     assertNotNull(testObject.depList);
     assertThat(testObject.depList.size(), equalTo(2));
     assertThat(testObject.depList.get(0),
-        equalTo(new Dep("SF__depList1")));
+        equalTo(new Dep("ewf__depList1")));
     assertThat(testObject.depList.get(1),
-        equalTo(new Dep("SF__depList2")));
+        equalTo(new Dep("ewf__depList2")));
 
     assertFalse(validation.hasViolations());
   }
