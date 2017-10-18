@@ -10,7 +10,7 @@
 
   <artifactId>sf-ewf-undertow</artifactId>
 
-  <name>sunflower ewf undertow http handler module</name>
+  <name>sunflower ewf undertow runtime module</name>
 
   <dependencies>
     <dependency>

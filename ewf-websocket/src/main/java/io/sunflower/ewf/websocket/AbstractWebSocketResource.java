@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sunflower.ewf.websocket.server.HandshakeFailureException;
-import io.sunflower.ewf.websocket.server.support.HandshakeInterceptorChain;
+import io.sunflower.ewf.websocket.server.HandshakeInterceptorChain;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.websocket.handler.AbstractWebSocketHandler;

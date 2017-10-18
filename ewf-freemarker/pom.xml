@@ -25,6 +25,12 @@
       <groupId>org.ocpsoft.prettytime</groupId>
       <artifactId>prettytime</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

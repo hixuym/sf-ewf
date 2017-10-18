@@ -15,8 +15,11 @@
 
 package io.sunflower.ewf;
 
+import java.util.Arrays;
+import java.util.List;
 import javax.inject.Singleton;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import io.sunflower.ewf.bodyparser.BodyParserEngineJson;
@@ -27,16 +30,23 @@ import io.sunflower.ewf.template.TemplateEngineJsonP;
 import io.sunflower.ewf.template.TemplateEngineText;
 
 /**
- * BasicModule
+ * BasicEwfModule
  *
  * @author michael created on 17/10/17 17:33
  */
-public class BasicModule extends AbstractModule {
+public abstract class BasicEwfModule extends AbstractModule {
+
+  private final List<Class<? extends ParamParser>> paramParsers = Lists.newArrayList();
 
   @Override
   protected void configure() {
     // Routing
-    Multibinder.newSetBinder(binder(), ParamParser.class);
+    Multibinder<ParamParser> multibinder
+        = Multibinder.newSetBinder(binder(), ParamParser.class);
+
+    for (Class<? extends ParamParser> parser : paramParsers) {
+      multibinder.addBinding().to(parser);
+    }
 
     bind(RouteBuilder.class).to(RouteBuilderImpl.class);
     bind(Router.class).to(RouterImpl.class).in(Singleton.class);
@@ -47,5 +57,14 @@ public class BasicModule extends AbstractModule {
     bind(TemplateEngineJson.class);
     bind(TemplateEngineJsonP.class);
     bind(TemplateEngineText.class);
+
+    bind(Context.class).to(getRequestContextImpl());
   }
+
+  @SafeVarargs
+  public final void registryParamParser(Class<? extends ParamParser>... parser) {
+    this.paramParsers.addAll(Arrays.asList(parser));
+  }
+
+  protected abstract Class<? extends Context> getRequestContextImpl();
 }

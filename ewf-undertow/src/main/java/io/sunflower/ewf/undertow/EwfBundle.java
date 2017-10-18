@@ -17,14 +17,14 @@ package io.sunflower.ewf.undertow;
 
 import static io.sunflower.undertow.handler.Handlers.BLOCKING_WRAPPER;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-import com.google.inject.AbstractModule;
+import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.google.inject.multibindings.MapBinder;
 import io.sunflower.Configuration;
-import io.sunflower.ConfiguredBundle;
-import io.sunflower.ewf.BasicModule;
+import io.sunflower.ewf.BasicEwfModule;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.Settings;
@@ -32,14 +32,19 @@ import io.sunflower.ewf.application.ApplicationRoutes;
 import io.sunflower.guicey.Injectors;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
-import io.sunflower.undertow.AppHandlers;
+import io.sunflower.undertow.UndertowBundle;
 import io.sunflower.undertow.UndertowModule;
 import io.undertow.server.HttpHandler;
 
-public class EwfBundle<T extends Configuration> implements ConfiguredBundle<T> {
+public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
   @Override
-  public void run(T configuration, Environment environment) throws Exception {
+  public void initialize(Bootstrap<?> bootstrap) {
+  }
+
+  @Override
+  protected void configure(T configuration, Environment environment,
+      UndertowModule undertowModule) {
 
     environment.addServerLifecycleListener(server -> {
       Injector injector = server.getInjector();
@@ -47,40 +52,41 @@ public class EwfBundle<T extends Configuration> implements ConfiguredBundle<T> {
       Set<ApplicationRoutes> routesSet =
           Injectors.instanceOf(injector, ApplicationRoutes.class);
 
+      List<ApplicationRoutes> routesList = Lists.newArrayList(routesSet);
+
+      Collections.sort(routesList);
+
       Router router = injector.getInstance(Router.class);
 
-      for (ApplicationRoutes routes : routesSet) {
+      for (ApplicationRoutes routes : routesList) {
         routes.init(router);
       }
 
       router.compileRoutes();
     });
 
-    environment.guicey().registry(new UndertowModule(environment));
-    environment.guicey().registry(new BasicModule());
-
     Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
     environment.guicey().registry(settings);
 
-    environment.guicey().registry(new AbstractModule() {
+    HttpHandler ewfHttpHandler = BLOCKING_WRAPPER.wrap(new EwfHttpHandler());
+
+    undertowModule.registryApplicationHandler(settings.getHandlerPath(), ewfHttpHandler);
+
+    BasicEwfModule basicEwfModule = new BasicEwfModule() {
+
       @Override
-      protected void configure() {
-        MapBinder<String, HttpHandler> mapBinder =
-            MapBinder.newMapBinder(binder(), String.class, HttpHandler.class, AppHandlers.class);
-
-        EwfHttpHandler ewfHttpHandler = new EwfHttpHandler();
-        requestInjection(ewfHttpHandler);
-
-        mapBinder.addBinding(settings.getHandlerPath())
-            .toInstance(BLOCKING_WRAPPER.wrap(ewfHttpHandler));
-
-        bind(Context.class).to(UndertowContext.class);
+      protected Class<? extends Context> getRequestContextImpl() {
+        return settings.isSessionEnabled() ?
+            UndertowWithSessionContext.class : UndertowContext.class;
       }
-    });
+    };
+
+    configure(basicEwfModule);
+    environment.guicey().registry(basicEwfModule);
+
   }
 
-  @Override
-  public void initialize(Bootstrap<?> bootstrap) {
-  }
+  protected void configure(BasicEwfModule basicEwfModule) {
 
+  }
 }

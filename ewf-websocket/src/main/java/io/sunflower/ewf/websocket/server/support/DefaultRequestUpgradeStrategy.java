@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.sunflower.ewf.undertow.UndertowContext;
 import io.sunflower.ewf.websocket.WebSocketExtension;
 import io.sunflower.ewf.websocket.WebSocketHandler;
 import io.sunflower.ewf.websocket.WebSocketSession;
@@ -29,7 +30,6 @@ import io.sunflower.ewf.websocket.server.HandshakeFailureException;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.server.UndertowContext;
 import io.sunflower.ewf.websocket.server.RequestUpgradeStrategy;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.HttpUpgradeListener;

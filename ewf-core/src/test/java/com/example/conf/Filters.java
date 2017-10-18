@@ -29,7 +29,7 @@ public class Filters implements ApplicationFilters {
   }
 
   @Override
-  public void addFilters(List<Class<? extends Filter>> filters) {
+  public void addGlobalFilters(List<Class<? extends Filter>> filters) {
     filters.add(filterToAdd);
   }
 }

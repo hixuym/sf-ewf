@@ -31,7 +31,7 @@ import io.sunflower.util.Duration;
  * ewf framework settings
  */
 @Singleton
-public final class Settings {
+public class Settings {
 
   private String applicationSecret = SecretGenerator.generateSecret();
 
@@ -45,6 +45,7 @@ public final class Settings {
   private boolean sessionSendOnlyIfChanged = true;
   private boolean sessionTransferredOverHttpsOnly = false;
   private boolean sessionHttpOnly = true;
+  private boolean sessionEnabled = false;
 
   private String httpCacheMaxAge = "3600";
   private boolean etagEnable = true;
@@ -115,6 +116,10 @@ public final class Settings {
       this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get("ewf.cookieEncrypted"));
     }
 
+    if (rawSettings.containsKey("ewf.sessionEnabled")) {
+      this.sessionEnabled = Boolean.parseBoolean(rawSettings.get("ewf.sessionEnabled"));
+    }
+
     if (rawSettings.containsKey("ewf.cookiePrefix")) {
       this.cookiePrefix = rawSettings.get("ewf.cookiePrefix");
     }
@@ -152,6 +157,10 @@ public final class Settings {
   }
 
   private static final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
+
+  public boolean isSessionEnabled() {
+    return sessionEnabled;
+  }
 
   public String getHandlerPath() {
     return handlerPath;

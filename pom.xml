@@ -12,13 +12,12 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>io.sunflower</groupId>
   <artifactId>sf-ewf</artifactId>
   <version>1.0.1-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
-  <name>Sunflower Excellent Web Framework Project</name>
+  <name>sunflower ewf project</name>
 
   <url>${ewf.url}</url>
 
@@ -27,7 +26,7 @@
   </description>
 
   <properties>
-    <gizmo.url>http://www.sunflower.io/ewf/${project.version}</gizmo.url>
+    <ewf.url>http://www.sunflower.io/ewf/${project.version}</ewf.url>
   </properties>
 
   <scm>
@@ -59,6 +58,11 @@
       <dependency>
         <groupId>io.sunflower</groupId>
         <artifactId>sf-ewf-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.sunflower</groupId>
+        <artifactId>sf-ewf-undertow</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

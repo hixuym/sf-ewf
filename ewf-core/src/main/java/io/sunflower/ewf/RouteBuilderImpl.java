@@ -24,7 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -52,8 +51,7 @@ public class RouteBuilderImpl implements RouteBuilder {
 
   private ApplicationFilters globalFilters;
 
-  @Inject
-  @VisibleForTesting
+  @com.google.inject.Inject(optional = true)
   public void setGlobalFilters(ApplicationFilters globalFilters) {
     this.globalFilters = globalFilters;
   }
@@ -251,7 +249,7 @@ public class RouteBuilderImpl implements RouteBuilder {
       allFilters.addAll(globalFiltersList.get());
     } else {
       if (this.globalFilters != null) {
-        this.globalFilters.addFilters(allFilters);
+        this.globalFilters.addGlobalFilters(allFilters);
       }
     }
 

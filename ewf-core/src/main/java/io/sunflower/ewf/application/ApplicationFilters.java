@@ -23,5 +23,5 @@ import io.sunflower.ewf.Filter;
  */
 public interface ApplicationFilters {
 
-  void addFilters(List<Class<? extends Filter>> filters);
+  void addGlobalFilters(List<Class<? extends Filter>> filters);
 }

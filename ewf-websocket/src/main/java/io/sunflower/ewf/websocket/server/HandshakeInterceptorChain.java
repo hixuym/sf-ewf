@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.websocket.server.support;
+package io.sunflower.ewf.websocket.server;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,6 @@ import java.util.Map;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.websocket.WebSocketHandler;
-import io.sunflower.ewf.websocket.server.HandshakeInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

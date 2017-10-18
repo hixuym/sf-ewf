@@ -690,7 +690,7 @@ public class ResourceMethodInvokerTest {
     when(context.getParameter("param1")).thenReturn("hello");
     create("needingInjectionParamParser", NeedingInjectionParamParser.class)
         .invoke(mockController, context);
-    verify(mockController).needingInjectionParamParser(new Dep("SF__hello"));
+    verify(mockController).needingInjectionParamParser(new Dep("ewf__hello"));
   }
 
   @Test
@@ -699,7 +699,7 @@ public class ResourceMethodInvokerTest {
     create("needingInjectionParamParserArray", NeedingInjectionParamParser.class)
         .invoke(mockController, context);
     verify(mockController)
-        .needingInjectionParamParserArray(new Dep[]{new Dep("SF__hello1"), new Dep("SF__hello2")});
+        .needingInjectionParamParserArray(new Dep[]{new Dep("ewf__hello1"), new Dep("ewf__hello2")});
   }
 
   @Test
