@@ -1,3 +1,6 @@
+server:
+  type: undertow
+
 logging:
   level: INFO
   loggers:
