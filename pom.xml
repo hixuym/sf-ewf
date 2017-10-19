@@ -73,6 +73,7 @@
     <module>ewf-freemarker</module>
     <module>ewf-websocket</module>
     <module>ewf-undertow</module>
+    <module>ewf-archetypes</module>
   </modules>
 
 </project>
