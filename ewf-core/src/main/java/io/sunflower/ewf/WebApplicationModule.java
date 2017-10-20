@@ -30,11 +30,11 @@ import io.sunflower.ewf.template.TemplateEngineJsonP;
 import io.sunflower.ewf.template.TemplateEngineText;
 
 /**
- * BasicEwfModule
+ * WebApplicationModule
  *
  * @author michael created on 17/10/17 17:33
  */
-public abstract class BasicEwfModule extends AbstractModule {
+public abstract class WebApplicationModule extends AbstractModule {
 
   private final List<Class<? extends ParamParser>> paramParsers = Lists.newArrayList();
 
@@ -66,5 +66,9 @@ public abstract class BasicEwfModule extends AbstractModule {
     this.paramParsers.addAll(Arrays.asList(parser));
   }
 
+  /**
+   * context impl
+   * @return the context impl
+   */
   protected abstract Class<? extends Context> getRequestContextImpl();
 }

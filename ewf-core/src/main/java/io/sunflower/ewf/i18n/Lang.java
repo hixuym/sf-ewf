@@ -22,6 +22,9 @@ import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 
+/**
+ * @author michael
+ */
 @ImplementedBy(LangImpl.class)
 public interface Lang {
 

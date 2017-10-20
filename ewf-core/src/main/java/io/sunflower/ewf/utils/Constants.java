@@ -15,10 +15,15 @@
 
 package io.sunflower.ewf.utils;
 
+/**
+ * @author michael
+ */
 public interface Constants {
 
-  // i18n keys and default messages of RouteHandler
-  // create the keys in your own messages.properties file to customize the message
+  /**
+   * i18n keys and default messages of RouteHandler create the keys in your own messages.properties
+   * file to customize the message
+   */
   String I18N_SYSTEM_BAD_REQUEST_TEXT_KEY = "ewf.system.bad_request.text";
   String I18N_SYSTEM_BAD_REQUEST_TEXT_DEFAULT = "Oops. That''s a bad request and all we know.";
 
@@ -60,7 +65,6 @@ public interface Constants {
    */
   String UTF_8 = "utf-8";
 
-  // for validations.
   String DATE_KEY = "validation.is.date.violation";
   String DATE_MESSAGE = "{0} must be a valid date";
 
@@ -78,9 +82,6 @@ public interface Constants {
 
   String DURATION_KEY = "validation.is.duration.violation";
   String DURATION_MESSAGE = "{0} must be an valid duration.";
-
-  String KEY_SUNFLOWER_STANDALONE_CLASS = "sunflower.standalone.class";
-  String DEFAULT_STANDALONE_CLASS = "io.sunflower.ewf.netty.NettyStandalone";
 
   String AUTHENTICITY_TOKEN = "authenticityToken";
 }

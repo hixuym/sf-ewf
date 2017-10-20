@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf.errors;
 
 import java.util.Objects;
 
@@ -24,6 +24,7 @@ import com.google.common.base.MoreObjects;
 /**
  * A pojo to be renderd as Json or Xml. Used for instance to display error messages when a route is
  * not found.
+ * @author michael
  */
 public class ErrorMessage {
 

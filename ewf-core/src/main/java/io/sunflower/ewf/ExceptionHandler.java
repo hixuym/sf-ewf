@@ -17,17 +17,19 @@ package io.sunflower.ewf;
 
 import com.google.inject.ImplementedBy;
 
-@ImplementedBy(DefaultExceptionMapper.class)
-public interface ExceptionMapper {
+/**
+ * @author michael
+ */
+@ImplementedBy(DefaultExceptionHandler.class)
+public interface ExceptionHandler {
 
   /**
-   *
+   * transform exception to response result.
    * @param context
    * @param exception
-   * @param underlyingResult
    * @return
    */
-  Result onException(Context context, Exception exception, Result underlyingResult);
+  Result onException(Exception exception, Context context);
 
   /**
    * Should handle cases where no route can be found for a given request.

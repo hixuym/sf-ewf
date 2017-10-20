@@ -22,7 +22,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.sunflower.Configuration;
-import io.sunflower.ewf.BasicEwfModule;
+import io.sunflower.ewf.WebApplicationModule;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.Settings;
@@ -68,7 +68,7 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
     undertowModule
         .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
 
-    BasicEwfModule basicEwfModule = new BasicEwfModule() {
+    WebApplicationModule webApplicationModule = new WebApplicationModule() {
 
       @Override
       protected Class<? extends Context> getRequestContextImpl() {
@@ -77,12 +77,12 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
       }
     };
 
-    configure(basicEwfModule);
-    environment.guicey().registry(basicEwfModule);
+    configure(webApplicationModule);
+    environment.guicey().registry(webApplicationModule);
 
   }
 
-  protected void configure(BasicEwfModule basicEwfModule) {
+  protected void configure(WebApplicationModule webApplicationModule) {
 
   }
 }

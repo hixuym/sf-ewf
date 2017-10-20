@@ -26,6 +26,7 @@ import io.sunflower.ewf.Result;
  * Useful inside resources or filters for instance.
  *
  * RouteHandler is supposed to pick it up and render an appropriate error page.
+ * @author michael
  */
 public class BadRequestException extends WebApplicationException {
 
