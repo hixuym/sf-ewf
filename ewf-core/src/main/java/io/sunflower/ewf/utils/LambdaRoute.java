@@ -17,7 +17,7 @@ package io.sunflower.ewf.utils;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import io.sunflower.ewf.ResourceMethods.ResourceMethod;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod;
 
 public class LambdaRoute {
 

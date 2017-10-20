@@ -33,6 +33,7 @@ import io.sunflower.ewf.Context;
  *
  * If an incoming request has a flash cookie then the data from it will be loaded as "current" flash
  * data.  Unless you keep() those keys that data will only be valid for the current request.
+ * @author michael
  */
 public interface FlashScope {
 

@@ -34,14 +34,18 @@ import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineManagerImpl implements TemplateEngineManager {
 
   private final Logger logger = LoggerFactory.getLogger(TemplateEngineManagerImpl.class);
 
-  // Keep a reference of providers rather than instances, so template engines
-  // don't have
-  // to be singleton if they don't want
+  /**
+   * Keep a reference of providers rather than instances, so template engines don't have to be
+   * singleton if they don't want
+   */
   private final Map<String, Provider<? extends TemplateEngine>> contentTypeToTemplateEngineMap;
 
   @Inject
@@ -79,7 +83,7 @@ public class TemplateEngineManagerImpl implements TemplateEngineManager {
     }
   }
 
-  private final void logTemplateEngines() {
+  private void logTemplateEngines() {
     List<String> outputTypes = Lists.newArrayList(getContentTypes());
     Collections.sort(outputTypes);
 

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf;
 
 import java.io.IOException;
 import java.io.OutputStream;

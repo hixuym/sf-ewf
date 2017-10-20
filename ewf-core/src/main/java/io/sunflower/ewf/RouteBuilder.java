@@ -17,6 +17,8 @@ package io.sunflower.ewf;
 
 import java.util.List;
 
+import io.sunflower.ewf.utils.WithResourceMethod;
+
 public interface RouteBuilder extends WithResourceMethod<Void> {
 
   RouteBuilder route(String uri);

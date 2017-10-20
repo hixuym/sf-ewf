@@ -1031,7 +1031,7 @@ public class ResourceMethodInvokerTest {
   }
 
   // ValidBean(@Pattern(regexp = "[a-z]*") String param1,
-  // @Length(min = 5, max = 10) String param2, @Min(3) @Max(10) int param3);
+  // @Size(min = 5, max = 10) String param2, @Min(3) @Max(10) int param3);
   @Test
   public void validationPassed() {
     validateJSR303(buildDto("regex", "length", 5));

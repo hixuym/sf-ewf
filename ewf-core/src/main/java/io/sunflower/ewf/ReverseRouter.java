@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import io.sunflower.ewf.utils.LambdaRoute;
 import io.sunflower.ewf.utils.MethodReference;
 import io.sunflower.ewf.ReverseRouter.Builder;
+import io.sunflower.ewf.utils.ResourceMethods;
+import io.sunflower.ewf.utils.WithResourceMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

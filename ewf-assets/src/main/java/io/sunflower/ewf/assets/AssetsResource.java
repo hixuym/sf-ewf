@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf;
+package io.sunflower.ewf.assets;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,12 @@ import java.net.URLConnection;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Renderable;
+import io.sunflower.ewf.ResponseStreams;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
+import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.utils.HttpCacheToolkit;
 import io.sunflower.ewf.utils.MimeTypes;
 import org.slf4j.Logger;
@@ -35,6 +40,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This controller serves public resources under /assets. It is capable of serving static files,
  * webjars or files from a completely different directory on the server.
+ * @author michael
  */
 @Singleton
 public class AssetsResource {

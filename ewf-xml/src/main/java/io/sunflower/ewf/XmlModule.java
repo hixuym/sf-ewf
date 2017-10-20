@@ -21,12 +21,12 @@ import io.sunflower.ewf.bodyparser.BodyParserEngineXml;
 import io.sunflower.ewf.template.TemplateEngineXml;
 
 /**
- * GizmoXmlModule
+ * XmlModule
  *
  * @author michael
  * created on 17/10/13 22:32
  */
-public class GizmoXmlModule extends AbstractModule {
+public class XmlModule extends AbstractModule {
 
   @Override
   protected void configure() {

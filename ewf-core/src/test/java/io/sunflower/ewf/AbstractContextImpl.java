@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,8 +25,6 @@ import com.google.inject.Injector;
 import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.ParamParsers;
 import io.sunflower.ewf.uploads.FileItem;
-import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.validation.Validation;
 
 /**

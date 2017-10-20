@@ -30,6 +30,9 @@ import io.sunflower.ewf.utils.MethodReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class RouterImpl implements Router {
 
   static private final Logger logger = LoggerFactory.getLogger(RouterImpl.class);
@@ -38,9 +41,13 @@ public class RouterImpl implements Router {
   private final List<RouteBuilderImpl> allRouteBuilders = new ArrayList<>();
   private final Injector injector;
   private List<Route> routes;
-  // for fast reverse route lookups
+  /**
+   * for fast reverse route lookups
+   */
   private Map<MethodReference, Route> reverseRoutes;
-  // This regex works for both {myParam} AND {myParam: .*} (with regex)
+  /**
+   * This regex works for both {myParam} AND {myParam: .*} (with regex)
+   */
   private final String VARIABLE_PART_PATTERN_WITH_PLACEHOLDER = "\\{(%s)(:\\s([^}]*))?\\}";
   private final Provider<RouteBuilderImpl> routeBuilderImplProvider;
 

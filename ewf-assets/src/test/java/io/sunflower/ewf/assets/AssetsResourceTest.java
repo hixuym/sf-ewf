@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf;
+package io.sunflower.ewf.assets;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
@@ -23,9 +23,14 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Renderable;
+import io.sunflower.ewf.ResponseStreams;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
+import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.utils.HttpCacheToolkit;
 import io.sunflower.ewf.utils.MimeTypes;
-import io.sunflower.ewf.utils.ResponseStreams;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import org.junit.Before;
 import org.junit.Test;
 

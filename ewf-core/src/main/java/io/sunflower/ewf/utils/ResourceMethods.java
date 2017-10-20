@@ -12,13 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.sunflower.ewf;
+package io.sunflower.ewf.utils;
 
 import java.io.Serializable;
+
+import io.sunflower.ewf.Result;
 
 /**
  * Functional interfaces for RouteHandler controller methods accepting up to X number of arguments with
  * type inference.
+ * @author michael
  */
 public class ResourceMethods {
 

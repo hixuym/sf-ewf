@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.sunflower.ewf;
+package io.sunflower.ewf.assets;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -24,6 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class AssetsResourceHelper {
 
   private final static Logger logger = LoggerFactory.getLogger(AssetsResourceHelper.class);

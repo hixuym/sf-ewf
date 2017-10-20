@@ -28,6 +28,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import io.sunflower.ewf.utils.ResourceMethods;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;

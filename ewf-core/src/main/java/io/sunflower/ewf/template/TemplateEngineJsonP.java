@@ -24,7 +24,7 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
 import org.slf4j.Logger;

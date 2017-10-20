@@ -33,6 +33,9 @@ import io.sunflower.setup.Environment;
 import io.sunflower.undertow.UndertowBundle;
 import io.sunflower.undertow.UndertowModule;
 
+/**
+ * @author michael
+ */
 public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
   @Override

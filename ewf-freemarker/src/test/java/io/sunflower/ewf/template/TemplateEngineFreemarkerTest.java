@@ -43,7 +43,7 @@ import io.sunflower.ewf.i18n.Lang;
 import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
