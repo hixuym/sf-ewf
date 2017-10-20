@@ -61,7 +61,7 @@ public class ResourceMethodInvoker {
     }
 
     // use Optional<> instead of null value.
-    checkNullArgumentsAndThrowBadRequestExceptionIfConfigured(arguments);
+    checkNullArgumentsAndThrowBadRequestException(arguments);
 
     try {
       return method.invoke(resource, arguments);
@@ -76,7 +76,7 @@ public class ResourceMethodInvoker {
     }
   }
 
-  private void checkNullArgumentsAndThrowBadRequestExceptionIfConfigured(Object[] arguments) {
+  private void checkNullArgumentsAndThrowBadRequestException(Object[] arguments) {
     for (Object object : arguments) {
       if (object == null) {
         throw new BadRequestException();
