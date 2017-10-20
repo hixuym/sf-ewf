@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.sunflower.ewf;
+package io.sunflower.ewf.utils;
 
-import io.sunflower.ewf.ResourceMethods.ResourceMethod;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod0;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod1;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod2;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod4;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod7;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod0;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod1;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod2;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod4;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod7;
 
 /**
  * Interface that exposes multiple with methods that accept a large number of various argument

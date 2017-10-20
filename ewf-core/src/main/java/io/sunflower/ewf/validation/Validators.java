@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import javax.inject.Singleton;
 import javax.validation.MessageInterpolator;
-import javax.validation.Valid;
 import javax.validation.ValidatorFactory;
 import javax.validation.metadata.ConstraintDescriptor;
 
@@ -96,14 +95,14 @@ public class Validators {
   }
 
   @Singleton
-  public static class Jsr303Validator implements Validator<Object> {
+  public static class BeanValidator implements Validator<Object> {
 
     private final Lang requestLanguage;
     private final javax.validation.Validator validator;
     private final ValidatorFactory validatorFactory;
 
     @Inject
-    public Jsr303Validator(Lang requestLanguage,
+    public BeanValidator(Lang requestLanguage,
         ValidatorFactory validatorFactory,
         javax.validation.Validator validator) {
       this.requestLanguage = requestLanguage;
@@ -147,10 +146,10 @@ public class Validators {
 
   public static class LengthValidator implements Validator<String> {
 
-    private final Length length;
+    private final Size size;
 
-    public LengthValidator(Length length) {
-      this.length = length;
+    public LengthValidator(Size size) {
+      this.size = size;
     }
 
     /**
@@ -163,16 +162,16 @@ public class Validators {
     @Override
     public void validate(String value, String field, Context context) {
       if (value != null) {
-        if (this.length.max() != -1 && value.length() > this.length.max()) {
+        if (this.size.max() != -1 && value.length() > this.size.max()) {
           context.getValidation().addViolation(
-              new ConstraintViolation(this.length.maxKey(),
-                  fieldKey(field, this.length.fieldKey()),
-                  this.length.maxMessage(), this.length.max(), value));
-        } else if (this.length.min() != -1 && value.length() < this.length.min()) {
+              new ConstraintViolation(this.size.maxKey(),
+                  fieldKey(field, this.size.fieldKey()),
+                  this.size.maxMessage(), this.size.max(), value));
+        } else if (this.size.min() != -1 && value.length() < this.size.min()) {
           context.getValidation().addViolation(
-              new ConstraintViolation(this.length.minKey(),
-                  fieldKey(field, this.length.fieldKey()),
-                  this.length.minMessage(), this.length.min(), value));
+              new ConstraintViolation(this.size.minKey(),
+                  fieldKey(field, this.size.fieldKey()),
+                  this.size.minMessage(), this.size.min(), value));
         }
       }
     }

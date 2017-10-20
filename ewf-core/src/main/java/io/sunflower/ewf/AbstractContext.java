@@ -12,26 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf;
 
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.sunflower.ewf.session.FlashScope;
-import io.sunflower.ewf.ContentTypes;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.Route;
 import io.sunflower.ewf.bodyparser.BodyParserEngine;
 import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.ParamParsers;
 import io.sunflower.ewf.session.Session;
+import io.sunflower.ewf.utils.HttpHeaderUtils;
 import io.sunflower.ewf.validation.Validation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

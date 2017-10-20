@@ -15,6 +15,9 @@
 
 package io.sunflower.ewf;
 
+/**
+ * @author michael
+ */
 public interface ContentTypes {
 
   String TEXT_HTML = "text/html";

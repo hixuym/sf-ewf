@@ -25,11 +25,22 @@ import java.util.regex.Matcher;
  */
 public class RouteParameter {
 
-  // eg. {id: [0-9]+}
-  private final int index;    // index of where token starts
-  private final String token; // "{id: [0-9]+}"
-  private final String name;  // "id"
-  private final String regex; // "[0-9]+"
+  /**
+   * eg. {id: [0-9]+} index of where token starts
+   */
+  private final int index;
+  /**
+   * "{id: [0-9]+}"
+   */
+  private final String token;
+  /**
+   * "id"
+   */
+  private final String name;
+  /**
+   * "[0-9]+"
+   */
+  private final String regex;
 
   public RouteParameter(int index, String token, String name, String regex) {
     this.index = index;

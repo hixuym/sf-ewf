@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.Inject;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import org.slf4j.Logger;

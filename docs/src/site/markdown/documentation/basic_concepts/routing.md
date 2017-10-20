@@ -157,9 +157,9 @@ router.GET().route("/assets/.*").with(AssetsController::serveArbitrary);
 </pre>
 
 In the first example <code>\\\\d\*</code> tells the router to match digits 
-(defined by <code>\\\\d</code>) of arbitrary length (defined by <code>\*</code>). 
+(defined by <code>\\\\d</code>) of arbitrary size (defined by <code>\*</code>). 
 In the second example <code>.\*</code> lets the router match arbitrary characters 
-(<code>.</code>) of arbitrary length (defined by <code>\*</code>).
+(<code>.</code>) of arbitrary size (defined by <code>\*</code>).
 
 This example also shows what happens if two routes match.
 For instance a request to <code>/assets/00012</code> is matched by

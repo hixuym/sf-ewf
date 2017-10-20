@@ -28,7 +28,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Route;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.InternalServerErrorException;

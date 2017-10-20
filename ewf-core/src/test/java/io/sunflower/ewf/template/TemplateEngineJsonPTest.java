@@ -29,7 +29,7 @@ import java.util.Collections;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
 import org.junit.Before;

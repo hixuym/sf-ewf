@@ -25,7 +25,7 @@ import java.lang.invoke.SerializedLambda;
 import java.nio.charset.StandardCharsets;
 
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod1;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod1;
 import io.sunflower.ewf.Results;
 import io.sunflower.ewf.Result;
 import org.hamcrest.CoreMatchers;

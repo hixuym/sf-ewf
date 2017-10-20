@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 @WithValidator(Validators.LengthValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Length {
+public @interface Size {
 
   /**
    * The maximum length of the field

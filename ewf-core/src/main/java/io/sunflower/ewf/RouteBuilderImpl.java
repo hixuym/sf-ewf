@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.util.Providers;
-import io.sunflower.ewf.ResourceMethods.ResourceMethod;
+import io.sunflower.ewf.utils.ResourceMethods.ResourceMethod;
 import io.sunflower.ewf.application.ApplicationFilters;
 import io.sunflower.ewf.params.ResourceMethodInvoker;
 import io.sunflower.ewf.utils.LambdaRoute;

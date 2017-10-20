@@ -25,7 +25,8 @@ import com.codahale.metrics.Timer;
 import io.sunflower.ewf.errors.BadRequestException;
 
 /**
- * Created by michael on 17/6/23.
+ * @author michael
+ * created on 17/6/23
  */
 @Singleton
 public class InstrumentedRouteHandler extends RouteHandlerImpl {
@@ -78,7 +79,7 @@ public class InstrumentedRouteHandler extends RouteHandlerImpl {
       allRequestsMeter.mark();
       context.setRoute(route);
 
-      Result underlyingResult = null;
+      Result underlyingResult;
       try {
         underlyingResult = route.getFilterChain().next(context);
         resultHandler.handleResult(underlyingResult, context);
@@ -88,7 +89,7 @@ public class InstrumentedRouteHandler extends RouteHandlerImpl {
         } else {
           internalServerErrors.mark();
         }
-        Result result = exceptionHandler.onException(context, exception, underlyingResult);
+        Result result = exceptionHandler.onException(exception, context);
         renderErrorResultAndCatchAndLogExceptions(result, context);
       } finally {
         context.cleanup();

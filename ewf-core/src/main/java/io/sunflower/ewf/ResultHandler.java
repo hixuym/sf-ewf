@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf;
 
 import javax.inject.Singleton;
 
@@ -25,8 +25,12 @@ import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.errors.WebApplicationException;
 import io.sunflower.ewf.template.TemplateEngine;
 import io.sunflower.ewf.template.TemplateEngineManager;
+import io.sunflower.ewf.utils.NoHttpBody;
 
 
+/**
+ * @author michael
+ */
 @Singleton
 public class ResultHandler {
 

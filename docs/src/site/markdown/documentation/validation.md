@@ -49,7 +49,7 @@ public class Dto {
         @Pattern(regexp = "[a-z]*")
         public String regex;
         @Size(min = 5, max = 10)
-        public String length;
+        public String size;
         @Min(value = 3)
         @Max(value = 10)
         public int range;

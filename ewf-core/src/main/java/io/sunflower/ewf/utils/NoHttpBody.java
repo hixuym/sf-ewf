@@ -15,6 +15,8 @@
 
 package io.sunflower.ewf.utils;
 
+import io.sunflower.ewf.ResultHandler;
+
 /**
  * This is a marker class used to handle Results in {@link ResultHandler}.
  *

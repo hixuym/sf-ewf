@@ -18,7 +18,6 @@ package io.sunflower.ewf;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.sunflower.ewf.utils.ResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +55,7 @@ public class RouteHandlerImpl implements RouteHandler {
 
     context.setRoute(route);
 
-    Result underlyingResult = null;
+    Result underlyingResult;
 
     try {
 
@@ -73,7 +72,7 @@ public class RouteHandlerImpl implements RouteHandler {
     }
   }
 
-  private void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
+  protected void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
     try {
       resultHandler.handleResult(errorResult, context);
     } catch (Exception exceptionCausingRenderError) {

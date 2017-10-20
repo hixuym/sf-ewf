@@ -28,6 +28,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.ResponseStreams;
+import io.sunflower.ewf.ResultHandler;
 import io.sunflower.ewf.Results;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.template.TemplateEngine;

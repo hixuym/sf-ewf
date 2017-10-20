@@ -49,7 +49,7 @@ import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.template.directives.TemplateEngineFreemarkerAuthenticityFormDirective;
 import io.sunflower.ewf.template.directives.TemplateEngineFreemarkerAuthenticityTokenDirective;
 import io.sunflower.ewf.utils.Constants;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import org.slf4j.Logger;
 
 @Singleton

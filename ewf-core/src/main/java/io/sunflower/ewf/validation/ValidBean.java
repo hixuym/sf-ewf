@@ -20,14 +20,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.sunflower.ewf.validation.Validators.Jsr303Validator;
+import io.sunflower.ewf.validation.Validators.BeanValidator;
 
 /**
  * Validates that the annotated element is conform to its JSR303-Annotations
  *
  * @author psommer
  */
-@WithValidator(Jsr303Validator.class)
+@WithValidator(BeanValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface ValidBean {

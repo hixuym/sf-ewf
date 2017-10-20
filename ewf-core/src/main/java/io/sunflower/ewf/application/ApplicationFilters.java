@@ -20,8 +20,13 @@ import io.sunflower.ewf.Filter;
 
 /**
  * Allows to define filters that are applied to every request of your application.
+ * @author michael
  */
 public interface ApplicationFilters {
 
+  /**
+   * add global filters
+   * @param filters
+   */
   void addGlobalFilters(List<Class<? extends Filter>> filters);
 }

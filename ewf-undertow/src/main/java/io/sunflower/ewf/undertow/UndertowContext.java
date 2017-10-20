@@ -37,8 +37,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.uploads.FileItem;
-import io.sunflower.ewf.utils.AbstractContext;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.AbstractContext;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
@@ -51,7 +51,6 @@ import io.undertow.server.handlers.form.FormDataParser;
 import io.undertow.util.HeaderValues;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by michael on 17/9/13.

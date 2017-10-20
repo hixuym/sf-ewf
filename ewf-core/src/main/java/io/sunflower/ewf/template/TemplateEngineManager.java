@@ -22,6 +22,7 @@ import com.google.inject.ImplementedBy;
 /**
  * Template engine manager. Has a number of built in template engines, and allows registering custom
  * template engines by registering explicit bindings of things that implement TemplateEngine.
+ * @author michael
  */
 @ImplementedBy(TemplateEngineManagerImpl.class)
 public interface TemplateEngineManager {

@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import org.junit.Before;

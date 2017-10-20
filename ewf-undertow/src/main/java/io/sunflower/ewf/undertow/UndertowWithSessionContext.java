@@ -24,7 +24,7 @@ import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.ParamParsers;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.utils.ResponseStreams;
+import io.sunflower.ewf.ResponseStreams;
 import io.sunflower.ewf.validation.Validation;
 import io.undertow.server.HttpServerExchange;
 

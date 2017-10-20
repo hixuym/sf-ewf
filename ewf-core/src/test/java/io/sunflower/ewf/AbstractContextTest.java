@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.utils;
+package io.sunflower.ewf;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -32,17 +32,10 @@ import java.util.HashSet;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import io.sunflower.ewf.ContentTypes;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Results;
-import io.sunflower.ewf.Route;
 import io.sunflower.ewf.bodyparser.BodyParserEngine;
 import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.ParamParsers;
 import io.sunflower.ewf.session.FlashScope;
-import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.Result;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.validation.Validation;
 import org.junit.Before;
