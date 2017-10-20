@@ -30,6 +30,9 @@ import io.sunflower.ewf.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class LangImpl implements Lang {
 

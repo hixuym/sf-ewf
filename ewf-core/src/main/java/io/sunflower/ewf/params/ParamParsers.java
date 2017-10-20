@@ -654,8 +654,7 @@ public class ParamParsers {
           }
           return Dates.asUtilDate(LocalDate.parse(parameterValue, LOCAL_DATE_FORMATER));
         } catch (DateTimeParseException e) {
-          validation
-              .addViolation(new ConstraintViolation(
+          validation.addViolation(new ConstraintViolation(
                   Constants.DATE_KEY, field, Constants.DATE_MESSAGE, parameterValue));
           return null;
         }

@@ -19,22 +19,25 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import io.sunflower.ewf.errors.BadRequestException;
-import io.sunflower.ewf.utils.ErrorMessage;
-import io.sunflower.ewf.utils.Constants;
+import io.sunflower.ewf.errors.ErrorMessage;
 import io.sunflower.ewf.errors.RenderingException;
 import io.sunflower.ewf.i18n.Messages;
+import io.sunflower.ewf.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultExceptionMapper implements ExceptionMapper {
+/**
+ * @author michael
+ */
+public class DefaultExceptionHandler implements ExceptionHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
 
   private final Messages messages;
   private final Settings configuration;
 
   @Inject
-  public DefaultExceptionMapper(Messages messages, Settings configuration) {
+  public DefaultExceptionHandler(Messages messages, Settings configuration) {
     this.messages = messages;
     this.configuration = configuration;
   }
@@ -53,7 +56,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
   }
 
   @Override
-  public Result onException(Context context, Exception exception, Result underlyingResult) {
+  public Result onException(Exception exception, Context context) {
 
     Result result;
     // log the exception as debug
@@ -62,12 +65,12 @@ public class DefaultExceptionMapper implements ExceptionMapper {
     }
 
     if (exception instanceof BadRequestException) {
-      result = getBadRequestResult(context, exception);
+      result = getBadRequestResult(exception, context);
     } else if (exception instanceof RenderingException) {
       RenderingException renderingException = (RenderingException) exception;
-      result = getRenderingExceptionResult(context, renderingException, underlyingResult);
+      result = getRenderingExceptionResult(renderingException, context);
     } else {
-      result = getInternalServerErrorResult(context, exception, underlyingResult);
+      result = getInternalServerErrorResult(exception, context);
     }
     return result;
   }
@@ -126,7 +129,7 @@ public class DefaultExceptionMapper implements ExceptionMapper {
 
   }
 
-  private Result getBadRequestResult(Context context, Exception exception) {
+  protected Result getBadRequestResult(Exception exception, Context context) {
 
     String messageI18n
         = messages.getWithDefault(
@@ -143,19 +146,13 @@ public class DefaultExceptionMapper implements ExceptionMapper {
         .render(message);
   }
 
-  private Result getRenderingExceptionResult(Context context, RenderingException exception,
-      Result underlyingResult) {
+  protected Result getRenderingExceptionResult(RenderingException exception, Context context) {
 
-    return getInternalServerErrorResult(context, exception);
+    return getInternalServerErrorResult(exception, context);
 
   }
 
-  private Result getInternalServerErrorResult(Context context, Exception exception) {
-    return getInternalServerErrorResult(context, exception, null);
-  }
-
-  private Result getInternalServerErrorResult(Context context, Exception exception,
-      Result underlyingResult) {
+  protected Result getInternalServerErrorResult(Exception exception, Context context) {
 
     logger.error(
         "Emitting bad request 500. Something really wrong when calling route: {} (class: {} method: {})",

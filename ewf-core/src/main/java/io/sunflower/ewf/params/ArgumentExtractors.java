@@ -230,7 +230,7 @@ public class ArgumentExtractors {
 
     @Override
     public FileItem[] extract(Context context) {
-      List<FileItem> values = new ArrayList<FileItem>();
+      List<FileItem> values = new ArrayList<>();
       for (FileItem fileItem : context.getParameterAsFileItems(key)) {
         values.add(fileItem);
       }
@@ -282,7 +282,7 @@ public class ArgumentExtractors {
 
     @Override
     public File[] extract(Context context) {
-      List<File> values = new ArrayList<File>();
+      List<File> values = new ArrayList<>();
       for (FileItem fileItem : context.getParameterAsFileItems(key)) {
         values.add(fileItem.getFile());
       }
@@ -334,7 +334,7 @@ public class ArgumentExtractors {
 
     @Override
     public InputStream[] extract(Context context) {
-      List<InputStream> values = new ArrayList<InputStream>();
+      List<InputStream> values = new ArrayList<>();
       for (FileItem fileItem : context.getParameterAsFileItems(key)) {
         values.add(fileItem.getInputStream());
       }

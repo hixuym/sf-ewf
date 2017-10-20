@@ -162,8 +162,7 @@ public class ResourceMethodInvoker {
     if (extractor == null) {
       // See if we have a WithArgumentExtractors annotated annotation for specialized extractors
       for (Annotation annotation : annotations) {
-        WithArgumentExtractors withArgumentExtractors = annotation.annotationType()
-            .getAnnotation(WithArgumentExtractors.class);
+        WithArgumentExtractors withArgumentExtractors = annotation.annotationType().getAnnotation(WithArgumentExtractors.class);
         if (withArgumentExtractors != null) {
           for (Class<? extends ArgumentExtractor<?>> argumentExtractor : withArgumentExtractors.value()) {
             Class<?> extractedType =

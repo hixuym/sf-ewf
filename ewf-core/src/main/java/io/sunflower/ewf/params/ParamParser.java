@@ -19,6 +19,7 @@ import io.sunflower.ewf.validation.Validation;
 
 /**
  * Parses a String parameter
+ * @author michael
  */
 public interface ParamParser<T> {
 

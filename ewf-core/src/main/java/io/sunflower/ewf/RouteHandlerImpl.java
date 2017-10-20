@@ -37,7 +37,7 @@ public class RouteHandlerImpl implements RouteHandler {
   protected ResultHandler resultHandler;
 
   @Inject
-  protected ExceptionMapper exceptionMapper;
+  protected ExceptionHandler exceptionHandler;
 
   @Override
   public void handleRequest(Context.Impl context) {
@@ -48,7 +48,7 @@ public class RouteHandlerImpl implements RouteHandler {
 
     if (route == null) {
       // throw a 404 "not found" because we did not find the route
-      Result result = exceptionMapper.getNotFoundResult(context);
+      Result result = exceptionHandler.getNotFoundResult(context);
       renderErrorResultAndCatchAndLogExceptions(result, context);
 
       return;
@@ -66,21 +66,18 @@ public class RouteHandlerImpl implements RouteHandler {
 
     } catch (Exception exception) {
       // call special handler to capture the underlying result if there is one
-      Result result = exceptionMapper.onException(context, exception, underlyingResult);
+      Result result = exceptionHandler.onException(exception, context);
       renderErrorResultAndCatchAndLogExceptions(result, context);
     } finally {
       context.cleanup();
     }
   }
 
-  @Override
-  public void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
-
+  private void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
     try {
       resultHandler.handleResult(errorResult, context);
     } catch (Exception exceptionCausingRenderError) {
-      logger.error("Unable to handle result. That's really really fishy.",
-          exceptionCausingRenderError);
+      logger.error("Unable to handle result. That's really really fishy.", exceptionCausingRenderError);
     }
   }
 }

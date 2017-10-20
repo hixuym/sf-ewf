@@ -17,21 +17,16 @@ package io.sunflower.ewf;
 
 import com.google.inject.ImplementedBy;
 
+/**
+ * @author michael
+ */
 @ImplementedBy(RouteHandlerImpl.class)
 public interface RouteHandler {
 
   /**
    * When a route is requested this method is called.
+   * @param context ewf request context
    */
   void handleRequest(Context.Impl context);
-
-  /**
-   * Should be used to render an error. Any errors should be catched and not reported in any way to
-   * the request.
-   *
-   * For instance if your application catches a sever internal computation error use this method and
-   * its implementations to render out an error html page.
-   */
-  void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context);
 
 }

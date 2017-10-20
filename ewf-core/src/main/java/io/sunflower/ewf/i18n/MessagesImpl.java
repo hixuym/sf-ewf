@@ -35,6 +35,9 @@ import io.sunflower.ewf.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class MessagesImpl implements Messages {
 

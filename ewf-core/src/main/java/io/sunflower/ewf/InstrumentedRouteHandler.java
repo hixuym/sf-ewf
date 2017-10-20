@@ -70,7 +70,7 @@ public class InstrumentedRouteHandler extends RouteHandlerImpl {
 
       if (route == null) {
         routesNotFound.mark();
-        Result result = exceptionMapper.getNotFoundResult(context);
+        Result result = exceptionHandler.getNotFoundResult(context);
         renderErrorResultAndCatchAndLogExceptions(result, context);
         return;
       }
@@ -88,7 +88,7 @@ public class InstrumentedRouteHandler extends RouteHandlerImpl {
         } else {
           internalServerErrors.mark();
         }
-        Result result = exceptionMapper.onException(context, exception, underlyingResult);
+        Result result = exceptionHandler.onException(context, exception, underlyingResult);
         renderErrorResultAndCatchAndLogExceptions(result, context);
       } finally {
         context.cleanup();

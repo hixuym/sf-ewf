@@ -19,6 +19,7 @@ import io.sunflower.ewf.Context;
 
 /**
  * Argument extractor that parses the String[] argument into a X[]
+ * @author michael
  */
 public class ParsingArrayExtractor<X> implements ArgumentExtractor<X> {
 

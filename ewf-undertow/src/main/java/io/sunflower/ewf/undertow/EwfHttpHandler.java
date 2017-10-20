@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Handles a request from Undertow and then delegates to ewf.
+ * @author michael
  */
 public class EwfHttpHandler implements HttpHandler {
 

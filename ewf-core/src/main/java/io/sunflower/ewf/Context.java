@@ -30,6 +30,9 @@ import io.sunflower.ewf.uploads.FileItem;
 import io.sunflower.ewf.utils.ResponseStreams;
 import io.sunflower.ewf.validation.Validation;
 
+/**
+ * @author michael
+ */
 public interface Context {
 
   /**
@@ -50,12 +53,6 @@ public interface Context {
    * X Forwarded for header, used when behind fire walls and proxies.
    */
   String X_FORWARD_HEADER = "X-Forwarded-For";
-
-  /**
-   * Used to enable or disable usage of X-Forwarded-For header in getRemoteAddr(). Can be set in
-   * application.conf to true or false. If not set it's assumed to be false;
-   */
-  String GIZMO_PROPERTIES_X_FORWARDED_FOR = "gizmo.x_forwarded_for_enabled";
 
   /**
    * The Content-Type header field indicates the media type of the request body sent to the
@@ -266,6 +263,7 @@ public interface Context {
    * The parameter is decoded by default.
    *
    * @param name The name of the post or query parameter
+   * @param clazz the class of bean
    * @return The value of the parameter or null if not found.
    */
   <T> T getParameterAs(String name, Class<T> clazz);
@@ -326,14 +324,14 @@ public interface Context {
 
   /**
    * Get the (first) request header with the given name
-   *
+   * @param name header name
    * @return The header value or null if not found.
    */
   String getHeader(String name);
 
   /**
    * Get all the request headers with the given name.
-   *
+   * @param name headers name
    * @return the header values. Returns empty list if none are found.
    */
   List<String> getHeaders(String name);
