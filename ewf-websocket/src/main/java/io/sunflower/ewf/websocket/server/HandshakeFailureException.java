@@ -15,7 +15,7 @@
 
 package io.sunflower.ewf.websocket.server;
 
-import io.sunflower.ewf.exceptions.EwfException;
+import io.sunflower.ewf.errors.WebApplicationException;
 
 /**
  * Thrown when handshake processing failed to complete due to an internal, unrecoverable error. This
@@ -31,7 +31,7 @@ import io.sunflower.ewf.exceptions.EwfException;
  * @since 4.0
  */
 @SuppressWarnings("serial")
-public class HandshakeFailureException extends EwfException {
+public class HandshakeFailureException extends WebApplicationException {
 
   public HandshakeFailureException(String message) {
     super(505, message);

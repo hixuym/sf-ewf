@@ -38,7 +38,7 @@ import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
 import io.sunflower.ewf.Route;
-import io.sunflower.ewf.exceptions.RenderingException;
+import io.sunflower.ewf.errors.RenderingException;
 import io.sunflower.ewf.i18n.Lang;
 import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.session.FlashScope;
@@ -160,7 +160,7 @@ public class TemplateEngineFreemarkerTest {
     when(templateEngineHelper
         .getTemplateForResult(any(Route.class), any(Result.class), Mockito.anyString()))
         .thenReturn("views/broken.ftl.html");
-    // only freemarker templates generated exceptions to browser -- it makes
+    // only freemarker templates generated errors to browser -- it makes
     // sense that this continues in diagnostic mode only
     //when(configuration.isDev()).thenReturn(true);
     //when(configuration.areDiagnosticsEnabled()).thenReturn(true);

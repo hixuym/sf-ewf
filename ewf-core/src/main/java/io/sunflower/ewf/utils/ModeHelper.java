@@ -28,7 +28,7 @@ public class ModeHelper {
    * returns an empty Optional<Mode> if no mode is set. Or the valid mode set via a System Property
    * called "ninja.mode".
    *
-   * E.g. under mvn you can use mvn ... -Dninja.mode=prod or so. Valid values for ninja.mode are
+   * E.g. under mvn you can use mvn ... -Dninja.mode=prod or so. ValidBean values for ninja.mode are
    * "prod", "dev", "test".
    *
    * @return The valid mode set via a System Property called "ninja.mode" or Optional absent if we
@@ -68,7 +68,7 @@ public class ModeHelper {
    * returns Mode.dev if no mode is set. Or the valid mode set via a System Property called
    * "ninja.mode".
    *
-   * E.g. under mvn you can use mvn ... -Dewf.mode=prod or so. Valid values for ninja.mode are
+   * E.g. under mvn you can use mvn ... -Dewf.mode=prod or so. ValidBean values for ninja.mode are
    * "prod", "dev", "test".
    *
    * @return The valid mode set via a System Property called "ninja.mode" or Mode.dev if it is not

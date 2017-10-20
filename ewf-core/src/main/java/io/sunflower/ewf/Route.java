@@ -26,22 +26,23 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * A route
+ * @author michael
  */
 public class Route {
 
-  static public final String HTTP_METHOD_GET = "GET";
-  static public final String HTTP_METHOD_POST = "POST";
-  static public final String HTTP_METHOD_PUT = "PUT";
-  static public final String HTTP_METHOD_HEAD = "HEAD";
-  static public final String HTTP_METHOD_DELETE = "DELETE";
-  static public final String HTTP_METHOD_OPTIONS = "OPTIONS";
-  static public final String HTTP_METHOD_WEBSOCKET = "WS";
+  static final String HTTP_METHOD_GET = "GET";
+  static final String HTTP_METHOD_POST = "POST";
+  static final String HTTP_METHOD_PUT = "PUT";
+  static final String HTTP_METHOD_HEAD = "HEAD";
+  static final String HTTP_METHOD_DELETE = "DELETE";
+  static final String HTTP_METHOD_OPTIONS = "OPTIONS";
 
-  //Matches: {id} AND {id: .*?}
-  // group(1) extracts the name of the group (in that case "id").
-  // group(3) extracts the regex if defined
-  final static Pattern PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE
-      = Pattern.compile("\\{(.*?)(:\\s(.*?))?}");
+  /**
+   * Matches: {id} AND {id: .*?}
+   * group(1) extracts the name of the group (in that case "id").
+   * group(3) extracts the regex if defined
+   */
+  final static Pattern PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE = Pattern.compile("\\{(.*?)(:\\s(.*?))?}");
 
   /**
    * This regex matches everything in between path slashes.
@@ -93,10 +94,6 @@ public class Route {
 
   public boolean isHttpMethodOptions() {
     return this.isHttpMethod(Route.HTTP_METHOD_OPTIONS);
-  }
-
-  public boolean isHttpMethodWebSocket() {
-    return this.isHttpMethod(Route.HTTP_METHOD_WEBSOCKET);
   }
 
   public String getHttpMethod() {
@@ -165,6 +162,7 @@ public class Route {
     return map;
   }
 
+  private static final Pattern GROUP_MATCHER = Pattern.compile("\\(([^?].*)\\)");
   /**
    * Gets a raw uri like "/{name}/id/*" and returns "/([^/]*)/id/*."
    *
@@ -179,7 +177,7 @@ public class Route {
 
     // convert capturing groups in route regex to non-capturing groups
     // this is to avoid count mismatch of path params and groups in uri regex
-    Matcher groupMatcher = Pattern.compile("\\(([^?].*)\\)").matcher(rawUri);
+    Matcher groupMatcher = GROUP_MATCHER.matcher(rawUri);
     String converted = groupMatcher.replaceAll("\\(?:$1\\)");
 
     Matcher matcher = PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE.matcher(converted);

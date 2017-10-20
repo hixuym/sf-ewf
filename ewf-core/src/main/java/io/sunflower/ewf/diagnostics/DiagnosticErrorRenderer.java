@@ -31,14 +31,14 @@ import io.sunflower.ewf.Route;
 import io.sunflower.ewf.utils.ResponseStreams;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.exceptions.InternalServerErrorException;
+import io.sunflower.ewf.errors.InternalServerErrorException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Utility class for rendering <code>DiagnosticError</code> instances as a Result.  Does not rely on
- * any 3rd party rendering library to permit rendering exceptions in the case where a template
+ * any 3rd party rendering library to permit rendering errors in the case where a template
  * engine fails!
  *
  * @author Joe Lauer (https://twitter.com/jjlauer)
@@ -383,7 +383,7 @@ public class DiagnosticErrorRenderer {
 
     Object renderable = result.getRenderable();
 
-    // only rendering exceptions would have the renderable actually set
+    // only rendering errors would have the renderable actually set
     // to something other than a DiagnosticError
     if (renderable == null || renderable instanceof DiagnosticError) {
       appendNoValues(s);

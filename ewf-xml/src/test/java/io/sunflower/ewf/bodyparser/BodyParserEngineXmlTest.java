@@ -30,7 +30,7 @@ import java.util.TimeZone;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.exceptions.BadRequestException;
+import io.sunflower.ewf.errors.BadRequestException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;

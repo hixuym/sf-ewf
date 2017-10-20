@@ -43,17 +43,17 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.multibindings.Multibinder;
-import io.sunflower.ewf.exceptions.RoutingException;
+import io.sunflower.ewf.errors.RoutingException;
 import io.sunflower.ewf.i18n.Lang;
 import io.sunflower.ewf.i18n.LangImpl;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.exceptions.BadRequestException;
+import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.validation.ConstraintViolation;
-import io.sunflower.ewf.validation.JSR303Validation;
+import io.sunflower.ewf.validation.ValidBean;
 import io.sunflower.ewf.validation.NumberValue;
 import io.sunflower.ewf.validation.Validation;
 import io.sunflower.ewf.validation.ValidationImpl;
@@ -1030,7 +1030,7 @@ public class ResourceMethodInvokerTest {
     verify(mockController).bodyWithOptional(Optional.empty());
   }
 
-  // JSR303Validation(@Pattern(regexp = "[a-z]*") String param1,
+  // ValidBean(@Pattern(regexp = "[a-z]*") String param1,
   // @Length(min = 5, max = 10) String param2, @Min(3) @Max(10) int param3);
   @Test
   public void validationPassed() {
@@ -1223,7 +1223,7 @@ public class ResourceMethodInvokerTest {
 
   private void validateJSR303(Dto dto) {
     when(context.parseBody(Dto.class)).thenReturn(dto);
-    create("JSR303Validation", this.lang).invoke(mockController, context);
+    create("ValidBean", this.lang).invoke(mockController, context);
   }
 
   private void validateJSR303WithOptional(Dto dto) {
@@ -1389,11 +1389,11 @@ public class ResourceMethodInvokerTest {
 
     Result tooManyBodies(Object body1, Object body2);
 
-    Result JSR303Validation(@JSR303Validation Dto dto, Validation validation);
+    Result JSR303Validation(@ValidBean Dto dto, Validation validation);
 
-    Result JSR303ValidationWithOptional(@JSR303Validation Optional<Dto> dto, Validation validation);
+    Result JSR303ValidationWithOptional(@ValidBean Optional<Dto> dto, Validation validation);
 
-    Result JSR303ValidationWithRequired(@JSR303Validation Dto dto, Validation validation);
+    Result JSR303ValidationWithRequired(@ValidBean Dto dto, Validation validation);
 
     Result dateParam(@Param("param1") Date param1);
 

@@ -44,7 +44,7 @@ public interface Validation {
 
   /**
    * Whether the validation context has a violation for the given field
-   *
+   * @param paramName key
    * @return True if it does
    */
   boolean hasViolation(String paramName);
@@ -58,7 +58,7 @@ public interface Validation {
 
   /**
    * Get a complete list of field violations for a specified parameter.
-   *
+   * @param paramName key
    * @return A List of FieldViolation-objects
    */
   List<ConstraintViolation> getViolations(String paramName);

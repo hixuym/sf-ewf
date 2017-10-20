@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.exceptions;
+package io.sunflower.ewf.errors;
 
 import io.sunflower.ewf.Result;
 
 /**
- * A convenience unchecked exception for "rendering" exceptions.
+ * A convenience unchecked exception for "rendering" errors.
  *
  * Allows you to wrap any exception (checked or unchecked) and throw it along with info about
  * what...
@@ -29,7 +29,7 @@ import io.sunflower.ewf.Result;
  *
  * RouteHandler is supposed to pick it up and render an appropriate error page.
  */
-public class RenderingException extends EwfException {
+public class RenderingException extends WebApplicationException {
 
   private final static String DEFAULT_MESSAGE = "Result rendering failed and that's all we know.";
 

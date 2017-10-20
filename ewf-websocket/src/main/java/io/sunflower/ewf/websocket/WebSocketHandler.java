@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * A handler for WebSocket messages and lifecycle events.
  *
- * <p>Implementations of this interface are encouraged to handle exceptions locally where it makes
+ * <p>Implementations of this interface are encouraged to handle errors locally where it makes
  * sense or alternatively let the exception bubble up in which case by default the exception is
  * logged and the session closed with {@link CloseStatus#SERVER_ERROR SERVER_ERROR(1011)}. The
  * exception handling strategy is provided by ExceptionWebSocketHandlerDecorator} and it can be
@@ -36,7 +36,7 @@ public interface WebSocketHandler {
    * Invoked after WebSocket negotiation has succeeded and the WebSocket connection is opened and
    * ready for use.
    *
-   * @throws Exception this method can handle or propagate exceptions; see class-level Javadoc for
+   * @throws Exception this method can handle or propagate errors; see class-level Javadoc for
    * details.
    */
   void afterConnectionEstablished(WebSocketSession session);
@@ -44,7 +44,7 @@ public interface WebSocketHandler {
   /**
    * Invoked when a new WebSocket message arrives.
    *
-   * @throws Exception this method can handle or propagate exceptions; see class-level Javadoc for
+   * @throws Exception this method can handle or propagate errors; see class-level Javadoc for
    * details.
    */
   void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException;
@@ -52,7 +52,7 @@ public interface WebSocketHandler {
   /**
    * Handle an error from the underlying WebSocket message transport.
    *
-   * @throws Exception this method can handle or propagate exceptions; see class-level Javadoc for
+   * @throws Exception this method can handle or propagate errors; see class-level Javadoc for
    * details.
    */
   void handleTransportError(WebSocketSession session, Throwable exception);
@@ -63,7 +63,7 @@ public interface WebSocketHandler {
    * underlying implementation, sending messages at this point is discouraged and most likely will
    * not succeed.
    *
-   * @throws Exception this method can handle or propagate exceptions; see class-level Javadoc for
+   * @throws Exception this method can handle or propagate errors; see class-level Javadoc for
    * details.
    */
   void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus);

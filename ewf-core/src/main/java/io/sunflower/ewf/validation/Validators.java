@@ -20,13 +20,14 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import javax.inject.Singleton;
 import javax.validation.MessageInterpolator;
+import javax.validation.Valid;
 import javax.validation.ValidatorFactory;
 import javax.validation.metadata.ConstraintDescriptor;
 
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Result;
 import io.sunflower.ewf.i18n.Lang;
 
 /**
@@ -50,8 +51,8 @@ public class Validators {
    *
    * @author Thibault Meyer
    */
-  private static class GizmoContextMsgInterpolator implements MessageInterpolator.Context,
-      Serializable {
+  private static class EwfContextMsgInterpolator
+      implements MessageInterpolator.Context, Serializable {
 
     private final Object value;
     private final ConstraintDescriptor<?> descriptor;
@@ -62,7 +63,7 @@ public class Validators {
      * @param value value being validated
      * @param descriptor Constraint being validated
      */
-    public GizmoContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
+    public EwfContextMsgInterpolator(Object value, ConstraintDescriptor<?> descriptor) {
       this.value = value;
       this.descriptor = descriptor;
     }
@@ -94,13 +95,20 @@ public class Validators {
     }
   }
 
-  public static class JSRValidator implements Validator<Object> {
+  @Singleton
+  public static class Jsr303Validator implements Validator<Object> {
 
     private final Lang requestLanguage;
+    private final javax.validation.Validator validator;
+    private final ValidatorFactory validatorFactory;
 
     @Inject
-    public JSRValidator(Lang requestLanguage) {
+    public Jsr303Validator(Lang requestLanguage,
+        ValidatorFactory validatorFactory,
+        javax.validation.Validator validator) {
       this.requestLanguage = requestLanguage;
+      this.validator = validator;
+      this.validatorFactory = validatorFactory;
     }
 
     /**
@@ -113,25 +121,19 @@ public class Validators {
     @Override
     public void validate(Object value, String field, Context context) {
       if (value != null) {
-        final ValidatorFactory validatorFactory = javax.validation.Validation
-            .buildDefaultValidatorFactory();
-        final javax.validation.Validator validator = validatorFactory.getValidator();
-        final Set<javax.validation.ConstraintViolation<Object>> violations = validator
-            .validate(value);
+        final Set<javax.validation.ConstraintViolation<Object>> violations = validator.validate(value);
         final Locale localeToUse = this.requestLanguage.getLocaleFromStringOrDefault(
-            this.requestLanguage.getLanguage(context, Optional.<Result>empty()));
+            this.requestLanguage.getLanguage(context, Optional.empty()));
+
         final Validation validation = context.getValidation();
 
         for (final javax.validation.ConstraintViolation<Object> violation : violations) {
           final String violationMessage = validatorFactory.getMessageInterpolator().interpolate(
               violation.getMessageTemplate(),
-              new GizmoContextMsgInterpolator(value, violation.getConstraintDescriptor()),
-              localeToUse
-          );
+              new EwfContextMsgInterpolator(value, violation.getConstraintDescriptor()), localeToUse);
           final String messageKey = violation.getMessageTemplate().replaceAll("[{}]", "");
           final ConstraintViolation constraintViolation = new ConstraintViolation(
-              messageKey, violation.getPropertyPath().toString(), violationMessage,
-              violation.getInvalidValue());
+              messageKey, violation.getPropertyPath().toString(), violationMessage, violation.getInvalidValue());
           validation.addViolation(constraintViolation);
         }
       }

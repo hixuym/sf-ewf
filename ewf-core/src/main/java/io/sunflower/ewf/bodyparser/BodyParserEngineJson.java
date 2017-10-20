@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.ContentTypes;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.exceptions.BadRequestException;
+import io.sunflower.ewf.errors.BadRequestException;
 
 /**
  * Built in Json body parser.

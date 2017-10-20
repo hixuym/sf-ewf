@@ -32,6 +32,9 @@ import io.sunflower.ewf.validation.ConstraintViolation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx {
 
   public final static Logger logger = LoggerFactory
@@ -50,13 +53,14 @@ public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx
 
   }
 
+  @Override
   public TemplateModel exec(List args) throws TemplateModelException {
 
     if (args.size() == 1 && args.get(0) instanceof StringModel
         && ((StringModel) args.get(0)).getWrappedObject() instanceof ConstraintViolation) {
 
-      ConstraintViolation violation = (ConstraintViolation) ((StringModel) args.get(0))
-          .getWrappedObject();
+      ConstraintViolation violation = (ConstraintViolation)
+          ((StringModel) args.get(0)).getWrappedObject();
 
       String messageValue = messages
           .get(violation.getMessageKey(), context, result, violation.getMessageParams())

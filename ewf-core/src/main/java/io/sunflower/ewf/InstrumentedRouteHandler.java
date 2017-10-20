@@ -22,7 +22,7 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import io.sunflower.ewf.exceptions.BadRequestException;
+import io.sunflower.ewf.errors.BadRequestException;
 
 /**
  * Created by michael on 17/6/23.

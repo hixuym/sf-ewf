@@ -20,15 +20,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import io.sunflower.ewf.validation.Validators.Jsr303Validator;
+
 /**
  * Validates that the annotated element is conform to its JSR303-Annotations
  *
  * @author psommer
  */
-@WithValidator(Validators.JSRValidator.class)
+@WithValidator(Jsr303Validator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface JSR303Validation {
+public @interface ValidBean {
 
   String KEY = "validation.is.JSR303.violation";
   String MESSAGE = "{0} cannot be validated with JSR303 annotations";

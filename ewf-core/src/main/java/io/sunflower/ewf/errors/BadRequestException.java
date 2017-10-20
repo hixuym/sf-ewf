@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.exceptions;
+package io.sunflower.ewf.errors;
 
 import io.sunflower.ewf.Result;
 
@@ -27,7 +27,7 @@ import io.sunflower.ewf.Result;
  *
  * RouteHandler is supposed to pick it up and render an appropriate error page.
  */
-public class BadRequestException extends EwfException {
+public class BadRequestException extends WebApplicationException {
 
   final static String DEFAULT_MESSAGE = "That's a bad request and all we know.";
 

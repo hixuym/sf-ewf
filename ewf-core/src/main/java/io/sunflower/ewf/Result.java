@@ -31,7 +31,7 @@ import io.sunflower.ewf.utils.DateUtil;
 import io.sunflower.ewf.utils.NoHttpBody;
 import io.sunflower.ewf.utils.ResponseStreams;
 import io.sunflower.ewf.utils.SwissKnife;
-import io.sunflower.ewf.exceptions.InternalServerErrorException;
+import io.sunflower.ewf.errors.InternalServerErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

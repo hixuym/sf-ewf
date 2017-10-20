@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.exceptions;
+package io.sunflower.ewf.errors;
 
 /**
  * Exception thrown when an error in route configuration is found

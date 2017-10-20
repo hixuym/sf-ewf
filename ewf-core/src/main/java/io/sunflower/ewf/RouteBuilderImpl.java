@@ -35,17 +35,25 @@ import io.sunflower.ewf.utils.LambdaRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class RouteBuilderImpl implements RouteBuilder {
 
   private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
 
-  protected final static String GLOBAL_FILTERS_DEFAULT_LOCATION = "conf.Filters";
-
   private String httpMethod;
   private String uri;
   private Method functionalMethod;
-  private Optional<Method> implementationMethod;  // method to use for parameter/annotation extraction
-  private Optional<Object> targetObject;          // instance to invoke
+  /**
+   * method to use for parameter/annotation extraction
+   */
+  private Optional<Method> implementationMethod;
+
+  /**
+   * instance to invoke
+   */
+  private Optional<Object> targetObject;
   private Optional<List<Class<? extends Filter>>> globalFiltersOptional;
   private final List<Class<? extends Filter>> localFilters;
 
@@ -161,20 +169,20 @@ public class RouteBuilderImpl implements RouteBuilder {
    *
    * We are reloading when there are changes. So this is almost as good as compile time checking.
    *
-   * @param controllerClass The controller class
-   * @param controllerMethod The method
+   * @param resourceClass The controller class
+   * @param resourceMethod The method
    * @return The actual method
    */
-  private Method verifyControllerMethod(Class<?> controllerClass,
-      String controllerMethod) {
+  private Method verifyControllerMethod(Class<?> resourceClass,
+      String resourceMethod) {
     try {
       Method methodFromQueryingClass = null;
 
       // 1. Make sure method is in class
       // 2. Make sure only one method is there. Otherwise we cannot really
       // know what to do with the parameters.
-      for (Method method : controllerClass.getMethods()) {
-        if (method.getName().equals(controllerMethod)) {
+      for (Method method : resourceClass.getMethods()) {
+        if (method.getName().equals(resourceMethod)) {
           if (methodFromQueryingClass == null) {
             methodFromQueryingClass = method;
           } else {
@@ -196,14 +204,11 @@ public class RouteBuilderImpl implements RouteBuilder {
       }
 
     } catch (SecurityException e) {
-      log.error(
-          "Error while checking for valid Controller / controllerMethod combination",
-          e);
+      log.error("Error while checking for valid Resource / resourceMethod combination", e);
     } catch (NoSuchMethodException e) {
       log.error("Error in route configuration!!!");
-      log.error("Can not find Controller " + controllerClass.getName()
-          + " and method " + controllerMethod);
-      log.error("Hint: make sure the controller returns a Result!");
+      log.error("Can not find Resource " + resourceClass.getName() + " and method " + resourceMethod);
+      log.error("Hint: make sure the resource method returns a Result!");
       log.error("Hint: RouteHandler does not allow more than one method with the same name!");
     }
     return null;
@@ -218,18 +223,19 @@ public class RouteBuilderImpl implements RouteBuilder {
   public Route buildRoute(Injector injector) {
     if (functionalMethod == null) {
       log.error("Error in route configuration for {}", uri);
-      throw new IllegalStateException("Route missing a controller method");
+      throw new IllegalStateException("Route missing a resource method");
     }
 
     // Calculate filters
     LinkedList<Class<? extends Filter>> allFilters = new LinkedList<>();
 
-    allFilters.addAll(calculateGlobalFilters(this.globalFiltersOptional, injector));
+    allFilters.addAll(calculateGlobalFilters(this.globalFiltersOptional));
 
     allFilters.addAll(this.localFilters);
 
     allFilters.addAll(calculateFiltersForClass(functionalMethod.getDeclaringClass()));
     FilterWith filterWith = functionalMethod.getAnnotation(FilterWith.class);
+
     if (filterWith != null) {
       allFilters.addAll(Arrays.asList(filterWith.value()));
     }
@@ -239,12 +245,11 @@ public class RouteBuilderImpl implements RouteBuilder {
     return new Route(httpMethod, uri, functionalMethod, filterChain);
   }
 
-  private List<Class<? extends Filter>> calculateGlobalFilters(
-      Optional<List<Class<? extends Filter>>> globalFiltersList, Injector injector) {
+  private List<Class<? extends Filter>> calculateGlobalFilters(Optional<List<Class<? extends Filter>>> globalFiltersList) {
+
     List<Class<? extends Filter>> allFilters = Lists.newArrayList();
 
-    // Setting globalFilters in route will deactivate the filters defined
-    // by conf.Filters
+    // Setting globalFilters in route will deactivate the filters defined by globalFilters
     if (globalFiltersList.isPresent()) {
       allFilters.addAll(globalFiltersList.get());
     } else {
@@ -285,8 +290,8 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
   }
 
-  private Set<Class<? extends Filter>> calculateFiltersForClass(
-      Class controller) {
+  private Set<Class<? extends Filter>> calculateFiltersForClass(Class resourceClass) {
+
     LinkedHashSet<Class<? extends Filter>> filters = new LinkedHashSet<>();
 
     //
@@ -294,20 +299,19 @@ public class RouteBuilderImpl implements RouteBuilder {
     //
 
     // Superclass
-    if (controller.getSuperclass() != null) {
-      filters.addAll(calculateFiltersForClass(controller.getSuperclass()));
+    if (resourceClass.getSuperclass() != null) {
+      filters.addAll(calculateFiltersForClass(resourceClass.getSuperclass()));
     }
 
     // Interfaces
-    if (controller.getInterfaces() != null) {
-      for (Class clazz : controller.getInterfaces()) {
+    if (resourceClass.getInterfaces() != null) {
+      for (Class clazz : resourceClass.getInterfaces()) {
         filters.addAll(calculateFiltersForClass(clazz));
       }
     }
 
     // Now add from here
-    FilterWith filterWith = (FilterWith) controller
-        .getAnnotation(FilterWith.class);
+    FilterWith filterWith = (FilterWith) resourceClass.getAnnotation(FilterWith.class);
     if (filterWith != null) {
       filters.addAll(Arrays.asList(filterWith.value()));
     }

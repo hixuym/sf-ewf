@@ -13,34 +13,37 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.exceptions;
+package io.sunflower.ewf.errors;
+
+import io.sunflower.ewf.Result;
 
 /**
  * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and
  * throw it.
  *
- * Should signal a html error 400 - bad request (the client sent something strange).
+ * Should signal a html error 500 (something went wrong on the server).
  *
  * Useful inside resources or filters for instance.
  *
  * RouteHandler is supposed to pick it up and render an appropriate error page.
  */
-public class EwfException extends RuntimeException {
+public class InternalServerErrorException extends WebApplicationException {
 
-  private int httpStatus;
+  private final static String DEFAULT_MESSAGE = "That's an internal server error and all we know.";
 
-  public EwfException(int httpStatus, String httpMessage) {
-    super(httpMessage);
-    this.httpStatus = httpStatus;
+  public InternalServerErrorException() {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE);
   }
 
-  public EwfException(int httpStatus, String httpMessage, Throwable cause) {
-    super(httpMessage, cause);
-    this.httpStatus = httpStatus;
+  public InternalServerErrorException(String message) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, message);
   }
 
-  public int getHttpStatus() {
-    return this.httpStatus;
+  public InternalServerErrorException(String message, Throwable cause) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
   }
 
+  public InternalServerErrorException(Throwable cause) {
+    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE, cause);
+  }
 }

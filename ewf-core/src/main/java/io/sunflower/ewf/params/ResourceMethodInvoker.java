@@ -28,8 +28,8 @@ import java.util.Optional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.exceptions.BadRequestException;
-import io.sunflower.ewf.exceptions.RoutingException;
+import io.sunflower.ewf.errors.BadRequestException;
+import io.sunflower.ewf.errors.RoutingException;
 import io.sunflower.ewf.validation.Validator;
 import io.sunflower.ewf.validation.WithValidator;
 import org.slf4j.Logger;
@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Invokes methods on the controller, extracting arguments out
+ * @author michael
  */
 public class ResourceMethodInvoker {
 
@@ -45,24 +46,25 @@ public class ResourceMethodInvoker {
   private final Method method;
   private final ArgumentExtractor<?>[] argumentExtractors;
 
-  ResourceMethodInvoker(
+  private ResourceMethodInvoker(
       Method method,
       ArgumentExtractor<?>[] argumentExtractors) {
     this.method = method;
     this.argumentExtractors = argumentExtractors;
   }
 
-  public Object invoke(Object controller, Context context) {
+  public Object invoke(Object resource, Context context) {
     // Extract arguments
     Object[] arguments = new Object[argumentExtractors.length];
     for (int i = 0; i < argumentExtractors.length; i++) {
       arguments[i] = argumentExtractors[i].extract(context);
     }
 
+    // use Optional<> instead of null value.
     checkNullArgumentsAndThrowBadRequestExceptionIfConfigured(arguments);
 
     try {
-      return method.invoke(controller, arguments);
+      return method.invoke(resource, arguments);
     } catch (IllegalAccessException | IllegalArgumentException e) {
       throw new RuntimeException(e);
     } catch (InvocationTargetException e) {
@@ -99,19 +101,19 @@ public class ResourceMethodInvoker {
       Injector injector) {
     // get both the parameters...
     final Type[] genericParameterTypes = implementationMethod.getGenericParameterTypes();
+
     final MethodParameter[] methodParameters = MethodParameter
         .convertIntoMethodParameters(genericParameterTypes);
+
     // ... and all annotations for the parameters
-    final Annotation[][] paramAnnotations = implementationMethod
-        .getParameterAnnotations();
+    final Annotation[][] paramAnnotations = implementationMethod.getParameterAnnotations();
 
     ArgumentExtractor<?>[] argumentExtractors = new ArgumentExtractor<?>[methodParameters.length];
 
     // now we skip through the parameters and process the annotations
     for (int i = 0; i < methodParameters.length; i++) {
       try {
-        argumentExtractors[i] = getArgumentExtractor(methodParameters[i], paramAnnotations[i],
-            injector);
+        argumentExtractors[i] = getArgumentExtractor(methodParameters[i], paramAnnotations[i], injector);
       } catch (RoutingException e) {
         throw new RoutingException("Error building argument extractor for parameter " + i +
             " in method " + implementationMethod.getDeclaringClass().getName() + "."
@@ -131,8 +133,7 @@ public class ResourceMethodInvoker {
               .getName() + "\n"
               + "Extra parmeter is type: " + methodParameters[i].parameterClass.getName());
         } else {
-          argumentExtractors[i] = new ArgumentExtractors.BodyAsExtractor(
-              methodParameters[i].parameterClass);
+          argumentExtractors[i] = new ArgumentExtractors.BodyAsExtractor(methodParameters[i].parameterClass);
           bodyAsFound = i;
         }
       }
@@ -156,8 +157,7 @@ public class ResourceMethodInvoker {
       MethodParameter methodParameter,
       Annotation[] annotations, Injector injector) {
     // First check if we have a static extractor
-    ArgumentExtractor<?> extractor = ArgumentExtractors
-        .getExtractorForType(methodParameter.parameterClass);
+    ArgumentExtractor<?> extractor = ArgumentExtractors.getExtractorForType(methodParameter.parameterClass);
 
     if (extractor == null) {
       // See if we have a WithArgumentExtractors annotated annotation for specialized extractors
@@ -165,13 +165,11 @@ public class ResourceMethodInvoker {
         WithArgumentExtractors withArgumentExtractors = annotation.annotationType()
             .getAnnotation(WithArgumentExtractors.class);
         if (withArgumentExtractors != null) {
-          for (Class<? extends ArgumentExtractor<?>> argumentExtractor : withArgumentExtractors
-              .value()) {
-            Class<?> extractedType = (Class<?>) ((ParameterizedType) (argumentExtractor
-                .getGenericInterfaces()[0])).getActualTypeArguments()[0];
+          for (Class<? extends ArgumentExtractor<?>> argumentExtractor : withArgumentExtractors.value()) {
+            Class<?> extractedType =
+                (Class<?>) ((ParameterizedType) (argumentExtractor.getGenericInterfaces()[0])).getActualTypeArguments()[0];
             if (methodParameter.parameterClass.isAssignableFrom(extractedType)) {
-              extractor = instantiateComponent(argumentExtractor, annotation,
-                  methodParameter.parameterClass, injector);
+              extractor = instantiateComponent(argumentExtractor, annotation, methodParameter.parameterClass, injector);
               break;
             }
           }
@@ -182,11 +180,9 @@ public class ResourceMethodInvoker {
     if (extractor == null) {
       // See if we have a WithArgumentExtractor annotated annotation
       for (Annotation annotation : annotations) {
-        WithArgumentExtractor withArgumentExtractor = annotation.annotationType()
-            .getAnnotation(WithArgumentExtractor.class);
+        WithArgumentExtractor withArgumentExtractor = annotation.annotationType().getAnnotation(WithArgumentExtractor.class);
         if (withArgumentExtractor != null) {
-          extractor = instantiateComponent(withArgumentExtractor.value(), annotation,
-              methodParameter.parameterClass, injector);
+          extractor = instantiateComponent(withArgumentExtractor.value(), annotation, methodParameter.parameterClass, injector);
           break;
         }
       }
@@ -212,8 +208,7 @@ public class ResourceMethodInvoker {
 
     // Now we have an extractor, lets apply validators that are able to validate
     for (Annotation annotation : annotations) {
-      WithValidator withValidator = annotation.annotationType()
-          .getAnnotation(WithValidator.class);
+      WithValidator withValidator = annotation.annotationType().getAnnotation(WithValidator.class);
       if (withValidator != null) {
         Validator<?> validator = instantiateComponent(withValidator.value(), annotation,
             methodParameter.parameterClass, injector);
@@ -244,16 +239,13 @@ public class ResourceMethodInvoker {
       if (extractor.getFieldName() != null) {
         if (String.class.isAssignableFrom(extractor.getExtractedType())) {
           // Look up a parser for a single-valued parameter
-          ParamParser<?> parser = injector.getInstance(ParamParsers.class)
-              .getParamParser(methodParameter.parameterClass);
+          ParamParser<?> parser = injector.getInstance(ParamParsers.class).getParamParser(methodParameter.parameterClass);
           if (parser == null) {
             throw new RoutingException("Can't find parameter parser for type "
                 + extractor.getExtractedType() + " on field "
                 + extractor.getFieldName());
           } else {
-            extractor =
-                new ParsingArgumentExtractor(extractor, parser);
-
+            extractor = new ParsingArgumentExtractor(extractor, parser);
           }
         } else if (String[].class.isAssignableFrom(extractor.getExtractedType())) {
           // Look up a parser for a multi-valued parameter
@@ -264,8 +256,7 @@ public class ResourceMethodInvoker {
                 + extractor.getExtractedType() + " on field "
                 + extractor.getFieldName());
           } else {
-            extractor =
-                new ParsingArrayExtractor(extractor, parser);
+            extractor = new ParsingArrayExtractor(extractor, parser);
           }
 
         } else {
@@ -289,8 +280,8 @@ public class ResourceMethodInvoker {
   }
 
   private static <T> T instantiateComponent(Class<? extends T> argumentExtractor,
-      final Annotation annotation, final Class<?> paramType,
-      Injector injector) {
+      final Annotation annotation, final Class<?> paramType, Injector injector) {
+
     // Noarg constructor
     Constructor noarg = getNoArgConstructor(argumentExtractor);
     if (noarg != null) {
@@ -309,6 +300,7 @@ public class ResourceMethodInvoker {
         throw new RoutingException(e);
       }
     }
+
     // Simple case, just takes the parsed class
     Constructor simpleClass = getSingleArgConstructor(argumentExtractor, Class.class);
     if (simpleClass != null) {
@@ -318,6 +310,7 @@ public class ResourceMethodInvoker {
         throw new RoutingException(e);
       }
     }
+
     // Complex case, use Guice.  Create a child getInjector with the annotation in it.
     return injector.createChildInjector(new AbstractModule() {
       @Override
@@ -379,8 +372,8 @@ public class ResourceMethodInvoker {
    */
   private static class MethodParameter {
 
-    public boolean isOptional;
-    public Class<?> parameterClass;
+    boolean isOptional;
+    Class<?> parameterClass;
 
     private MethodParameter(Type genericType) {
       try {
@@ -404,13 +397,12 @@ public class ResourceMethodInvoker {
         }
       } catch (Exception e) {
         throw new RuntimeException(
-            "Oops. Something went wrong while investigating method parameters for controller class invocation",
-            e);
+            "Oops. Something went wrong while investigating method parameters for resource class invocation", e);
       }
 
     }
 
-    public static MethodParameter[] convertIntoMethodParameters(Type[] genericParameterTypes) {
+    static MethodParameter[] convertIntoMethodParameters(Type[] genericParameterTypes) {
       MethodParameter[] methodParameters = new MethodParameter[genericParameterTypes.length];
       for (int i = 0; i < genericParameterTypes.length; i++) {
         methodParameters[i] = new MethodParameter(genericParameterTypes[i]);
@@ -423,7 +415,7 @@ public class ResourceMethodInvoker {
         return (Class<?>) type;
       } else {
         throw new RuntimeException(
-            "Oops. That's a strange internal RouteHandler error.\n"
+            "Oops. That's a strange internal error.\n"
                 + "Seems someone tried to convert a type into a class that is not a real class. ( "
                 + type.getTypeName() + ")");
       }

@@ -20,6 +20,9 @@ import java.util.Map;
 import io.sunflower.ewf.Context;
 
 
+/**
+ * @author michael
+ */
 public interface Session {
 
   String AUTHENTICITY_KEY = "___AT";
@@ -45,6 +48,7 @@ public interface Session {
   Map<String, String> getData();
 
   /**
+   * get authenticity token
    * @return a authenticity token (may generate a new one if the session currently does not contain
    * the token).
    */

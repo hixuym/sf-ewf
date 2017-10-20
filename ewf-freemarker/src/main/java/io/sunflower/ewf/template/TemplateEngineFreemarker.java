@@ -43,7 +43,7 @@ import freemarker.template.Version;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.exceptions.RenderingException;
+import io.sunflower.ewf.errors.RenderingException;
 import io.sunflower.ewf.i18n.Lang;
 import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.template.directives.TemplateEngineFreemarkerAuthenticityFormDirective;

@@ -67,7 +67,7 @@ public class ValidationImpl implements Validation {
   @Override
   public void addViolation(ConstraintViolation violation) {
     if (!this.violations.containsKey(violation.getFieldKey())) {
-      this.violations.put(violation.getFieldKey(), Lists.<ConstraintViolation>newArrayList());
+      this.violations.put(violation.getFieldKey(), Lists.newArrayList());
     }
     this.violations.get(violation.getFieldKey()).add(violation);
   }

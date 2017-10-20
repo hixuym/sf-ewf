@@ -18,10 +18,10 @@ package io.sunflower.ewf;
 import java.util.Optional;
 import javax.inject.Inject;
 
-import io.sunflower.ewf.exceptions.BadRequestException;
+import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.utils.ErrorMessage;
 import io.sunflower.ewf.utils.Constants;
-import io.sunflower.ewf.exceptions.RenderingException;
+import io.sunflower.ewf.errors.RenderingException;
 import io.sunflower.ewf.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

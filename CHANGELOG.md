@@ -3,7 +3,8 @@ Sunflower Gizmo Framework
 1.1.1 
 
   - add ewf archetypes
-
+  - add ewf auth
+  
 1.1.0 - 2017-10-18
 
   - change name from sf-gizmo to sf-ewf

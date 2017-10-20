@@ -21,8 +21,8 @@ import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Renderable;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.exceptions.BadRequestException;
-import io.sunflower.ewf.exceptions.EwfException;
+import io.sunflower.ewf.errors.BadRequestException;
+import io.sunflower.ewf.errors.WebApplicationException;
 import io.sunflower.ewf.template.TemplateEngine;
 import io.sunflower.ewf.template.TemplateEngineManager;
 
@@ -100,7 +100,7 @@ public class ResultHandler {
       templateEngine.invoke(context, result);
 
     } else {
-      throw new EwfException(
+      throw new WebApplicationException(
           500, "No template engine found for result content type " + result.getContentType());
     }
   }
