@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -58,6 +60,7 @@ import io.sunflower.ewf.validation.NumberValue;
 import io.sunflower.ewf.validation.Validation;
 import io.sunflower.ewf.validation.ValidationImpl;
 import io.sunflower.util.Dates;
+import io.sunflower.validation.BaseValidator;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -1223,7 +1226,7 @@ public class ResourceMethodInvokerTest {
 
   private void validateJSR303(Dto dto) {
     when(context.parseBody(Dto.class)).thenReturn(dto);
-    create("ValidBean", this.lang).invoke(mockController, context);
+    create("JSR303Validation", this.lang).invoke(mockController, context);
   }
 
   private void validateJSR303WithOptional(Dto dto) {
@@ -1261,6 +1264,10 @@ public class ResourceMethodInvokerTest {
         Multibinder<ParamParser> parsersBinder = Multibinder
             .newSetBinder(binder(), ParamParser.class);
 
+        ValidatorFactory validatorFactory = BaseValidator.newConfiguration().buildValidatorFactory();
+
+        bind(ValidatorFactory.class).toInstance(validatorFactory);
+        bind(Validator.class).toInstance(validatorFactory.getValidator());
         for (Object o : toBind) {
           if (o instanceof Class && ParamParser.class.isAssignableFrom((Class) o)) {
             parsersBinder.addBinding().to((Class<? extends ParamParser>) o);

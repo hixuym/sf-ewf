@@ -23,25 +23,25 @@ import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import io.sunflower.ewf.AssetsResource;
-import io.sunflower.ewf.Router;
+import io.sunflower.ewf.assets.AssetsResource;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineFreemarkerAssetsAtMethod implements
     TemplateMethodModelEx {
 
-  final Router router;
-  final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
+  private final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
 
   @Inject
   public TemplateEngineFreemarkerAssetsAtMethod(
-      Router router,
       TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper) {
-    this.router = router;
     this.templateEngineFreemarkerReverseRouteHelper = templateEngineFreemarkerReverseRouteHelper;
 
   }
 
+  @Override
   public TemplateModel exec(List args) throws TemplateModelException {
 
     List<Object> argsWithResourceAndMethod = new ArrayList<>(args.size() + 2);

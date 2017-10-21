@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default FlashScope implementation.
+ * @author michael
  */
 public class FlashScopeImpl implements FlashScope {
 

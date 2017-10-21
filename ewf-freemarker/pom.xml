@@ -18,6 +18,10 @@
       <artifactId>sf-ewf-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.sunflower</groupId>
+      <artifactId>sf-ewf-assets</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
     </dependency>

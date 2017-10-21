@@ -31,10 +31,14 @@ import io.sunflower.ewf.session.utils.CookieEncryption;
 import io.sunflower.ewf.session.utils.Crypto;
 import io.sunflower.ewf.utils.Constants;
 import io.sunflower.util.Duration;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * @author michael
+ */
 public class SessionImpl implements Session {
 
   private final static Logger logger = LoggerFactory.getLogger(SessionImpl.class);
@@ -96,7 +100,7 @@ public class SessionImpl implements Session {
       Cookie cookie = context.getCookie(sessionCookieName);
 
       // check that the cookie is not empty:
-      if (cookie != null && cookie.getValue() != null && !cookie.getValue().trim().isEmpty()) {
+      if (cookie != null && StringUtils.isNotEmpty(cookie.getValue())) {
 
         String value = cookie.getValue();
 

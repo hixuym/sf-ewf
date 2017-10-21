@@ -30,6 +30,7 @@ import java.util.Map;
  * signing cookie data.
  *
  * All praise goes to Play Framework and their awesome work.
+ * @author michael
  */
 public class CookieDataCodec {
 

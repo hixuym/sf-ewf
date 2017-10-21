@@ -23,8 +23,11 @@ import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import io.sunflower.ewf.AssetsResource;
+import io.sunflower.ewf.assets.AssetsResource;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineFreemarkerWebJarsAtMethod implements
     TemplateMethodModelEx {
@@ -38,6 +41,7 @@ public class TemplateEngineFreemarkerWebJarsAtMethod implements
 
   }
 
+  @Override
   public TemplateModel exec(List args) throws TemplateModelException {
 
     List<Object> argsWithControllerAndMethod = new ArrayList<>();

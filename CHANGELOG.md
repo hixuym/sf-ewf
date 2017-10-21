@@ -1,6 +1,6 @@
 Sunflower Gizmo Framework
 ======================================
-1.1.1 
+1.2.0 
 
   - add ewf archetypes
   - add ewf auth module
