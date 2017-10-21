@@ -34,6 +34,7 @@ public interface Filter {
    *
    * @param filterChain The filter chain
    * @param context The context
+   * @return Result filter result
    */
   Result filter(FilterChain filterChain, Context context);
 }

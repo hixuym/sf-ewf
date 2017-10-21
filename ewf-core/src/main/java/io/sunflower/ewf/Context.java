@@ -40,6 +40,10 @@ public interface Context {
    */
   interface Impl extends Context {
 
+    /**
+     * use internal
+     * @param route
+     */
     void setRoute(Route route);
   }
 
@@ -393,6 +397,7 @@ public interface Context {
    * Must not be used if getReader has been called.
    *
    * @return The input stream
+   * @throws IOException
    */
   InputStream getInputStream() throws IOException;
 
@@ -402,6 +407,7 @@ public interface Context {
    * Must not be used if getInputStream has been called.
    *
    * @return The reader
+   * @throws IOException
    */
   BufferedReader getReader() throws IOException;
 
