@@ -25,13 +25,16 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sunflower.ewf.ContentTypes;
-import io.sunflower.ewf.params.ParamParser;
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.params.ParamParser;
 import io.sunflower.ewf.params.ParamParsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class BodyParserEnginePost implements BodyParserEngine {
 
@@ -52,7 +55,9 @@ public class BodyParserEnginePost implements BodyParserEngine {
     return invoke(context, parameters, classOfT, "");
   }
 
-  // Allows to instantiate inner objects with a prefix for each parameter key
+  /**
+   * Allows to instantiate inner objects with a prefix for each parameter key
+   */
   private <T> T invoke(Context context, Map<String, String[]> parameters, Class<T> classOfT,
       String paramPrefix) {
 
@@ -152,8 +157,9 @@ public class BodyParserEnginePost implements BodyParserEngine {
     return false;
   }
 
+  @Override
   public String getContentType() {
-    return ContentTypes.APPLICATION_POST_FORM;
+    return Result.APPLICATION_POST_FORM;
   }
 
   private <T> Set<String> getAllDeclaredFieldsAsStringSet(Class<T> clazz) {

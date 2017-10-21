@@ -358,7 +358,7 @@ abstract public class AbstractContext implements Context.Impl {
       return false;
     }
 
-    return contentType.startsWith(ContentTypes.APPLICATION_JSON);
+    return contentType.startsWith(Result.APPLICATION_JSON);
   }
 
   @Override
@@ -368,7 +368,7 @@ abstract public class AbstractContext implements Context.Impl {
       return false;
     }
 
-    return contentType.startsWith(ContentTypes.APPLICATION_XML);
+    return contentType.startsWith(Result.APPLICATION_XML);
   }
 
   @Override

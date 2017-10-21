@@ -68,12 +68,17 @@ public class Result {
   public static final int SC_500_INTERNAL_SERVER_ERROR = 500;
   public static final int SC_501_NOT_IMPLEMENTED = 501;
 
+  /**
+   * contentTypes
+   */
   public static final String TEXT_HTML = "text/html";
   public static final String TEXT_PLAIN = "text/plain";
+  public static final String TEXT_CSS = "text/css";
   public static final String APPLICATION_JSON = "application/json";
   public static final String APPLICATION_JSONP = "application/javascript";
   public static final String APPLICATION_XML = "application/xml";
   public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+  public static final String APPLICATION_POST_FORM = "application/x-www-form-urlencoded";
 
   /**
    * This is a marker. Returning something like Result.html().render(NO_HTTP_BODY) will cause all

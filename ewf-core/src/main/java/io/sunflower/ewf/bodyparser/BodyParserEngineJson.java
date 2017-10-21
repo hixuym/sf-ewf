@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sunflower.ewf.ContentTypes;
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
 
 /**
@@ -44,6 +44,7 @@ public class BodyParserEngineJson implements BodyParserEngine {
     this.objectMapper = objectMapper;
   }
 
+  @Override
   public <T> T invoke(Context context, Class<T> classOfT) {
     try (InputStream inputStream = context.getInputStream()) {
       return objectMapper.readValue(inputStream, classOfT);
@@ -54,8 +55,9 @@ public class BodyParserEngineJson implements BodyParserEngine {
     }
   }
 
+  @Override
   public String getContentType() {
-    return ContentTypes.APPLICATION_JSON;
+    return Result.APPLICATION_JSON;
   }
 
 }

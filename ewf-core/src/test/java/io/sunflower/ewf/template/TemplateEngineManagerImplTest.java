@@ -27,14 +27,13 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import io.sunflower.ewf.i18n.Lang;
-import io.sunflower.ewf.i18n.LangImpl;
-import io.sunflower.ewf.ContentTypes;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Settings;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.RouterImpl;
+import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.i18n.Lang;
+import io.sunflower.ewf.i18n.LangImpl;
 import io.sunflower.guicey.LoggerProvider;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -44,13 +43,13 @@ public class TemplateEngineManagerImplTest {
   @Test
   public void testGetJson() {
     assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-        ContentTypes.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
+        Result.APPLICATION_JSON), instanceOf(TemplateEngineJson.class));
   }
 
   @Test
   public void testGetJsonP() {
     assertThat(createTemplateEngineManager().getTemplateEngineForContentType(
-        ContentTypes.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
+        Result.APPLICATION_JSONP), instanceOf(TemplateEngineJsonP.class));
   }
 
   @Test
@@ -64,14 +63,14 @@ public class TemplateEngineManagerImplTest {
   public void testOverrideJson() {
     assertThat(createTemplateEngineManager(OverrideJsonTemplateEngine.class)
         .getTemplateEngineForContentType(
-            ContentTypes.APPLICATION_JSON), instanceOf(OverrideJsonTemplateEngine.class));
+            Result.APPLICATION_JSON), instanceOf(OverrideJsonTemplateEngine.class));
   }
 
   @Test
   public void testOverrideHtml() {
     assertThat(createTemplateEngineManager(OverrideHtmlTemplateEngine.class)
         .getTemplateEngineForContentType(
-            ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine.class));
+            Result.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine.class));
   }
 
   @Test
@@ -83,7 +82,7 @@ public class TemplateEngineManagerImplTest {
         OverrideHtmlTemplateEngine2.class);
 
     assertThat(templateEngineManager.getTemplateEngineForContentType(
-        ContentTypes.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
+        Result.TEXT_HTML), instanceOf(OverrideHtmlTemplateEngine2.class));
   }
 
   @Test
@@ -127,7 +126,7 @@ public class TemplateEngineManagerImplTest {
 
     @Override
     public String getContentType() {
-      return ContentTypes.APPLICATION_JSON;
+      return Result.APPLICATION_JSON;
     }
   }
 
@@ -135,7 +134,7 @@ public class TemplateEngineManagerImplTest {
 
     @Override
     public String getContentType() {
-      return ContentTypes.TEXT_HTML;
+      return Result.TEXT_HTML;
     }
   }
 
@@ -143,7 +142,7 @@ public class TemplateEngineManagerImplTest {
 
     @Override
     public String getContentType() {
-      return ContentTypes.TEXT_HTML;
+      return Result.TEXT_HTML;
     }
   }
 
@@ -151,7 +150,7 @@ public class TemplateEngineManagerImplTest {
 
     @Override
     public String getContentType() {
-      return ContentTypes.TEXT_HTML;
+      return Result.TEXT_HTML;
     }
   }
 

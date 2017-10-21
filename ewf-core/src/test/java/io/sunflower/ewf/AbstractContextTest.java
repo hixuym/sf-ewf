@@ -401,10 +401,10 @@ public class AbstractContextTest {
   public void testParseBodyPostWorks() {
     AbstractContextImpl context = spy(abstractContext);
 
-    Mockito.doReturn(ContentTypes.APPLICATION_POST_FORM).when(context).getRequestContentType();
+    Mockito.doReturn(Result.APPLICATION_POST_FORM).when(context).getRequestContentType();
 
     when(bodyParserEngineManager
-        .getBodyParserEngineForContentType(ContentTypes.APPLICATION_POST_FORM))
+        .getBodyParserEngineForContentType(Result.APPLICATION_POST_FORM))
         .thenReturn(bodyParserEngine);
     Dummy dummy = new Dummy();
     dummy.name = "post";
@@ -414,7 +414,7 @@ public class AbstractContextTest {
     Dummy o = context.parseBody(Dummy.class);
 
     verify(bodyParserEngineManager)
-        .getBodyParserEngineForContentType(ContentTypes.APPLICATION_POST_FORM);
+        .getBodyParserEngineForContentType(Result.APPLICATION_POST_FORM);
     assertTrue(o instanceof Dummy);
     assertTrue(o.name.equals(dummy.name));
     assertTrue(o.count.equals(dummy.count));
@@ -424,7 +424,7 @@ public class AbstractContextTest {
   public void testIsJsonWorks() {
     AbstractContextImpl context = spy(abstractContext);
 
-    doReturn(ContentTypes.APPLICATION_JSON).when(context).getRequestContentType();
+    doReturn(Result.APPLICATION_JSON).when(context).getRequestContentType();
 
     assertTrue(context.isRequestJson());
   }
@@ -433,7 +433,7 @@ public class AbstractContextTest {
   public void testIsXmlWorks() {
     AbstractContextImpl context = spy(abstractContext);
 
-    doReturn(ContentTypes.APPLICATION_XML).when(context).getRequestContentType();
+    doReturn(Result.APPLICATION_XML).when(context).getRequestContentType();
 
     assertTrue(context.isRequestXml());
   }
@@ -442,7 +442,7 @@ public class AbstractContextTest {
   public void testParseBodyXmlWorks() {
     AbstractContextImpl context = spy(abstractContext);
 
-    doReturn(ContentTypes.APPLICATION_XML).when(context).getRequestContentType();
+    doReturn(Result.APPLICATION_XML).when(context).getRequestContentType();
 
     when(bodyParserEngineManager.getBodyParserEngineForContentType("application/xml"))
         .thenReturn(bodyParserEngine);
