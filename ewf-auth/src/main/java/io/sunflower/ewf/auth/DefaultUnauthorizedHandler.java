@@ -15,25 +15,23 @@
 
 package io.sunflower.ewf.auth;
 
-import java.security.Principal;
-
-import com.google.inject.ImplementedBy;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
 
 /**
- * An interface for classes which authorize principal objects.
+ * DefaultUnauthorizedHandler
  *
- * @param <P> the type of principals
- * @author michael
+ * @author michael created on 17/10/21 21:44
  */
-@ImplementedBy(PermitAllAuthorizer.class)
-public interface Authorizer<P extends Principal> {
+public class DefaultUnauthorizedHandler implements UnauthorizedHandler {
 
-  /**
-   * Decides if access is granted for the given principal in the given role.
-   *
-   * @param principal a {@link Principal} object, representing a user
-   * @param role a user role
-   * @return {@code true}, if the access is granted, {@code false otherwise}
-   */
-  boolean authorize(P principal, String role);
+  private static final String CHALLENGE_FORMAT = "%s realm=\"%s\"";
+
+  @Override
+  public Result onUnauthorized(String prefix, String realm) {
+    return Results.status(Result.SC_401_UNAUTHORIZED)
+        .addHeader(Result.WWW_AUTHENTICATE, String.format(CHALLENGE_FORMAT, prefix, realm))
+        .contentType(Result.TEXT_PLAIN)
+        .render("Credentials are required to access this resource.");
+  }
 }

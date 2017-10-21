@@ -15,13 +15,18 @@
 
 package io.sunflower.ewf.auth;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * RolesAllowed
+ *
+ * @author michael created on 17/10/21 22:21
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
-public @interface Auth {
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface RolesAllowed {
+  String value();
 }

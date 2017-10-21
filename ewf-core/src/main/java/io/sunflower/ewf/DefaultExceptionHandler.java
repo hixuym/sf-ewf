@@ -93,27 +93,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
   }
 
   @Override
-  public Result getUnauthorizedResult(Context context) {
-
-    String messageI18n
-        = messages.getWithDefault(
-        Constants.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_KEY,
-        Constants.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_DEFAULT,
-        context,
-        Optional.empty());
-
-    ErrorMessage message = new ErrorMessage(Result.SC_401_UNAUTHORIZED, messageI18n);
-
-    // WWW-Authenticate must be included per the spec
-    // http://www.ietf.org/rfc/rfc2617.txt 3.2.1 The WWW-Authenticate Response Header
-
-    return Results
-        .unauthorized().json()
-        .addHeader(Result.WWW_AUTHENTICATE, "None")
-        .render(message);
-  }
-
-  @Override
   public Result getForbiddenResult(Context context) {
 
     String messageI18n

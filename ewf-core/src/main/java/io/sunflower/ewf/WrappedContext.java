@@ -290,6 +290,16 @@ public class WrappedContext implements Context {
   }
 
   @Override
+  public SecurityContext getSecurityContext() {
+    return null;
+  }
+
+  @Override
+  public void setSecurityContext(SecurityContext securityContext) {
+
+  }
+
+  @Override
   public void cleanup() {
     wrapped.cleanup();
   }

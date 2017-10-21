@@ -18,6 +18,8 @@ package io.sunflower.ewf.auth;
 import java.security.Principal;
 import java.util.Optional;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * An interface for classes which authenticate user-provided credentials and return principal
  * objects.
@@ -26,6 +28,7 @@ import java.util.Optional;
  * @param <C> the type of credentials the authenticator can authenticate
  * @param <P> the type of principals the authenticator returns
  */
+@ImplementedBy(JwtAuthenticator.class)
 public interface Authenticator<C, P extends Principal> {
     /**
      * Given a set of user-provided credentials, return an optional principal.

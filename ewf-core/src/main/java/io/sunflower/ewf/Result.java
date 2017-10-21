@@ -27,25 +27,30 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.sunflower.ewf.errors.InternalServerErrorException;
 import io.sunflower.ewf.utils.DateUtil;
 import io.sunflower.ewf.utils.NoHttpBody;
 import io.sunflower.ewf.utils.SwissKnife;
-import io.sunflower.ewf.errors.InternalServerErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class Result {
 
   private final Logger logger = LoggerFactory.getLogger(Result.class);
 
-  // /////////////////////////////////////////////////////////////////////////
-  // HTTP Status codes (for convenience)
-  // /////////////////////////////////////////////////////////////////////////
+  /**
+   * HTTP Status codes (for convenience)
+   */
   public static final int SC_200_OK = 200;
   public static final int SC_201_CREATED = 201;
   public static final int SC_204_NO_CONTENT = 204;
 
-  // for redirects:
+  /**
+   * for redirects:
+   */
   public static final int SC_300_MULTIPLE_CHOICES = 300;
   public static final int SC_301_MOVED_PERMANENTLY = 301;
   public static final int SC_302_FOUND = 302;
@@ -63,27 +68,23 @@ public class Result {
   public static final int SC_500_INTERNAL_SERVER_ERROR = 500;
   public static final int SC_501_NOT_IMPLEMENTED = 501;
 
-  // /////////////////////////////////////////////////////////////////////////
-  // Some MIME types (for convenience)
-  // /////////////////////////////////////////////////////////////////////////
   public static final String TEXT_HTML = "text/html";
   public static final String TEXT_PLAIN = "text/plain";
   public static final String APPLICATION_JSON = "application/json";
   public static final String APPLICATION_JSONP = "application/javascript";
-  /* @deprecated Naming mistake - Please use APPLICATION_JSONP instead! */
   public static final String APPLICATION_XML = "application/xml";
   public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
-  // This is a marker. Returning something like
-  // Result.html().render(NO_HTTP_BODY) will cause all body rendering
-  // to be bypassed. This effectively means you'll return only headers and no body
-  // useful for "no content" style responses.
+  /**
+   * This is a marker. Returning something like Result.html().render(NO_HTTP_BODY) will cause all
+   * body rendering to be bypassed. This effectively means you'll return only headers and no body
+   * useful for "no content" style responses.
+   */
   public static final NoHttpBody NO_HTTP_BODY = new NoHttpBody();
 
-  // /////////////////////////////////////////////////////////////////////////
-  // Finally we got to the core of this class...
-  // /////////////////////////////////////////////////////////////////////////
-    /* Used as redirection header */
+  /**
+   * Used as redirection header
+   */
   public static final String LOCATION = "Location";
   public static final String CACHE_CONTROL = "Cache-Control";
   public static final String CACHE_CONTROL_DEFAULT_NOCACHE_VALUE = "no-cache, no-store, max-age=0, must-revalidate";
@@ -97,8 +98,10 @@ public class Result {
 
   private Class<?> jsonView;
 
-  /* The object that will be rendered. Could be a Java Pojo. Or a map. Or xyz. Will be
-   * handled by the TemplateReneringEngine. */
+  /**
+   * The object that will be rendered. Could be a Java Pojo. Or a map. Or xyz. Will be handled by
+   * the TemplateReneringEngine.
+   */
   private Object renderable;
 
   /**
@@ -338,8 +341,8 @@ public class Result {
         if (result.getContentType() == null) {
           result.contentType(Result.APPLICATION_OCTET_STREAM);
         }
-        ResponseStreams responseStreams = context
-            .finalizeHeaders(result);
+
+        ResponseStreams responseStreams = context.finalizeHeaders(result);
 
         try (OutputStream outputStream = responseStreams.getOutputStream()) {
 

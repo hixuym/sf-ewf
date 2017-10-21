@@ -15,25 +15,18 @@
 
 package io.sunflower.ewf.auth;
 
-import java.security.Principal;
-
-import com.google.inject.ImplementedBy;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * An interface for classes which authorize principal objects.
+ * PermitAll
  *
- * @param <P> the type of principals
- * @author michael
+ * @author michael created on 17/10/21 22:21
  */
-@ImplementedBy(PermitAllAuthorizer.class)
-public interface Authorizer<P extends Principal> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface PermitAll {
 
-  /**
-   * Decides if access is granted for the given principal in the given role.
-   *
-   * @param principal a {@link Principal} object, representing a user
-   * @param role a user role
-   * @return {@code true}, if the access is granted, {@code false otherwise}
-   */
-  boolean authorize(P principal, String role);
 }

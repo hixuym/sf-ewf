@@ -37,19 +37,10 @@ public interface ExceptionHandler {
    * Should lead to a html error 404 - not found (and be used with the same mindset).
    *
    * Usually used by handleRequest(...).
+   * @param context
+   * @return result
    */
   Result getNotFoundResult(Context context);
-
-  /**
-   * Should handle cases where access is unauthorized
-   *
-   * Should lead to a html error 401 - unauthorized (and be used with the same mindset).
-   *
-   * By default, WWW-Authenticate is set to None.
-   *
-   * Usually used by BasicAuthFilter for instance(...).
-   */
-  Result getUnauthorizedResult(Context context);
 
   /**
    * Should handle cases where access is forbidden
@@ -57,6 +48,8 @@ public interface ExceptionHandler {
    * Should lead to a html error 403 - forbidden (and be used with the same mindset).
    *
    * Usually used by SecureFilter for instance(...).
+   * @param context
+   * @return result
    */
   Result getForbiddenResult(Context context);
 

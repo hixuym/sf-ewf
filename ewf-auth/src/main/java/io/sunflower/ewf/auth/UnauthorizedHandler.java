@@ -15,18 +15,20 @@
 
 package io.sunflower.ewf.auth;
 
+import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Result;
 
 /**
  * @author michael
  */
+@ImplementedBy(DefaultUnauthorizedHandler.class)
 public interface UnauthorizedHandler {
 
-    /**
-     * build the result when unauthorized
-     * @param prefix
-     * @param realm
-     * @return
-     */
-    Result onUnauthorized(String prefix, String realm);
+  /**
+   * build the result when unauthorized
+   * @param prefix
+   * @param realm
+   * @return result
+   */
+  Result onUnauthorized(String prefix, String realm);
 }

@@ -16,24 +16,18 @@
 package io.sunflower.ewf.auth;
 
 import java.security.Principal;
-
-import com.google.inject.ImplementedBy;
+import java.util.Optional;
 
 /**
- * An interface for classes which authorize principal objects.
+ * JwtAuthenticator
  *
- * @param <P> the type of principals
- * @author michael
+ * @author michael created on 17/10/21 22:10
  */
-@ImplementedBy(PermitAllAuthorizer.class)
-public interface Authorizer<P extends Principal> {
+public class JwtAuthenticator<P extends Principal> implements Authenticator<String, P> {
 
-  /**
-   * Decides if access is granted for the given principal in the given role.
-   *
-   * @param principal a {@link Principal} object, representing a user
-   * @param role a user role
-   * @return {@code true}, if the access is granted, {@code false otherwise}
-   */
-  boolean authorize(P principal, String role);
+  @Override
+  public Optional<P> authenticate(String credentials) throws AuthenticationException {
+    return Optional.empty();
+  }
+
 }

@@ -24,6 +24,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.SecurityContext;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.uploads.FileItem;
 import io.sunflower.ewf.session.Session;
@@ -42,10 +43,29 @@ public class ArgumentExtractors {
           .put(Validation.class, new ValidationExtractor())
           .put(Session.class, new SessionExtractor())
           .put(FlashScope.class, new FlashExtractor())
+          .put(SecurityContext.class, new SecurityContextExtractor())
           .build();
 
   public static ArgumentExtractor<?> getExtractorForType(Class<?> type) {
     return STATIC_EXTRACTORS.get(type);
+  }
+
+  public static class SecurityContextExtractor implements ArgumentExtractor<SecurityContext> {
+
+    @Override
+    public SecurityContext extract(Context context) {
+      return context.getSecurityContext();
+    }
+
+    @Override
+    public Class<SecurityContext> getExtractedType() {
+      return SecurityContext.class;
+    }
+
+    @Override
+    public String getFieldName() {
+      return null;
+    }
   }
 
   public static class ContextExtractor implements ArgumentExtractor<Context> {
