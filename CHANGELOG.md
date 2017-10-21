@@ -1,4 +1,4 @@
-Sunflower Gizmo Framework
+Sunflower Web Application Framework
 ======================================
 1.2.0 
 
