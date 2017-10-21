@@ -22,11 +22,12 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.sunflower.Configuration;
-import io.sunflower.ewf.WebApplicationModule;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.WebApplicationModule;
 import io.sunflower.ewf.application.ApplicationRoutes;
+import io.sunflower.ewf.session.SessionModule;
 import io.sunflower.guicey.Injectors;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
@@ -71,12 +72,20 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
     undertowModule
         .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
 
+    boolean sessionEnabled = settings.isSessionEnabled();
+
+    final Class<? extends Context> contextClass =
+        sessionEnabled ? UndertowWithSessionContext.class : UndertowContext.class;
+
+    if (sessionEnabled) {
+      environment.guicey().registry(new SessionModule());
+    }
+
     WebApplicationModule webApplicationModule = new WebApplicationModule() {
 
       @Override
       protected Class<? extends Context> getRequestContextImpl() {
-        return settings.isSessionEnabled() ?
-            UndertowWithSessionContext.class : UndertowContext.class;
+        return contextClass;
       }
     };
 

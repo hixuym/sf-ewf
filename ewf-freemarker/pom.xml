@@ -10,7 +10,7 @@
 
   <artifactId>sf-ewf-freemarker</artifactId>
 
-  <name>Sunflower ewf freemarker template engine module</name>
+  <name>sunflower ewf freemarker template engine module</name>
 
   <dependencies>
     <dependency>
