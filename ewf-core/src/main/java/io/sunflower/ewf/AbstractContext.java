@@ -40,12 +40,15 @@ import org.slf4j.LoggerFactory;
  *
  * When adding features to a <code>Context</code> please think about whether it should be fully or
  * partially implemented here or in the concrete implementation.
+ * @author michael
  */
 abstract public class AbstractContext implements Context.Impl {
 
   static final private Logger logger = LoggerFactory.getLogger(AbstractContext.class);
 
-  // subclasses need to access these
+  /**
+   * subclasses need to access these
+   */
   final protected BodyParserEngineManager bodyParserEngineManager;
   final protected Settings configuration;
   final protected Validation validation;
@@ -53,8 +56,13 @@ abstract public class AbstractContext implements Context.Impl {
   final protected ParamParsers paramParsers;
 
   protected Route route;
-  // in async mode these values will be set to null so its critical they
-  // are saved when a context is initialized
+
+  private volatile SecurityContext securityContext;
+
+  /**
+   * in async mode these values will be set to null so its critical they
+   * are saved when a context is initialized
+   */
   private String requestPath;
   private String contextPath;
 
@@ -361,5 +369,15 @@ abstract public class AbstractContext implements Context.Impl {
     }
 
     return contentType.startsWith(ContentTypes.APPLICATION_XML);
+  }
+
+  @Override
+  public SecurityContext getSecurityContext() {
+    return this.securityContext;
+  }
+
+  @Override
+  public void setSecurityContext(SecurityContext securityContext) {
+    this.securityContext = securityContext;
   }
 }

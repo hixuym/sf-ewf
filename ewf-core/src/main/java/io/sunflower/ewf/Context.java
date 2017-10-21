@@ -571,6 +571,18 @@ public interface Context {
   void unsetCookie(Cookie cookie);
 
   /**
+   * get the request security context
+   * @return
+   */
+  SecurityContext getSecurityContext();
+
+  /**
+   * set the request security context
+   * @param securityContext
+   */
+  void setSecurityContext(SecurityContext securityContext);
+
+  /**
    * Cleanup context
    */
   void cleanup();
