@@ -21,7 +21,7 @@ package io.sunflower.ewf.auth;
  * <p><b>DO NOT USE THIS TO INDICATE THAT THE CREDENTIALS ARE INVALID.</b></p>
  * @author michael
  */
-public class AuthenticationException extends Exception {
+public class AuthenticationException extends RuntimeException {
     private static final long serialVersionUID = -5053567474138953905L;
 
     public AuthenticationException(String message) {

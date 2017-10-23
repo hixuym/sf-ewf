@@ -13,26 +13,23 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf;
+package io.sunflower.ewf.auth.params;
 
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import io.sunflower.ewf.utils.WithResourceMethod;
+import io.sunflower.ewf.params.WithArgumentExtractor;
 
 /**
- * @author michael
+ * Auth
+ *
+ * @author michael created on 17/10/23 15:59
  */
-public interface RouteBuilder extends WithResourceMethod<Void> {
-
-  RouteBuilder route(String uri);
-
-  RouteBuilder globalFilters(Class<? extends Filter>... filters);
-
-  RouteBuilder globalFilters(List<Class<? extends Filter>> filters);
-
-  RouteBuilder filters(Class<? extends Filter>... filters);
-
-  RouteBuilder filters(List<Class<? extends Filter>> filters);
-
-  void with(Class<?> resourceClass, String resourceMethod);
+@WithArgumentExtractor(PrincipalExtractor.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
+public @interface Auth {
+  String value() default "";
 }

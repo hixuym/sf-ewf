@@ -39,9 +39,6 @@ public class OAuthCredentialAuthFilter<P extends Principal> extends AbstractAuth
    */
   public static final String OAUTH_ACCESS_TOKEN_PARAM = "access_token";
 
-  private OAuthCredentialAuthFilter() {
-  }
-
   @Override
   public Result filter(FilterChain chain, final Context requestContext) {
     String credentials = getCredentials(requestContext.getHeader(HttpHeaders.AUTHORIZATION));

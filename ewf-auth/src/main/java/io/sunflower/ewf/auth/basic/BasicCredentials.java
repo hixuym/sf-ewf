@@ -19,6 +19,11 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -29,7 +34,11 @@ import com.google.common.base.MoreObjects;
  */
 public class BasicCredentials {
 
+  @NotNull
   private final String username;
+
+  @NotNull
+  @Size(min = 8)
   private final String password;
 
   /**
@@ -38,6 +47,7 @@ public class BasicCredentials {
    * @param username the username
    * @param password the password
    */
+  @JsonCreator
   public BasicCredentials(String username, String password) {
     this.username = requireNonNull(username);
     this.password = requireNonNull(password);
@@ -48,6 +58,7 @@ public class BasicCredentials {
    *
    * @return the credentials' username
    */
+  @JsonProperty
   public String getUsername() {
     return username;
   }
@@ -57,6 +68,7 @@ public class BasicCredentials {
    *
    * @return the credentials' password
    */
+  @JsonProperty
   public String getPassword() {
     return password;
   }
