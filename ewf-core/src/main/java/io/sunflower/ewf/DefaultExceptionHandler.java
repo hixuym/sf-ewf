@@ -18,9 +18,10 @@ package io.sunflower.ewf;
 import java.util.Optional;
 import javax.inject.Inject;
 
+import io.sunflower.ewf.diagnostics.DiagnosticError;
+import io.sunflower.ewf.diagnostics.DiagnosticErrorBuilder;
 import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.errors.ErrorMessage;
-import io.sunflower.ewf.errors.RenderingException;
 import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.utils.Constants;
 import org.slf4j.Logger;
@@ -56,7 +57,7 @@ public class DefaultExceptionHandler implements ExceptionHandler {
   }
 
   @Override
-  public Result onException(Exception exception, Context context) {
+  public Result onException(Context context, Exception exception) {
 
     Result result;
     // log the exception as debug
@@ -65,18 +66,22 @@ public class DefaultExceptionHandler implements ExceptionHandler {
     }
 
     if (exception instanceof BadRequestException) {
-      result = getBadRequestResult(exception, context);
-    } else if (exception instanceof RenderingException) {
-      RenderingException renderingException = (RenderingException) exception;
-      result = getRenderingExceptionResult(renderingException, context);
+      result = getBadRequestResult(context, (BadRequestException) exception);
     } else {
-      result = getInternalServerErrorResult(exception, context);
+      result = getInternalServerErrorResult(context, exception);
     }
     return result;
   }
 
   @Override
   public Result getNotFoundResult(Context context) {
+    if (isDiagnosticsEnabled()) {
+
+      DiagnosticError diagnosticError =
+          DiagnosticErrorBuilder.build404NotFoundDiagnosticError(true);
+
+      return Results.notFound().render(diagnosticError);
+    }
 
     String messageI18n
         = messages.getWithDefault(
@@ -93,7 +98,47 @@ public class DefaultExceptionHandler implements ExceptionHandler {
   }
 
   @Override
+  public Result getUnauthorizedResult(Context context) {
+    if (isDiagnosticsEnabled()) {
+
+      DiagnosticError diagnosticError =
+          DiagnosticErrorBuilder.build401UnauthorizedDiagnosticError();
+
+      return Results.unauthorized().render(diagnosticError);
+
+    }
+
+    String messageI18n
+        = messages.getWithDefault(
+        Constants.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_KEY,
+        Constants.I18N_SYSTEM_UNAUTHORIZED_REQUEST_TEXT_DEFAULT,
+        context,
+        Optional.empty());
+
+    ErrorMessage message = new ErrorMessage(messageI18n);
+
+    // WWW-Authenticate must be included per the spec
+    // http://www.ietf.org/rfc/rfc2617.txt 3.2.1 The WWW-Authenticate Response Header
+
+    return Results
+        .unauthorized()
+        .addHeader(Result.WWW_AUTHENTICATE, "None")
+        .json()
+        .render(message);
+
+  }
+
+  @Override
   public Result getForbiddenResult(Context context) {
+    // diagnostic mode
+    if (isDiagnosticsEnabled()) {
+
+      DiagnosticError diagnosticError =
+          DiagnosticErrorBuilder.build403ForbiddenDiagnosticError();
+
+      return Results.forbidden().render(diagnosticError);
+
+    }
 
     String messageI18n
         = messages.getWithDefault(
@@ -108,7 +153,16 @@ public class DefaultExceptionHandler implements ExceptionHandler {
 
   }
 
-  protected Result getBadRequestResult(Exception exception, Context context) {
+  @Override
+  public Result getBadRequestResult(Context context, BadRequestException exception) {
+    if (isDiagnosticsEnabled()) {
+
+      DiagnosticError diagnosticError =
+          DiagnosticErrorBuilder.build400BadRequestDiagnosticError(exception, true);
+
+      return Results.badRequest().render(diagnosticError);
+
+    }
 
     String messageI18n
         = messages.getWithDefault(
@@ -125,13 +179,9 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         .render(message);
   }
 
-  protected Result getRenderingExceptionResult(RenderingException exception, Context context) {
 
-    return getInternalServerErrorResult(exception, context);
-
-  }
-
-  protected Result getInternalServerErrorResult(Exception exception, Context context) {
+  @Override
+  public Result getInternalServerErrorResult(Context context, Exception exception) {
 
     logger.error(
         "Emitting bad request 500. Something really wrong when calling route: {} (class: {} method: {})",

@@ -16,6 +16,7 @@
 package io.sunflower.ewf;
 
 import com.google.inject.ImplementedBy;
+import io.sunflower.ewf.errors.BadRequestException;
 
 /**
  * @author michael
@@ -27,9 +28,34 @@ public interface ExceptionHandler {
    * transform exception to response result.
    * @param context
    * @param exception
+   * @return errorResult
+   */
+  Result onException(Context context, Exception exception);
+
+  /**
+   * Should handle cases where an exception is thrown when handling a route that let to an internal
+   * server error.
+   *
+   * Should lead to a html error 500 - internal sever error (and be used with the same mindset).
+   *
+   * Usually used by onRouteRequest(...).
+   * @param context
+   * @param exception
    * @return
    */
-  Result onException(Exception exception, Context context);
+  Result getInternalServerErrorResult(Context context, Exception exception);
+
+  /**
+   * Should handle cases where the client sent strange date that led to an error.
+   *
+   * Should lead to a html error 400 - bad request (and be used with the same mindset).
+   *
+   * Usually used by onRouteRequest(...).
+   * @param context
+   * @param exception
+   * @return
+   */
+  Result getBadRequestResult(Context context, BadRequestException exception);
 
   /**
    * Should handle cases where no route can be found for a given request.
@@ -41,6 +67,20 @@ public interface ExceptionHandler {
    * @return result
    */
   Result getNotFoundResult(Context context);
+
+  /**
+   * Should handle cases where access is unauthorized
+   *
+   * Should lead to a html error 401 - unauthorized
+   * (and be used with the same mindset).
+   *
+   * By default, WWW-Authenticate is set to None.
+   *
+   * Usually used by BasicAuthFilter for instance(...).
+   * @param context
+   * @return
+   */
+  Result getUnauthorizedResult(Context context);
 
   /**
    * Should handle cases where access is forbidden

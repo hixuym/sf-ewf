@@ -65,7 +65,7 @@ public class RouteHandlerImpl implements RouteHandler {
 
     } catch (Exception exception) {
       // call special handler to capture the underlying result if there is one
-      Result result = exceptionHandler.onException(exception, context);
+      Result result = exceptionHandler.onException(context, exception);
       renderErrorResultAndCatchAndLogExceptions(result, context);
     } finally {
       context.cleanup();

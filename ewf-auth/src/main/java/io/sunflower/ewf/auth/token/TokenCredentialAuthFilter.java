@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.auth.oauth;
+package io.sunflower.ewf.auth.token;
 
 
 import java.security.Principal;
@@ -29,7 +29,7 @@ import io.sunflower.ewf.auth.AbstractAuthFilter;
 /**
  * @author michael
  */
-public class OAuthCredentialAuthFilter<P extends Principal> extends AbstractAuthFilter<String, P> {
+public class TokenCredentialAuthFilter<P extends Principal> extends AbstractAuthFilter<String, P> {
 
   /**
    * Query parameter used to pass Bearer token
@@ -40,24 +40,24 @@ public class OAuthCredentialAuthFilter<P extends Principal> extends AbstractAuth
   public static final String OAUTH_ACCESS_TOKEN_PARAM = "access_token";
 
   @Override
-  public Result filter(FilterChain chain, final Context requestContext) {
-    String credentials = getCredentials(requestContext.getHeader(HttpHeaders.AUTHORIZATION));
+  public Result filter(FilterChain chain, final Context context) {
+    String credentials = getCredentials(context.getHeader(HttpHeaders.AUTHORIZATION));
 
     // If Authorization header is not used, check query parameter where token can be passed as well
     if (credentials == null) {
-      credentials = requestContext.getParameter(OAUTH_ACCESS_TOKEN_PARAM);
+      credentials = context.getParameter(OAUTH_ACCESS_TOKEN_PARAM);
     }
 
-    if (!authenticate(requestContext, credentials, SecurityContext.BASIC_AUTH)) {
-      return (unauthorizedHandler.onUnauthorized(prefix, realm));
+    if (!authenticate(context, credentials, SecurityContext.BASIC_AUTH)) {
+      return getUnauthorizedResult(context);
     }
 
-    return chain.next(requestContext);
+    return chain.next(context);
   }
 
   /**
-   * Parses a value of the `Authorization` header in the form of `Bearer
-   * a892bf3e284da9bb40648ab10`.
+   * Parses a value of the `Authorization` header in the form of
+   * `Bearer a892bf3e284da9bb40648ab10`.
    *
    * @param header the value of the `Authorization` header
    * @return a token
@@ -74,10 +74,15 @@ public class OAuthCredentialAuthFilter<P extends Principal> extends AbstractAuth
     }
 
     final String method = header.substring(0, space);
-    if (!prefix.equalsIgnoreCase(method)) {
+    if (!getPrefix().equalsIgnoreCase(method)) {
       return null;
     }
 
     return header.substring(space + 1);
+  }
+
+  @Override
+  protected String getPrefix() {
+    return "Bearer";
   }
 }

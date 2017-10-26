@@ -34,4 +34,9 @@ public class AssetsRoutes implements ApplicationRoutes {
     router.GET().route("/assets/{fileName: .*}").with(AssetsResource::serveStatic);
   }
 
+  @Override
+  public int order() {
+    // assets route at last.
+    return 100;
+  }
 }

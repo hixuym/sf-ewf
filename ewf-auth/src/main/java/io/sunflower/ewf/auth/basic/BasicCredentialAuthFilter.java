@@ -37,15 +37,15 @@ public class BasicCredentialAuthFilter<P extends Principal>
   }
 
   @Override
-  public Result filter(FilterChain chain, Context requestContext) {
+  public Result filter(FilterChain chain, Context context) {
     final BasicCredentials credentials =
-        getCredentials(requestContext.getHeader(HttpHeaders.AUTHORIZATION));
+        getCredentials(context.getHeader(HttpHeaders.AUTHORIZATION));
 
-    if (!authenticate(requestContext, credentials, SecurityContext.BASIC_AUTH)) {
-      return unauthorizedHandler.onUnauthorized(prefix, realm);
+    if (!authenticate(context, credentials, SecurityContext.BASIC_AUTH)) {
+      return getUnauthorizedResult(context);
     }
 
-    return chain.next(requestContext);
+    return chain.next(context);
   }
 
   /**
@@ -67,7 +67,7 @@ public class BasicCredentialAuthFilter<P extends Principal>
     }
 
     final String method = header.substring(0, space);
-    if (!prefix.equalsIgnoreCase(method)) {
+    if (!getPrefix().equalsIgnoreCase(method)) {
       return null;
     }
 

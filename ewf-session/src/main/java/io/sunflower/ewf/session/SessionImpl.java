@@ -211,7 +211,8 @@ public class SessionImpl implements Session {
 
     // Don't save the cookie nothing has changed, and if we're not expiring or
     // we are expiring but we're only updating if the session changes
-    if (!sessionDataHasBeenChanged && (sessionExpireTimeInMs == null || sessionSendOnlyIfChanged)) {
+    if (!sessionDataHasBeenChanged &&
+        (sessionExpireTimeInMs == null || sessionSendOnlyIfChanged)) {
       // Nothing changed and no cookie-expire, consequently send nothing
       // back.
       return;

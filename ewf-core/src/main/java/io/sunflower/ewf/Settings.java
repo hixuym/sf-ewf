@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * ewf framework settings
+ * @author michael
  */
 @Singleton
 public class Settings {
@@ -55,7 +56,7 @@ public class Settings {
 
   private String uploadTempFolder;
   private String jsonpCallbackParam = "jsonpCallback";
-  private boolean diagnosticsEnabled = true;
+  private boolean diagnosticsEnabled = false;
   private boolean usageOfXForwardedHeaderEnabled = false;
 
   private Mode mode = ModeHelper.determineModeFromSystemPropertiesOrProdIfNotSet();

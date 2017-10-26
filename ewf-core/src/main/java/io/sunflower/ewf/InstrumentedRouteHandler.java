@@ -89,7 +89,7 @@ public class InstrumentedRouteHandler extends RouteHandlerImpl {
         } else {
           internalServerErrors.mark();
         }
-        Result result = exceptionHandler.onException(exception, context);
+        Result result = exceptionHandler.onException(context, exception);
         renderErrorResultAndCatchAndLogExceptions(result, context);
       } finally {
         context.cleanup();

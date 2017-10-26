@@ -18,6 +18,9 @@ package io.sunflower.ewf;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public interface Router {
 
   /**
@@ -37,28 +40,53 @@ public interface Router {
 
   /**
    * Returns the list of compiled routes.
+   *
+   * @return application routes
    */
   List<Route> getRoutes();
 
+  /**
+   * get route by resource class and method name.
+   * @param resourceClass
+   * @param resourceMethodName
+   * @return optional route
+   */
   Optional<Route> getRouteForResourceClassAndMethod(
-      Class<?> controllerClass, String controllerMethodName);
+      Class<?> resourceClass, String resourceMethodName);
 
-  // /////////////////////////////////////////////////////////////////////////
-  // convenience methods to use the route in a DSL like way
-  // router.GET().route("/index").with(.....)
-  // /////////////////////////////////////////////////////////////////////////
+  /**
+   * convenience methods to use the route in a DSL like way router.GET().route("/index").with(.....)
+   */
   RouteBuilder GET();
 
+  /**
+   * return websocket route builder
+   */
   RouteBuilder WS();
 
+  /**
+   * return post method route builder
+   */
   RouteBuilder POST();
 
+  /**
+   * get put method route builder
+   */
   RouteBuilder PUT();
 
+  /**
+   * get delete method route builder
+   */
   RouteBuilder DELETE();
 
+  /**
+   * get options method route builder
+   */
   RouteBuilder OPTIONS();
 
+  /**
+   * get head method route builder
+   */
   RouteBuilder HEAD();
 
   /**

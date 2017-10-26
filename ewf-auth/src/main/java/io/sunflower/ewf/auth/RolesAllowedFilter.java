@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.ExceptionHandler;
 import io.sunflower.ewf.Filter;
 import io.sunflower.ewf.FilterChain;
 import io.sunflower.ewf.Result;
@@ -32,11 +33,11 @@ import io.sunflower.ewf.SecurityContext;
  */
 public class RolesAllowedFilter implements Filter {
 
-  private final UnauthorizedHandler unauthorizedHandler;
+  private final ExceptionHandler exceptionHandler;
 
   @Inject
-  public RolesAllowedFilter(UnauthorizedHandler unauthorizedHandler) {
-    this.unauthorizedHandler = unauthorizedHandler;
+  public RolesAllowedFilter(ExceptionHandler exceptionHandler) {
+    this.exceptionHandler = exceptionHandler;
   }
 
   @Override
@@ -46,7 +47,7 @@ public class RolesAllowedFilter implements Filter {
 
     // unauth
     if (securityContext == null) {
-      return unauthorizedHandler.onUnauthorized("", "");
+      return exceptionHandler.getUnauthorizedResult(context);
     }
 
     Route route = context.getRoute();
@@ -78,6 +79,6 @@ public class RolesAllowedFilter implements Filter {
       }
     }
 
-    return null;
+    return exceptionHandler.getForbiddenResult(context);
   }
 }

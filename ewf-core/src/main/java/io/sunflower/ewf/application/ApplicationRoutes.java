@@ -24,16 +24,26 @@ import io.sunflower.ewf.Router;
  */
 public interface ApplicationRoutes extends Comparable<ApplicationRoutes> {
 
+  /**
+   * use router build module routes
+   * @param router
+   */
   void init(Router router);
 
   /**
-   *
+   * routes order
    * @return
    */
   default int order() {
     return 10;
   }
 
+
+  /**
+   * compare tow routes, big order at last.
+   * @param o
+   * @return
+   */
   @Override
   default int compareTo(ApplicationRoutes o) {
     return order() - o.order();

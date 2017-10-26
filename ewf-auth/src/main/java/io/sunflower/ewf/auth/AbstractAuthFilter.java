@@ -17,11 +17,12 @@ package io.sunflower.ewf.auth;
 
 import java.security.Principal;
 import java.util.Optional;
-
 import javax.inject.Inject;
 
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.ExceptionHandler;
 import io.sunflower.ewf.Filter;
+import io.sunflower.ewf.Result;
 import io.sunflower.ewf.SecurityContext;
 import io.sunflower.ewf.errors.InternalServerErrorException;
 import org.slf4j.Logger;
@@ -34,8 +35,7 @@ public abstract class AbstractAuthFilter<C, P extends Principal> implements Filt
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected String prefix = "Basic";
-  protected String realm = "realm";
+  private static final String CHALLENGE_FORMAT = "%s realm=\"%s\"";
 
   @Inject
   protected Authenticator<C, P> authenticator;
@@ -44,18 +44,31 @@ public abstract class AbstractAuthFilter<C, P extends Principal> implements Filt
   protected Authorizer<P> authorizer;
 
   @Inject
-  protected UnauthorizedHandler unauthorizedHandler;
+  private ExceptionHandler exceptionHandler;
+
+  protected Result getUnauthorizedResult(Context context) {
+    return exceptionHandler.getUnauthorizedResult(context)
+        .addHeader(Result.WWW_AUTHENTICATE, String.format(CHALLENGE_FORMAT, getPrefix(), getRealm()));
+  }
+
+  protected String getPrefix() {
+    return "Basic";
+  }
+
+  protected String getRealm() {
+    return "realm";
+  }
 
   /**
    * Authenticates a request with user credentials and setup the security context.
    *
-   * @param requestContext the context of the request
+   * @param context the context of the request
    * @param credentials the user credentials
    * @param scheme the authentication scheme; one of {@code BASIC_AUTH, FORM_AUTH, CLIENT_CERT_AUTH,
    * DIGEST_AUTH}. See {@link SecurityContext}
    * @return {@code true}, if the request is authenticated, otherwise {@code false}
    */
-  protected boolean authenticate(Context requestContext, C credentials, String scheme) {
+  protected boolean authenticate(Context context, C credentials, String scheme) {
     try {
       if (credentials == null) {
         return false;
@@ -66,10 +79,9 @@ public abstract class AbstractAuthFilter<C, P extends Principal> implements Filt
         return false;
       }
 
-      final SecurityContext securityContext = requestContext.getSecurityContext();
-      final boolean secure = securityContext != null && securityContext.isSecure();
+      final SecurityContext securityContext = context.getSecurityContext();
 
-      requestContext.setSecurityContext(new SecurityContext() {
+      context.setSecurityContext(new SecurityContext() {
         @Override
         public Principal getUserPrincipal() {
           return principal.get();
@@ -82,7 +94,7 @@ public abstract class AbstractAuthFilter<C, P extends Principal> implements Filt
 
         @Override
         public boolean isSecure() {
-          return secure;
+          return "https".equalsIgnoreCase(context.getScheme());
         }
 
         @Override
@@ -93,7 +105,7 @@ public abstract class AbstractAuthFilter<C, P extends Principal> implements Filt
       return true;
     } catch (AuthenticationException e) {
       logger.warn("Error authenticating credentials", e);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(e.getMessage(), e);
     }
   }
 }
