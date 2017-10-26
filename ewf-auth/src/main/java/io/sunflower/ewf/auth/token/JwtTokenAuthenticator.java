@@ -30,7 +30,7 @@ import io.sunflower.ewf.auth.PrincipalImpl;
  * @author michael created on 17/10/21 22:10
  */
 @Singleton
-public class JwtTokenAuthenticator<P extends Principal> implements Authenticator<String, P> {
+public class JwtTokenAuthenticator implements Authenticator<String, Principal> {
 
   private final JwtTokenHelper helper;
 
@@ -40,15 +40,16 @@ public class JwtTokenAuthenticator<P extends Principal> implements Authenticator
   }
 
   @Override
-  public Optional<P> authenticate(String credentials) throws AuthenticationException {
+  public Optional<Principal> authenticate(String credentials) throws AuthenticationException {
 
     try {
-      Optional<String> username = helper.extract(credentials);
 
-      return (Optional<P>) username.map(PrincipalImpl::new);
+      return helper.extract(credentials).map(PrincipalImpl::new);
 
     } catch (Exception e) {
+
       throw new AuthenticationException(e.getMessage(), e);
+
     }
 
   }
