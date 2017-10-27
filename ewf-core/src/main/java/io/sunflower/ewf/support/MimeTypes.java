@@ -136,7 +136,7 @@ public class MimeTypes {
   private void initMimetypes() {
 
     // Load default mimetypes from the framework
-    String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/ewf/utils/mime-types.properties";
+    String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/ewf/support/mime-types.properties";
     try (InputStream is = this.getClass().getClassLoader()
         .getResourceAsStream(DEFAULT_MIMET_TYPE_LOCATIONS)) {
       mimetypes.load(is);
