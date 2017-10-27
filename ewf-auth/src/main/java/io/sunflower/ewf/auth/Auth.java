@@ -13,13 +13,20 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.session.internal.support;
+package io.sunflower.ewf.auth;
 
-public class ClockImpl implements Clock {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  @Override
-  public long currentTimeMillis() {
-    return System.currentTimeMillis();
-  }
+/**
+ * Auth
+ *
+ * @author michael created on 17/10/27 14:29
+ */
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Auth {
 
 }

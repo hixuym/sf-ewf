@@ -25,10 +25,10 @@ import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.session.utils.Clock;
-import io.sunflower.ewf.session.utils.CookieDataCodec;
-import io.sunflower.ewf.session.utils.CookieEncryption;
-import io.sunflower.ewf.session.utils.Crypto;
+import io.sunflower.ewf.session.internal.support.Clock;
+import io.sunflower.ewf.session.internal.support.CookieDataCodec;
+import io.sunflower.ewf.session.internal.support.CookieEncryption;
+import io.sunflower.ewf.session.internal.support.Crypto;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.util.Duration;
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SessionImpl implements Session {
 
-  private final static Logger logger = LoggerFactory.getLogger(io.sunflower.ewf.session.SessionImpl.class);
+  private final static Logger logger = LoggerFactory.getLogger(SessionImpl.class);
 
   private final Crypto crypto;
   private final CookieEncryption encryption;

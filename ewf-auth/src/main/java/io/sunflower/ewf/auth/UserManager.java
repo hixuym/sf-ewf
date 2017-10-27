@@ -13,13 +13,29 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.session.internal.support;
+package io.sunflower.ewf.auth;
 
-public class ClockImpl implements Clock {
+/**
+ * UserManager
+ *
+ * @author michael created on 17/10/27 14:31
+ */
+public interface UserManager<T> {
 
-  @Override
-  public long currentTimeMillis() {
-    return System.currentTimeMillis();
-  }
+  String REQUEST_UID_KEY = "ewf_request_uid";
 
+  /**
+   * find user by key
+   * @param uid
+   * @return
+   */
+  T getUser(String uid);
+
+  /**
+   * verify user credentials
+   * @param uid
+   * @param password
+   * @return
+   */
+  boolean verify(String uid, String password);
 }

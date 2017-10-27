@@ -16,10 +16,16 @@
 package io.sunflower.ewf.session.internal.support;
 
 import com.google.inject.ImplementedBy;
-import io.sunflower.ewf.session.utils.ClockImpl;
 
+/**
+ * @author michael
+ */
 @ImplementedBy(ClockImpl.class)
 public interface Clock {
 
+  /**
+   * current time millis
+   * @return
+   */
   long currentTimeMillis();
 }

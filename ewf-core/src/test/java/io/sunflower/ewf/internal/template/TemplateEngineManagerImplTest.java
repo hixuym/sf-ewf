@@ -38,7 +38,7 @@ import io.sunflower.ewf.spi.TemplateEngine;
 import io.sunflower.ewf.spi.internal.TemplateEngineJson;
 import io.sunflower.ewf.spi.internal.TemplateEngineJsonP;
 import io.sunflower.ewf.spi.internal.TemplateEngineText;
-import io.sunflower.guicey.LoggerProvider;
+import io.sunflower.guice.LoggerProvider;
 import org.junit.Test;
 import org.slf4j.Logger;
 

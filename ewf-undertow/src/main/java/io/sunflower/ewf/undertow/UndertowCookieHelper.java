@@ -22,6 +22,9 @@ import io.undertow.server.handlers.CookieImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author michael
+ */
 public class UndertowCookieHelper {
 
   private static final Logger log = LoggerFactory.getLogger(UndertowCookieHelper.class);

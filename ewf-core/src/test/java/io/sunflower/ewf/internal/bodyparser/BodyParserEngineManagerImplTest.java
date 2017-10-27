@@ -34,7 +34,7 @@ import io.sunflower.ewf.params.ParamParser;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
 import io.sunflower.ewf.spi.internal.BodyParserEnginePost;
-import io.sunflower.guicey.LoggerProvider;
+import io.sunflower.guice.LoggerProvider;
 import org.junit.Test;
 import org.slf4j.Logger;
 

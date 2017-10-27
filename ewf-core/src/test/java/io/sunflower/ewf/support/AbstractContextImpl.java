@@ -23,6 +23,8 @@ import java.util.Map;
 
 import com.google.inject.Injector;
 import io.sunflower.ewf.Cookie;
+import io.sunflower.ewf.session.FlashScope;
+import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.support.AbstractContext;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
@@ -37,9 +39,9 @@ public class AbstractContextImpl extends AbstractContext {
 
   public AbstractContextImpl(BodyParserEngineManager bodyParserEngineManager,
       Settings configuration, Validation validation, Injector injector,
-      ParamParsers paramParsers) {
+      ParamParsers paramParsers, FlashScope flashScope, Session session) {
     super(bodyParserEngineManager, configuration, validation, injector,
-        paramParsers);
+        paramParsers, flashScope, session);
   }
 
   @Override

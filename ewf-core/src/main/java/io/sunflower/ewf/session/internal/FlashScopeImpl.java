@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.session.FlashScope;
-import io.sunflower.ewf.session.utils.CookieDataCodec;
+import io.sunflower.ewf.session.internal.support.CookieDataCodec;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FlashScopeImpl implements FlashScope {
 
-  static private Logger log = LoggerFactory.getLogger(io.sunflower.ewf.session.FlashScopeImpl.class);
+  static private Logger log = LoggerFactory.getLogger(FlashScopeImpl.class);
 
   private final Map<String, String> currentFlashCookieData = new HashMap<>();
   private final Map<String, String> outgoingFlashCookieData = new HashMap<>();

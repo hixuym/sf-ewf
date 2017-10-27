@@ -27,7 +27,7 @@ import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.WebApplicationModule;
 import io.sunflower.ewf.support.Settings;
-import io.sunflower.guicey.Injectors;
+import io.sunflower.guice.Injectors;
 import io.sunflower.setup.Bootstrap;
 import io.sunflower.setup.Environment;
 import io.sunflower.undertow.UndertowBundle;
@@ -66,7 +66,7 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
     });
 
     Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
-    environment.guicey().registry(settings);
+    environment.guice().register(settings);
 
     undertowModule
         .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
@@ -80,7 +80,7 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
     };
 
     configure(webApplicationModule);
-    environment.guicey().registry(webApplicationModule);
+    environment.guice().register(webApplicationModule);
 
   }
 

@@ -32,14 +32,14 @@ import org.slf4j.LoggerFactory;
 /**
  * This class encrypts/decrypts session cookie data. Resultant encrypted strings are encoded in
  * base64, and decryption expects base64 encoded string.
+ * @author michael
  */
 @Singleton
 public class CookieEncryption {
 
   public static final String ALGORITHM = "AES";
 
-  private static final Logger logger = LoggerFactory.getLogger(
-      io.sunflower.ewf.session.utils.CookieEncryption.class);
+  private static final Logger logger = LoggerFactory.getLogger(CookieEncryption.class);
 
   private final Optional<SecretKeySpec> secretKeySpec;
 

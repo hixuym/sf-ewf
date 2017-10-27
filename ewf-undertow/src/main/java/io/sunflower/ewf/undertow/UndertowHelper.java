@@ -26,6 +26,9 @@ import io.sunflower.ewf.internal.ParameterFileItem;
 import io.undertow.server.handlers.form.FormData.FormValue;
 import io.undertow.util.HeaderValues;
 
+/**
+ * @author michael
+ */
 public class UndertowHelper {
 
   static public void createOrMerge(Map<String, String[]> parameters, String name,

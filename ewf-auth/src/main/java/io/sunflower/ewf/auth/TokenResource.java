@@ -13,13 +13,16 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.session.internal.support;
+package io.sunflower.ewf.auth;
 
-public class ClockImpl implements Clock {
+import javax.inject.Singleton;
 
-  @Override
-  public long currentTimeMillis() {
-    return System.currentTimeMillis();
-  }
+/**
+ * TokenResource
+ *
+ * @author michael created on 17/10/27 16:16
+ */
+@Singleton
+public class TokenResource {
 
 }

@@ -53,6 +53,9 @@ import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.ResponseStreams;
 import org.slf4j.Logger;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineFreemarker implements TemplateEngine {
 

@@ -18,32 +18,37 @@ package io.sunflower.ewf.auth;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import com.auth0.jwt.interfaces.Claim;
+import io.sunflower.ewf.auth.internal.JwtTokenManager;
 import io.sunflower.ewf.support.Settings;
-import io.sunflower.ewf.auth.token.JwtTokenHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JwtTokenHelperTests
+ * JwtTokenManagerTests
  *
  * @author michael created on 17/10/26 17:15
  */
-public class JwtTokenHelperTests {
+public class JwtTokenManagerTests {
 
   @Test
-  public void testJwtToken() {
+  public void testJwtToken() throws Exception {
 
-    JwtTokenHelper helper = new JwtTokenHelper(new Settings());
+    JwtTokenManager tokenManager = new JwtTokenManager(new Settings());
 
-    String token = helper.buildToken("michael", new Date(Instant.now().toEpochMilli() + 24*60*1000));
+    String token = tokenManager.generate("michael");
 
-    Map<String, Claim> claims = helper.verify(token);
+    System.out.println(token);
 
-    Assert.assertNotNull(claims.get("uid"));
+    String uid = tokenManager.verify(token);
 
-    Assert.assertEquals("michael", claims.get("uid").asString());
+    System.out.println(uid);
+
+    String refreshToken = tokenManager.refresh(token);
+
+    System.out.println(refreshToken);
   }
 
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.session.internal.SessionImpl;
 
 
 /**

@@ -47,9 +47,11 @@ public class Settings {
   private boolean sessionSendOnlyIfChanged = true;
   private boolean sessionTransferredOverHttpsOnly = false;
   private boolean sessionHttpOnly = true;
-  private boolean sessionEnabled = false;
+
+  private Duration tokenExpireTime = Duration.days(7);
 
   private String httpCacheMaxAge = "3600";
+
   private boolean etagEnable = true;
 
   private Map<String, String> mimetypes = new HashMap<>();
@@ -72,30 +74,36 @@ public class Settings {
     loadSettings(rawSettings);
   }
 
+  private static final String HANDLER_PATH_KEY = "ewf.handlerPath";
+  private static final String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
+  private static final String MODE_KEY = "ewf.mode";
+  private static final String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
+  private static final String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
+
   private void loadSettings(Map<String, String> rawSettings) {
-    if (rawSettings.containsKey("ewf.handlerPath")) {
-      this.handlerPath = rawSettings.get("ewf.handlerPath");
+    if (rawSettings.containsKey(HANDLER_PATH_KEY)) {
+      this.handlerPath = rawSettings.get(HANDLER_PATH_KEY);
     }
 
-    if (rawSettings.containsKey("sf.undertowContextPath")) {
+    if (rawSettings.containsKey(SF_UNDERTOW_CTX_PATH_KEY)) {
       String contextPath =
-          StringUtils.removeEnd(rawSettings.get("sf.undertowContextPath"), "/");
+          StringUtils.removeEnd(rawSettings.get(SF_UNDERTOW_CTX_PATH_KEY), "/");
 
       String handlerPath = StringUtils.removeEnd(this.handlerPath, "/");
 
       this.contextPath = contextPath + handlerPath;
     }
 
-    if (rawSettings.containsKey("ewf.mode")) {
-      this.mode = Mode.valueOf(rawSettings.get("ewf.mode"));
+    if (rawSettings.containsKey(MODE_KEY)) {
+      this.mode = Mode.valueOf(rawSettings.get(MODE_KEY));
     }
 
-    if (rawSettings.containsKey("ewf.uploadTempFolder")) {
-      this.uploadTempFolder = rawSettings.get("ewf.uploadTempFolder");
+    if (rawSettings.containsKey(UPLOAD_FOLDER_KEY)) {
+      this.uploadTempFolder = rawSettings.get(UPLOAD_FOLDER_KEY);
     }
 
-    if (rawSettings.containsKey("ewf.jsonpCallbackParam")) {
-      this.jsonpCallbackParam = rawSettings.get("ewf.jsonpCallbackParam");
+    if (rawSettings.containsKey(JSONP_CALLBACK_PARAM_KEY)) {
+      this.jsonpCallbackParam = rawSettings.get(JSONP_CALLBACK_PARAM_KEY);
     }
 
     if (rawSettings.containsKey("ewf.diagnosticsEnabled")) {
@@ -129,10 +137,6 @@ public class Settings {
       this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get("ewf.cookieEncrypted"));
     }
 
-    if (rawSettings.containsKey("ewf.sessionEnabled")) {
-      this.sessionEnabled = Boolean.parseBoolean(rawSettings.get("ewf.sessionEnabled"));
-    }
-
     if (rawSettings.containsKey("ewf.cookiePrefix")) {
       this.cookiePrefix = rawSettings.get("ewf.cookiePrefix");
     }
@@ -156,6 +160,14 @@ public class Settings {
       this.httpCacheMaxAge = rawSettings.get("ewf.cacheMaxAge");
     }
 
+    if (rawSettings.containsKey("ewf.tokenExpireTime")) {
+      this.tokenExpireTime = Duration.parse(rawSettings.get("ewf.tokenExpireTime"));
+    }
+
+    if (rawSettings.containsKey("ewf.sessionExpireTime")) {
+      this.sessionExpireTime = Duration.parse(rawSettings.get("ewf.sessionExpireTime"));
+    }
+
     for (Map.Entry<String, String> e : rawSettings.entrySet()) {
       String key = e.getKey();
       String v = e.getValue();
@@ -174,10 +186,6 @@ public class Settings {
   }
 
   private static final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
-
-  public boolean isSessionEnabled() {
-    return sessionEnabled;
-  }
 
   public String getHandlerPath() {
     return handlerPath;
@@ -263,4 +271,7 @@ public class Settings {
     return mode;
   }
 
+  public Duration getTokenExpireTime() {
+    return tokenExpireTime;
+  }
 }

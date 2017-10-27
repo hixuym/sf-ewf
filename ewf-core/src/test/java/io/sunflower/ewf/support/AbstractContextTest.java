@@ -37,6 +37,7 @@ import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
 import io.sunflower.ewf.internal.Route;
+import io.sunflower.ewf.session.internal.FlashScopeImpl;
 import io.sunflower.ewf.spi.BodyParserEngine;
 import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.internal.ParamParsers;
@@ -76,6 +77,12 @@ public class AbstractContextTest {
   @Mock
   private Settings configuration;
 
+  @Mock
+  private FlashScope flashScope;
+
+  @Mock
+  private Session session;
+
   private AbstractContextImpl abstractContext;
 
   @Before
@@ -85,7 +92,9 @@ public class AbstractContextTest {
         configuration,
         validation,
         null,
-        new ParamParsers(new HashSet<>()));
+        new ParamParsers(new HashSet<>()),
+        flashScope,
+        session);
 
     abstractContext.init("", "/");
   }
