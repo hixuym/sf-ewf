@@ -36,6 +36,8 @@ import java.util.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
+import io.sunflower.ewf.session.FlashScope;
+import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.uploads.FileItem;
 import io.sunflower.ewf.support.AbstractContext;
 import io.sunflower.ewf.support.ResponseStreams;
@@ -69,14 +71,18 @@ public class UndertowContext extends AbstractContext {
       Settings configuration,
       Validation validation,
       Injector injector,
-      ParamParsers paramParsers) {
+      ParamParsers paramParsers,
+      FlashScope flashScope,
+      Session session) {
 
     super(
         bodyParserEngineManager,
         configuration,
         validation,
         injector,
-        paramParsers);
+        paramParsers,
+        flashScope,
+        session);
 
     this.attributes = new HashMap<>();
   }

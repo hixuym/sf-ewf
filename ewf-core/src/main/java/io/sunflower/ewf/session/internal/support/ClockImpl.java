@@ -13,21 +13,15 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.session;
+package io.sunflower.ewf.session.internal.support;
 
-import com.google.inject.AbstractModule;
+import io.sunflower.ewf.session.utils.Clock;
 
-/**
- * SessionModule
- *
- * @author michael created on 17/10/14 11:25
- */
-public class SessionModule extends AbstractModule {
+public class ClockImpl implements Clock {
 
   @Override
-  protected void configure() {
-    bind(FlashScope.class).to(FlashScopeImpl.class);
-    bind(Session.class).to(SessionImpl.class);
+  public long currentTimeMillis() {
+    return System.currentTimeMillis();
   }
 
 }

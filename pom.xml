@@ -76,7 +76,6 @@
     <module>ewf-assets</module>
     <module>ewf-xml</module>
     <module>ewf-auth</module>
-    <module>ewf-session</module>
     <module>ewf-freemarker</module>
     <module>ewf-websocket</module>
     <module>ewf-undertow</module>

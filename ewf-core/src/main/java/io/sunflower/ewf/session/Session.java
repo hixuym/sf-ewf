@@ -17,12 +17,14 @@ package io.sunflower.ewf.session;
 
 import java.util.Map;
 
+import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
 
 
 /**
  * @author michael
  */
+@ImplementedBy(SessionImpl.class)
 public interface Session {
 
   String AUTHENTICITY_KEY = "___AT";

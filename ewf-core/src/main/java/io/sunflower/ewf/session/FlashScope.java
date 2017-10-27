@@ -17,6 +17,7 @@ package io.sunflower.ewf.session;
 
 import java.util.Map;
 
+import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
 
 /**
@@ -35,6 +36,7 @@ import io.sunflower.ewf.Context;
  * data.  Unless you keep() those keys that data will only be valid for the current request.
  * @author michael
  */
+@ImplementedBy(FlashScopeImpl.class)
 public interface FlashScope {
 
   /**

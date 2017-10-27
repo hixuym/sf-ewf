@@ -58,6 +58,9 @@ abstract public class AbstractContext implements Impl {
   final protected Injector injector;
   final protected ParamParsers paramParsers;
 
+  final protected FlashScope flashScope;
+  final protected Session session;
+
   protected Route route;
 
   /**
@@ -73,18 +76,25 @@ abstract public class AbstractContext implements Impl {
       Settings configuration,
       Validation validation,
       Injector injector,
-      ParamParsers paramParsers) {
+      ParamParsers paramParsers,
+      FlashScope flashScope,
+      Session session) {
     this.bodyParserEngineManager = bodyParserEngineManager;
     this.configuration = configuration;
     this.validation = validation;
     this.injector = injector;
     this.paramParsers = paramParsers;
+    this.flashScope = flashScope;
+    this.session = session;
   }
 
   protected void init(String contextPath, String requestPath) {
     // contextPath "" or "/" prefix string.
     this.contextPath = contextPath;
     this.requestPath = requestPath;
+
+    this.flashScope.init(this);
+    this.session.init(this);
   }
 
   @Override
@@ -104,14 +114,12 @@ abstract public class AbstractContext implements Impl {
 
   @Override
   public FlashScope getFlashScope() {
-    return null;
-//    throw new UnsupportedOperationException("gizmo-core not support flashscope, use sf-gizmo-session");
+    return this.flashScope;
   }
 
   @Override
   public Session getSession() {
-    return null;
-//    throw new UnsupportedOperationException("gizmo-core not support session, use sf-gizmo-session");
+    return this.session;
   }
 
   @Override
@@ -278,6 +286,11 @@ abstract public class AbstractContext implements Impl {
   }
 
   protected ResponseStreams finalizeHeaders(Result result, Boolean handleFlashAndSessionCookie) {
+
+    if (handleFlashAndSessionCookie) {
+      this.flashScope.save(this);
+      this.session.save(this);
+    }
 
     // copy any cookies from result
     for (Cookie cookie : result.getCookies()) {
