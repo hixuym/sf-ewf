@@ -18,7 +18,7 @@ package io.sunflower.ewf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.sunflower.ewf.utils.NoHttpBody;
+import io.sunflower.ewf.support.NoHttpBody;
 import org.junit.Test;
 
 public class ResultsTest {

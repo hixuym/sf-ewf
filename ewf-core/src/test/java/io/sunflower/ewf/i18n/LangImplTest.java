@@ -24,9 +24,10 @@ import java.util.Optional;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.utils.Constants;
+import io.sunflower.ewf.i18n.internal.LangImpl;
+import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.Result;
 import org.junit.Before;
 import org.junit.Test;

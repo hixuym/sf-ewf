@@ -17,6 +17,7 @@ package io.sunflower.ewf;
 
 /**
  * A filter chain
+ *
  * @author michael
  */
 public interface FilterChain {

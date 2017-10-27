@@ -20,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 /**
  * Just an idea to guicey a header right into the methods...
  *

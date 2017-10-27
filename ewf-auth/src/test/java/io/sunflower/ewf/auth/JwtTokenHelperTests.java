@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.auth0.jwt.interfaces.Claim;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.auth.token.JwtTokenHelper;
 import org.junit.Assert;
 import org.junit.Test;

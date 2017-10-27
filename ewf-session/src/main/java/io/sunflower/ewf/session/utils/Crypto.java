@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 import com.google.common.io.BaseEncoding;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 
 @Singleton
 public class Crypto {

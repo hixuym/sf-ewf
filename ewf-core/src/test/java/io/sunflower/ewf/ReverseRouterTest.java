@@ -24,9 +24,12 @@ import java.util.Collections;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import io.sunflower.ewf.internal.RouteBuilderImpl;
+import io.sunflower.ewf.internal.RouterImpl;
 import io.sunflower.ewf.params.Param;
-import io.sunflower.ewf.params.ParamParsers;
-import io.sunflower.ewf.utils.MethodReference;
+import io.sunflower.ewf.params.internal.ParamParsers;
+import io.sunflower.ewf.support.MethodReference;
+import io.sunflower.ewf.support.Settings;
 import org.junit.Before;
 import org.junit.Test;
 

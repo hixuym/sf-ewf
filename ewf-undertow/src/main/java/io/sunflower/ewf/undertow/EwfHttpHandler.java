@@ -16,8 +16,8 @@ package io.sunflower.ewf.undertow;
 
 import com.google.inject.Injector;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.RouteHandler;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.spi.RouteHandler;
+import io.sunflower.ewf.support.Settings;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import org.slf4j.Logger;

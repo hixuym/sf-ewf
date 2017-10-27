@@ -18,6 +18,7 @@ package io.sunflower.ewf.validation;
 import java.util.List;
 
 import com.google.inject.ImplementedBy;
+import io.sunflower.ewf.internal.ValidationImpl;
 
 /**
  * This interface means the validation context (implemented by {@link ValidationImpl}) and can be

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

@@ -17,7 +17,7 @@ package io.sunflower.ewf;
 
 import java.util.Optional;
 
-import io.sunflower.ewf.utils.NoHttpBody;
+import io.sunflower.ewf.support.NoHttpBody;
 
 
 /**

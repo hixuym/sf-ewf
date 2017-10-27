@@ -30,6 +30,11 @@ package io.sunflower.ewf;
  */
 public interface Renderable {
 
+  /**
+   * renderable object.
+   * @param context
+   * @param result
+   */
   void render(Context context, Result result);
 
 }

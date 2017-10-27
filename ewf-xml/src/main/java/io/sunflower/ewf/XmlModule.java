@@ -17,8 +17,8 @@ package io.sunflower.ewf;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.AbstractModule;
-import io.sunflower.ewf.bodyparser.BodyParserEngineXml;
-import io.sunflower.ewf.template.TemplateEngineXml;
+import io.sunflower.ewf.internal.bodyparser.BodyParserEngineXml;
+import io.sunflower.ewf.internal.template.TemplateEngineXml;
 
 /**
  * XmlModule

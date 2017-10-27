@@ -17,7 +17,7 @@ package io.sunflower.ewf;
 
 import java.util.List;
 
-import io.sunflower.ewf.utils.WithResourceMethod;
+import io.sunflower.ewf.support.WithResourceMethod;
 
 /**
  * @author michael

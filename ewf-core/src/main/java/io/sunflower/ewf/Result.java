@@ -28,9 +28,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sunflower.ewf.errors.InternalServerErrorException;
-import io.sunflower.ewf.utils.DateUtil;
-import io.sunflower.ewf.utils.NoHttpBody;
-import io.sunflower.ewf.utils.SwissKnife;
+import io.sunflower.ewf.support.ResponseStreams;
+import io.sunflower.ewf.support.DateUtil;
+import io.sunflower.ewf.support.NoHttpBody;
+import io.sunflower.ewf.support.SwissKnife;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

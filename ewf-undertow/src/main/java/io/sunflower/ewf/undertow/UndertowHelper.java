@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.sunflower.ewf.uploads.FileItem;
-import io.sunflower.ewf.uploads.ParameterFileItem;
+import io.sunflower.ewf.internal.ParameterFileItem;
 import io.undertow.server.handlers.form.FormData.FormValue;
 import io.undertow.util.HeaderValues;
 

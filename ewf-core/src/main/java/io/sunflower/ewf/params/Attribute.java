@@ -20,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 /**
  * Injects an attribute value into a controller method invocation.
  *

@@ -17,7 +17,7 @@ package com.example.conf;
 import java.util.List;
 
 import io.sunflower.ewf.Filter;
-import io.sunflower.ewf.application.ApplicationFilters;
+import io.sunflower.ewf.ApplicationFilters;
 
 // Used in some testcases...
 public class Filters implements ApplicationFilters {
@@ -29,7 +29,7 @@ public class Filters implements ApplicationFilters {
   }
 
   @Override
-  public void addGlobalFilters(List<Class<? extends Filter>> filters) {
+  public void addFilters(List<Class<? extends Filter>> filters) {
     filters.add(filterToAdd);
   }
 }

@@ -21,9 +21,9 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.session.utils.CookieDataCodec;
-import io.sunflower.ewf.utils.Constants;
+import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

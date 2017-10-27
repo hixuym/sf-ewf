@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
+import io.sunflower.ewf.support.ResponseStreams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

@@ -18,6 +18,8 @@ package io.sunflower.ewf;
 import java.util.List;
 import java.util.Optional;
 
+import io.sunflower.ewf.internal.Route;
+
 /**
  * @author michael
  */

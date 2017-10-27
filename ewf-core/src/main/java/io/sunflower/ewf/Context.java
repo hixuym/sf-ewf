@@ -21,9 +21,11 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import io.sunflower.ewf.bodyparser.BodyParserEngine;
-import io.sunflower.ewf.bodyparser.BodyParserEngineJson;
-import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
+import io.sunflower.ewf.internal.Route;
+import io.sunflower.ewf.spi.BodyParserEngine;
+import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
+import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
+import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.uploads.FileItem;
@@ -569,18 +571,6 @@ public interface Context {
    * @param cookie RouteHandler Cookie
    */
   void unsetCookie(Cookie cookie);
-
-  /**
-   * get the request security context
-   * @return
-   */
-  SecurityContext getSecurityContext();
-
-  /**
-   * set the request security context
-   * @param securityContext
-   */
-  void setSecurityContext(SecurityContext securityContext);
 
   /**
    * Cleanup context

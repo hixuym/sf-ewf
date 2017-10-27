@@ -20,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import io.sunflower.ewf.internal.Validators;
+
 /**
  * Validates that the length of the field meets the given length constraints
  *

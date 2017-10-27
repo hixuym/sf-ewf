@@ -39,7 +39,7 @@ import io.sunflower.ewf.websocket.server.HandshakeHandler;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.utils.Constants;
+import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.websocket.WebSocketHandler;
 import io.sunflower.ewf.websocket.server.RequestUpgradeStrategy;
 import org.slf4j.Logger;

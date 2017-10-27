@@ -27,8 +27,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.auth.AuthenticationException;
+import io.sunflower.ewf.support.Settings;
 
 /**
  * JwtTokenHelper
@@ -46,7 +45,6 @@ public class JwtTokenHelper {
     try {
       algorithmHS = Algorithm.HMAC256(settings.getApplicationSecret());
     } catch (UnsupportedEncodingException e) {
-      throw new AuthenticationException(e);
     }
 
     verifier = JWT.require(algorithmHS)

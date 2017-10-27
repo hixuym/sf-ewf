@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
+import io.sunflower.ewf.internal.RouteParameter;
 import org.junit.Test;
 
 public class RouteParameterTest {

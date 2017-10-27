@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

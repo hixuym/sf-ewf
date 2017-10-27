@@ -22,12 +22,14 @@ import javax.inject.Singleton;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import io.sunflower.ewf.bodyparser.BodyParserEngineJson;
-import io.sunflower.ewf.bodyparser.BodyParserEnginePost;
+import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
+import io.sunflower.ewf.spi.internal.BodyParserEnginePost;
+import io.sunflower.ewf.internal.RouteBuilderImpl;
+import io.sunflower.ewf.internal.RouterImpl;
 import io.sunflower.ewf.params.ParamParser;
-import io.sunflower.ewf.template.TemplateEngineJson;
-import io.sunflower.ewf.template.TemplateEngineJsonP;
-import io.sunflower.ewf.template.TemplateEngineText;
+import io.sunflower.ewf.spi.internal.TemplateEngineJson;
+import io.sunflower.ewf.spi.internal.TemplateEngineJsonP;
+import io.sunflower.ewf.spi.internal.TemplateEngineText;
 
 /**
  * WebApplicationModule

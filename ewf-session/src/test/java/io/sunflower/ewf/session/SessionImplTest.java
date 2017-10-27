@@ -32,13 +32,13 @@ import java.util.Collection;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Settings;
+import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.session.utils.Clock;
 import io.sunflower.ewf.session.utils.CookieEncryption;
 import io.sunflower.ewf.session.utils.Crypto;
-import io.sunflower.ewf.utils.Constants;
-import io.sunflower.ewf.utils.SecretGenerator;
+import io.sunflower.ewf.support.Constants;
+import io.sunflower.ewf.support.SecretGenerator;
 import io.sunflower.util.Duration;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;

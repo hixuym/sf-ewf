@@ -23,11 +23,14 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.inject.Inject;
 
-import io.sunflower.ewf.utils.LambdaRoute;
-import io.sunflower.ewf.utils.MethodReference;
+import io.sunflower.ewf.internal.Route;
+import io.sunflower.ewf.internal.RouteParameter;
+import io.sunflower.ewf.support.LambdaRoute;
+import io.sunflower.ewf.support.MethodReference;
 import io.sunflower.ewf.ReverseRouter.Builder;
-import io.sunflower.ewf.utils.ResourceMethods;
-import io.sunflower.ewf.utils.WithResourceMethod;
+import io.sunflower.ewf.support.ResourceMethods;
+import io.sunflower.ewf.support.Settings;
+import io.sunflower.ewf.support.WithResourceMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

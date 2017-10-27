@@ -16,7 +16,7 @@
 package io.sunflower.ewf.assets;
 
 import io.sunflower.ewf.Router;
-import io.sunflower.ewf.application.ApplicationRoutes;
+import io.sunflower.ewf.ApplicationRoutes;
 
 /**
  * AssetsRoutes

@@ -17,7 +17,7 @@ package com.example.conf;
 
 import com.example.resources.DummyApplication;
 import io.sunflower.ewf.Router;
-import io.sunflower.ewf.application.ApplicationRoutes;
+import io.sunflower.ewf.ApplicationRoutes;
 
 
 // Just a dummy for testing.

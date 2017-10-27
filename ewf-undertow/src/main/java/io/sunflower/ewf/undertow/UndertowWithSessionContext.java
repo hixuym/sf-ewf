@@ -19,12 +19,12 @@ import javax.inject.Inject;
 
 import com.google.inject.Injector;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.bodyparser.BodyParserEngineManager;
-import io.sunflower.ewf.params.ParamParsers;
+import io.sunflower.ewf.support.Settings;
+import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
+import io.sunflower.ewf.params.internal.ParamParsers;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.ResponseStreams;
+import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.validation.Validation;
 import io.undertow.server.HttpServerExchange;
 

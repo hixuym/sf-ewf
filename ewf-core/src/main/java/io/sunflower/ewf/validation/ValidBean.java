@@ -20,7 +20,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.sunflower.ewf.validation.Validators.BeanValidator;
+import io.sunflower.ewf.internal.Validators.BeanValidator;
 
 /**
  * Validates that the annotated element is conform to its JSR303-Annotations

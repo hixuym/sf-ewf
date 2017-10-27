@@ -20,8 +20,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.sunflower.ewf.Settings;
-import io.sunflower.ewf.utils.SecretGenerator;
+import io.sunflower.ewf.support.Settings;
+import io.sunflower.ewf.support.SecretGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
