@@ -67,7 +67,7 @@ public class Settings {
 
     private String contextPath = "";
 
-    private String scanPkgs = "controllers";
+    private String scanPkgs = CONTROLLERS_DIR;
 
     private boolean jaxyRouteEnabled = true;
 

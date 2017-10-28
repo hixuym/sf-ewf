@@ -41,11 +41,13 @@ public interface Session {
     void init(Context context);
 
     /**
+     * session id
      * @return id of a session.
      */
     String getId();
 
     /**
+     * complete content of session as immutable copy.
      * @return complete content of session as immutable copy.
      */
     Map<String, String> getData();
