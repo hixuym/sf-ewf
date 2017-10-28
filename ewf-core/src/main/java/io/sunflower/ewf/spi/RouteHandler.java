@@ -24,10 +24,11 @@ import io.sunflower.ewf.Context.Impl;
 @ImplementedBy(RouteHandlerImpl.class)
 public interface RouteHandler {
 
-  /**
-   * When a route is requested this method is called.
-   * @param context ewf request context
-   */
-  void handleRequest(Impl context);
+    /**
+     * When a route is requested this method is called.
+     *
+     * @param context ewf request context
+     */
+    void handleRequest(Impl context);
 
 }

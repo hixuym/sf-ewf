@@ -17,12 +17,12 @@ package io.sunflower.ewf;
 
 /**
  * Renderables can be returned inside a result.
- *
+ * <p>
  * Renderables are responsible for finalizing the headers before anything is written to the output
  * streams.
- *
+ * <p>
  * context.finalizeHeaders(result) is your friend.
- *
+ * <p>
  * It is not done automatically as you may want to change the status of the response, the return
  * type and so on...
  *
@@ -30,11 +30,12 @@ package io.sunflower.ewf;
  */
 public interface Renderable {
 
-  /**
-   * renderable object.
-   * @param context
-   * @param result
-   */
-  void render(Context context, Result result);
+    /**
+     * renderable object.
+     *
+     * @param context
+     * @param result
+     */
+    void render(Context context, Result result);
 
 }

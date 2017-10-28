@@ -22,12 +22,12 @@ package io.sunflower.ewf;
  */
 public interface FilterChain {
 
-  /**
-   * Pass the request to the next filter
-   *
-   * @param context The context for the request
-   * @return The result
-   */
-  Result next(Context context);
+    /**
+     * Pass the request to the next filter
+     *
+     * @param context The context for the request
+     * @return The result
+     */
+    Result next(Context context);
 
 }

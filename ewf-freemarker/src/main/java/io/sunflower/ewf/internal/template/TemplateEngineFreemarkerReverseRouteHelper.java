@@ -15,11 +15,6 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.template.SimpleNumber;
@@ -30,77 +25,82 @@ import io.sunflower.ewf.ReverseRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Singleton
 public class TemplateEngineFreemarkerReverseRouteHelper {
 
-  private final Logger logger = LoggerFactory
-      .getLogger(TemplateEngineFreemarkerReverseRouteHelper.class);
+    private final Logger logger = LoggerFactory
+            .getLogger(TemplateEngineFreemarkerReverseRouteHelper.class);
 
-  private final ReverseRouter reverseRouter;
+    private final ReverseRouter reverseRouter;
 
-  @Inject
-  public TemplateEngineFreemarkerReverseRouteHelper(ReverseRouter router) {
-    this.reverseRouter = router;
-  }
-
-  public TemplateModel computeReverseRoute(List args) throws TemplateModelException {
-
-    if (args.size() < 2) {
-
-      throw new TemplateModelException(
-          "Please specify at least classname and resource (2 parameters).");
-
-    } else {
-
-      List<String> strings = new ArrayList<>(args.size());
-
-      for (Object o : args) {
-
-        // We currently allow only numbers and strings as arguments
-        if (o instanceof String) {
-          strings.add((String) o);
-        }
-        if (o instanceof SimpleScalar) {
-          strings.add(((SimpleScalar) o).getAsString());
-        } else if (o instanceof SimpleNumber) {
-          strings.add(o.toString());
-        }
-
-      }
-
-      try {
-
-        Class<?> clazz = Class.forName(strings.get(0));
-
-        Object[] parameterMap = strings.subList(2, strings.size()).toArray();
-
-        if (parameterMap.length % 2 != 0) {
-          logger.error(
-              "Always provide key (as String) value (as Object) pairs in parameterMap. That means providing e.g. 2, 4, 6... objects.");
-          return new SimpleScalar(null);
-        }
-
-        Map<String, Object> map = new HashMap<>(parameterMap.length / 2);
-        for (int i = 0; i < parameterMap.length; i += 2) {
-          map.put((String) parameterMap[i], parameterMap[i + 1]);
-        }
-
-        ReverseRouter.Builder reverseRouteBuilder = reverseRouter.with(clazz, strings.get(1));
-
-        map.forEach((name, value) -> {
-          // path or query param?
-          if (reverseRouteBuilder.getRoute().getParameters().containsKey(name)) {
-            reverseRouteBuilder.rawPathParam(name, value);
-          } else {
-            reverseRouteBuilder.rawQueryParam(name, value);
-          }
-        });
-
-        return new SimpleScalar(reverseRouteBuilder.build());
-      } catch (ClassNotFoundException ex) {
-        throw new TemplateModelException("Error. Cannot find class for String: " + strings.get(0));
-      }
+    @Inject
+    public TemplateEngineFreemarkerReverseRouteHelper(ReverseRouter router) {
+        this.reverseRouter = router;
     }
 
-  }
+    public TemplateModel computeReverseRoute(List args) throws TemplateModelException {
+
+        if (args.size() < 2) {
+
+            throw new TemplateModelException(
+                    "Please specify at least classname and resource (2 parameters).");
+
+        } else {
+
+            List<String> strings = new ArrayList<>(args.size());
+
+            for (Object o : args) {
+
+                // We currently allow only numbers and strings as arguments
+                if (o instanceof String) {
+                    strings.add((String) o);
+                }
+                if (o instanceof SimpleScalar) {
+                    strings.add(((SimpleScalar) o).getAsString());
+                } else if (o instanceof SimpleNumber) {
+                    strings.add(o.toString());
+                }
+
+            }
+
+            try {
+
+                Class<?> clazz = Class.forName(strings.get(0));
+
+                Object[] parameterMap = strings.subList(2, strings.size()).toArray();
+
+                if (parameterMap.length % 2 != 0) {
+                    logger.error(
+                            "Always provide key (as String) value (as Object) pairs in parameterMap. That means providing e.g. 2, 4, 6... objects.");
+                    return new SimpleScalar(null);
+                }
+
+                Map<String, Object> map = new HashMap<>(parameterMap.length / 2);
+                for (int i = 0; i < parameterMap.length; i += 2) {
+                    map.put((String) parameterMap[i], parameterMap[i + 1]);
+                }
+
+                ReverseRouter.Builder reverseRouteBuilder = reverseRouter.with(clazz, strings.get(1));
+
+                map.forEach((name, value) -> {
+                    // path or query param?
+                    if (reverseRouteBuilder.getRoute().getParameters().containsKey(name)) {
+                        reverseRouteBuilder.rawPathParam(name, value);
+                    } else {
+                        reverseRouteBuilder.rawQueryParam(name, value);
+                    }
+                });
+
+                return new SimpleScalar(reverseRouteBuilder.build());
+            } catch (ClassNotFoundException ex) {
+                throw new TemplateModelException("Error. Cannot find class for String: " + strings.get(0));
+            }
+        }
+
+    }
 }

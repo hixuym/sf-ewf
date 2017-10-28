@@ -15,9 +15,6 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
@@ -25,33 +22,36 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import io.sunflower.ewf.assets.AssetsResource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author michael
  */
 @Singleton
 public class TemplateEngineFreemarkerAssetsAtMethod implements
-    TemplateMethodModelEx {
+        TemplateMethodModelEx {
 
-  private final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
+    private final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
 
-  @Inject
-  public TemplateEngineFreemarkerAssetsAtMethod(
-      TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper) {
-    this.templateEngineFreemarkerReverseRouteHelper = templateEngineFreemarkerReverseRouteHelper;
+    @Inject
+    public TemplateEngineFreemarkerAssetsAtMethod(
+            TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper) {
+        this.templateEngineFreemarkerReverseRouteHelper = templateEngineFreemarkerReverseRouteHelper;
 
-  }
+    }
 
-  @Override
-  public TemplateModel exec(List args) throws TemplateModelException {
+    @Override
+    public TemplateModel exec(List args) throws TemplateModelException {
 
-    List<Object> argsWithResourceAndMethod = new ArrayList<>(args.size() + 2);
-    argsWithResourceAndMethod.add(AssetsResource.class.getName());
-    argsWithResourceAndMethod.add("serveStatic");
-    argsWithResourceAndMethod.add("fileName");
-    argsWithResourceAndMethod.addAll(args);
+        List<Object> argsWithResourceAndMethod = new ArrayList<>(args.size() + 2);
+        argsWithResourceAndMethod.add(AssetsResource.class.getName());
+        argsWithResourceAndMethod.add("serveStatic");
+        argsWithResourceAndMethod.add("fileName");
+        argsWithResourceAndMethod.addAll(args);
 
-    return templateEngineFreemarkerReverseRouteHelper
-        .computeReverseRoute(argsWithResourceAndMethod);
+        return templateEngineFreemarkerReverseRouteHelper
+                .computeReverseRoute(argsWithResourceAndMethod);
 
-  }
+    }
 }

@@ -21,43 +21,43 @@ import java.util.Random;
 
 public class SecretGenerator {
 
-  /**
-   * Generates a random String of length 64. This string is suitable as secret for your application
-   * (key "application.secret" in conf/application.conf).
-   *
-   * @return A string that can be used as "application.secret".
-   */
-  public static String generateSecret() {
+    /**
+     * Generates a random String of length 64. This string is suitable as secret for your application
+     * (key "application.secret" in conf/application.conf).
+     *
+     * @return A string that can be used as "application.secret".
+     */
+    public static String generateSecret() {
 
-    return generateSecret(new SecureRandom());
-
-  }
-
-  /**
-   * !!!! Only for testing purposes !!!!
-   *
-   * Usually you want to use {@link SecretGenerator#generateSecret()}
-   *
-   * @param random the random generator to use. Usually new Random(), but for testing you can use a
-   * predefined seed.
-   * @return A String suitable as random secret for eg signing a session.
-   */
-  protected static String generateSecret(Random random) {
-
-    String charsetForSecret = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    StringBuilder stringBuilder = new StringBuilder(64);
-
-    for (int i = 0; i < 64; i++) {
-
-      int charToPoPickFromCharset = random.nextInt(charsetForSecret.length());
-      stringBuilder.append(charsetForSecret.charAt(charToPoPickFromCharset));
+        return generateSecret(new SecureRandom());
 
     }
 
-    return stringBuilder.toString();
+    /**
+     * !!!! Only for testing purposes !!!!
+     * <p>
+     * Usually you want to use {@link SecretGenerator#generateSecret()}
+     *
+     * @param random the random generator to use. Usually new Random(), but for testing you can use a
+     *               predefined seed.
+     * @return A String suitable as random secret for eg signing a session.
+     */
+    protected static String generateSecret(Random random) {
 
-  }
+        String charsetForSecret = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        StringBuilder stringBuilder = new StringBuilder(64);
+
+        for (int i = 0; i < 64; i++) {
+
+            int charToPoPickFromCharset = random.nextInt(charsetForSecret.length());
+            stringBuilder.append(charsetForSecret.charAt(charToPoPickFromCharset));
+
+        }
+
+        return stringBuilder.toString();
+
+    }
 
 
 }

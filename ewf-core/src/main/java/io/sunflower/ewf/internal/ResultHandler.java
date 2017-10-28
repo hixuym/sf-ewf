@@ -15,17 +15,17 @@
 
 package io.sunflower.ewf.internal;
 
-import javax.inject.Singleton;
-
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Renderable;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.errors.WebApplicationException;
-import io.sunflower.ewf.spi.TemplateEngine;
 import io.sunflower.ewf.internal.template.TemplateEngineManager;
+import io.sunflower.ewf.spi.TemplateEngine;
 import io.sunflower.ewf.support.NoHttpBody;
+
+import javax.inject.Singleton;
 
 
 /**
@@ -34,79 +34,79 @@ import io.sunflower.ewf.support.NoHttpBody;
 @Singleton
 public class ResultHandler {
 
-  private final TemplateEngineManager templateEngineManager;
+    private final TemplateEngineManager templateEngineManager;
 
-  @Inject
-  public ResultHandler(TemplateEngineManager templateEngineManager) {
-    this.templateEngineManager = templateEngineManager;
-  }
-
-  public void handleResult(Result result, Context context) {
-
-    if (result == null) {
-      // Do nothing, assuming the controller manually handled it
-      return;
+    @Inject
+    public ResultHandler(TemplateEngineManager templateEngineManager) {
+        this.templateEngineManager = templateEngineManager;
     }
 
-    Object objectToBeRendered = result.getRenderable();
+    public void handleResult(Result result, Context context) {
 
-    if (objectToBeRendered instanceof Renderable) {
-      // if the object is a renderable it should do everything itself...:
-      // make sure to call context.finalizeHeaders(result) with the
-      // results you want to set...
-      ((Renderable) objectToBeRendered).render(context, result);
-    } else {
+        if (result == null) {
+            // Do nothing, assuming the controller manually handled it
+            return;
+        }
 
-      // If result does not contain a Cache-control: ... header
-      // we disable caching of this response by calling doNotCacheContent().
-      if (!result.getHeaders().containsKey(Result.CACHE_CONTROL)) {
-        result.doNotCacheContent();
-      }
+        Object objectToBeRendered = result.getRenderable();
 
-      if (objectToBeRendered instanceof NoHttpBody) {
-        // This indicates that we do not want to render anything in the body.
-        // Can be used e.g. for a 204 No Content response.
-        // and bypasses the rendering engines.
-        context.finalizeHeaders(result);
+        if (objectToBeRendered instanceof Renderable) {
+            // if the object is a renderable it should do everything itself...:
+            // make sure to call context.finalizeHeaders(result) with the
+            // results you want to set...
+            ((Renderable) objectToBeRendered).render(context, result);
+        } else {
 
-      } else {
-        // normal mode of operation: we render the stuff via the
-        // template renderer:
-        renderWithTemplateEngineOrRaw(context, result);
-      }
-    }
-  }
+            // If result does not contain a Cache-control: ... header
+            // we disable caching of this response by calling doNotCacheContent().
+            if (!result.getHeaders().containsKey(Result.CACHE_CONTROL)) {
+                result.doNotCacheContent();
+            }
 
-  private void renderWithTemplateEngineOrRaw(Context context, Result result) {
+            if (objectToBeRendered instanceof NoHttpBody) {
+                // This indicates that we do not want to render anything in the body.
+                // Can be used e.g. for a 204 No Content response.
+                // and bypasses the rendering engines.
+                context.finalizeHeaders(result);
 
-    // if content type is not yet set in result we copy it over from the
-    // request accept header
-    if (result.getContentType() == null) {
-
-      if (result.supportedContentTypes().contains(context.getAcceptContentType())) {
-        result.contentType(context.getAcceptContentType());
-      } else if (result.fallbackContentType().isPresent()) {
-        result.contentType(result.fallbackContentType().get());
-      } else {
-        throw new BadRequestException(
-            "No idea how to handle incoming request with Accept:"
-                + context.getAcceptContentType()
-                + " at route " + context.getRequestPath());
-      }
+            } else {
+                // normal mode of operation: we render the stuff via the
+                // template renderer:
+                renderWithTemplateEngineOrRaw(context, result);
+            }
+        }
     }
 
-    // try to get a suitable rendering engine...
-    TemplateEngine templateEngine = templateEngineManager
-        .getTemplateEngineForContentType(result.getContentType());
+    private void renderWithTemplateEngineOrRaw(Context context, Result result) {
 
-    if (templateEngine != null) {
+        // if content type is not yet set in result we copy it over from the
+        // request accept header
+        if (result.getContentType() == null) {
 
-      templateEngine.invoke(context, result);
+            if (result.supportedContentTypes().contains(context.getAcceptContentType())) {
+                result.contentType(context.getAcceptContentType());
+            } else if (result.fallbackContentType().isPresent()) {
+                result.contentType(result.fallbackContentType().get());
+            } else {
+                throw new BadRequestException(
+                        "No idea how to handle incoming request with Accept:"
+                                + context.getAcceptContentType()
+                                + " at route " + context.getRequestPath());
+            }
+        }
 
-    } else {
-      throw new WebApplicationException(
-          500, "No template engine found for result content type " + result.getContentType());
+        // try to get a suitable rendering engine...
+        TemplateEngine templateEngine = templateEngineManager
+                .getTemplateEngineForContentType(result.getContentType());
+
+        if (templateEngine != null) {
+
+            templateEngine.invoke(context, result);
+
+        } else {
+            throw new WebApplicationException(
+                    500, "No template engine found for result content type " + result.getContentType());
+        }
     }
-  }
 
 }

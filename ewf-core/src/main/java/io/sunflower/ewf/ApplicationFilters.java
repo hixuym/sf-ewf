@@ -16,17 +16,17 @@ package io.sunflower.ewf;
 
 import java.util.List;
 
-import io.sunflower.ewf.Filter;
-
 /**
  * Allows to define filters that are applied to every request of your application.
+ *
  * @author michael
  */
 public interface ApplicationFilters {
 
-  /**
-   * add global filters
-   * @param filters
-   */
-  void addFilters(List<Class<? extends Filter>> filters);
+    /**
+     * add global filters
+     *
+     * @param filters
+     */
+    void addFilters(List<Class<? extends Filter>> filters);
 }

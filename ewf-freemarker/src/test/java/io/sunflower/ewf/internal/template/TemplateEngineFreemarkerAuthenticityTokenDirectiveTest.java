@@ -15,20 +15,13 @@
 
 package io.sunflower.ewf.internal.template;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.io.StringWriter;
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 import freemarker.core.Environment;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
-import io.sunflower.ewf.internal.template.directives.TemplateEngineFreemarkerAuthenticityTokenDirective;
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.internal.template.directives.TemplateEngineFreemarkerAuthenticityTokenDirective;
 import io.sunflower.ewf.session.Session;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,70 +32,77 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.StringWriter;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateEngineFreemarkerAuthenticityTokenDirectiveTest {
 
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-  @Mock
-  Context context;
+    @Mock
+    Context context;
 
-  @Mock
-  Session session;
+    @Mock
+    Session session;
 
-  StringWriter stringWriter = new StringWriter();
+    StringWriter stringWriter = new StringWriter();
 
-  Environment environment = new Environment(Mockito.mock(Template.class), null, stringWriter);
+    Environment environment = new Environment(Mockito.mock(Template.class), null, stringWriter);
 
-  TemplateEngineFreemarkerAuthenticityTokenDirective templateEngineFreemarkerAuthenticityTokenDirective;
+    TemplateEngineFreemarkerAuthenticityTokenDirective templateEngineFreemarkerAuthenticityTokenDirective;
 
-  Map<String, String> parameters = Maps.newHashMap();
+    Map<String, String> parameters = Maps.newHashMap();
 
-  @Before
-  public void before() {
-    when(context.getSession()).thenReturn(session);
-    when(session.getAuthenticityToken()).thenReturn("12345");
+    @Before
+    public void before() {
+        when(context.getSession()).thenReturn(session);
+        when(session.getAuthenticityToken()).thenReturn("12345");
 
-    templateEngineFreemarkerAuthenticityTokenDirective = new TemplateEngineFreemarkerAuthenticityTokenDirective(
-        context);
-  }
+        templateEngineFreemarkerAuthenticityTokenDirective = new TemplateEngineFreemarkerAuthenticityTokenDirective(
+                context);
+    }
 
-  @Test
-  public void testThatAuthenticityTokenIsNotCalledInConstructor() throws Exception {
-    Mockito.verify(session, Mockito.never()).getAuthenticityToken();
-  }
+    @Test
+    public void testThatAuthenticityTokenIsNotCalledInConstructor() throws Exception {
+        Mockito.verify(session, Mockito.never()).getAuthenticityToken();
+    }
 
-  @Test
-  public void testThatItWorks() throws Exception {
-    TemplateModel[] loopVars = new TemplateModel[0];
+    @Test
+    public void testThatItWorks() throws Exception {
+        TemplateModel[] loopVars = new TemplateModel[0];
 
-    templateEngineFreemarkerAuthenticityTokenDirective
-        .execute(environment, parameters, loopVars, null);
+        templateEngineFreemarkerAuthenticityTokenDirective
+                .execute(environment, parameters, loopVars, null);
 
-    assertThat(
-        stringWriter.toString(),
-        equalTo("12345"));
-    Mockito.verify(session).getAuthenticityToken();
-  }
+        assertThat(
+                stringWriter.toString(),
+                equalTo("12345"));
+        Mockito.verify(session).getAuthenticityToken();
+    }
 
 
-  @Test
-  public void testThatParamsThrowException() throws Exception {
-    thrown.expect(TemplateException.class);
-    parameters.put("foo", "bar");
+    @Test
+    public void testThatParamsThrowException() throws Exception {
+        thrown.expect(TemplateException.class);
+        parameters.put("foo", "bar");
 
-    templateEngineFreemarkerAuthenticityTokenDirective.execute(null, parameters, null, null);
-  }
+        templateEngineFreemarkerAuthenticityTokenDirective.execute(null, parameters, null, null);
+    }
 
-  @Test
-  public void testThatLoopVarsThrowException() throws Exception {
-    TemplateModel[] loopVars = new TemplateModel[1];
-    thrown.expect(TemplateException.class);
-    loopVars[0] = new TemplateModel() {
-    };
+    @Test
+    public void testThatLoopVarsThrowException() throws Exception {
+        TemplateModel[] loopVars = new TemplateModel[1];
+        thrown.expect(TemplateException.class);
+        loopVars[0] = new TemplateModel() {
+        };
 
-    templateEngineFreemarkerAuthenticityTokenDirective.execute(null, parameters, loopVars, null);
-  }
+        templateEngineFreemarkerAuthenticityTokenDirective.execute(null, parameters, loopVars, null);
+    }
 
 }

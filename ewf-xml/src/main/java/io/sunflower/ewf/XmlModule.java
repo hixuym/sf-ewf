@@ -28,11 +28,11 @@ import io.sunflower.ewf.internal.template.TemplateEngineXml;
  */
 public class XmlModule extends AbstractModule {
 
-  @Override
-  protected void configure() {
-    bind(XmlMapper.class).toInstance(XmlMappers.newXmlMapper());
-    bind(BodyParserEngineXml.class);
-    bind(TemplateEngineXml.class);
-  }
+    @Override
+    protected void configure() {
+        bind(XmlMapper.class).toInstance(XmlMappers.newXmlMapper());
+        bind(BodyParserEngineXml.class);
+        bind(TemplateEngineXml.class);
+    }
 
 }

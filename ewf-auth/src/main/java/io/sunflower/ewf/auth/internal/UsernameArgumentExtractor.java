@@ -15,42 +15,37 @@
 
 package io.sunflower.ewf.auth.internal;
 
-import javax.inject.Inject;
-
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.auth.UserManager;
-import io.sunflower.ewf.params.ArgumentClassHolder;
 import io.sunflower.ewf.params.ArgumentExtractor;
 
+import static io.sunflower.ewf.auth.Constant.USERNAME_KEY;
+
 /**
- * CurrentUserExtractor
+ * UsernameArgumentExtractor
  *
  * @author michael created on 17/10/27 14:37
  */
-public class CurrentUserExtractor<T> implements ArgumentExtractor {
+public class UsernameArgumentExtractor implements ArgumentExtractor<String> {
 
-  private final ArgumentClassHolder argumentClassHolder;
-  private final UserManager<T> userManager;
+    @Override
+    public String extract(Context context) {
 
-  @Inject
-  public CurrentUserExtractor(ArgumentClassHolder argumentClassHolder,
-      UserManager<T> userManager) {
-    this.argumentClassHolder = argumentClassHolder;
-    this.userManager = userManager;
-  }
+        String uid = context.getSession().get(USERNAME_KEY);
 
-  @Override
-  public T extract(Context context) {
-    return null;
-  }
+        if (uid == null) {
+            uid = (String) context.getAttribute(USERNAME_KEY);
+        }
 
-  @Override
-  public Class<?> getExtractedType() {
-    return argumentClassHolder.getArgumentClass();
-  }
+        return uid;
+    }
 
-  @Override
-  public String getFieldName() {
-    return null;
-  }
+    @Override
+    public Class<String> getExtractedType() {
+        return String.class;
+    }
+
+    @Override
+    public String getFieldName() {
+        return null;
+    }
 }

@@ -20,31 +20,32 @@ import io.sunflower.ewf.Result;
 /**
  * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and
  * throw it.
- *
+ * <p>
  * Should signal a html error 400 - bad request (the client sent something strange).
- *
+ * <p>
  * Useful inside resources or filters for instance.
- *
+ * <p>
  * RouteHandler is supposed to pick it up and render an appropriate error page.
+ *
  * @author michael
  */
 public class BadRequestException extends WebApplicationException {
 
-  final static String DEFAULT_MESSAGE = "That's a bad request and all we know.";
+    final static String DEFAULT_MESSAGE = "That's a bad request and all we know.";
 
-  public BadRequestException() {
-    super(Result.SC_400_BAD_REQUEST, DEFAULT_MESSAGE);
-  }
+    public BadRequestException() {
+        super(Result.SC_400_BAD_REQUEST, DEFAULT_MESSAGE);
+    }
 
-  public BadRequestException(String message) {
-    super(Result.SC_400_BAD_REQUEST, message);
-  }
+    public BadRequestException(String message) {
+        super(Result.SC_400_BAD_REQUEST, message);
+    }
 
-  public BadRequestException(String message, Throwable cause) {
-    super(Result.SC_400_BAD_REQUEST, message, cause);
-  }
+    public BadRequestException(String message, Throwable cause) {
+        super(Result.SC_400_BAD_REQUEST, message, cause);
+    }
 
-  public BadRequestException(Throwable cause) {
-    super(Result.SC_400_BAD_REQUEST, DEFAULT_MESSAGE, cause);
-  }
+    public BadRequestException(Throwable cause) {
+        super(Result.SC_400_BAD_REQUEST, DEFAULT_MESSAGE, cause);
+    }
 }

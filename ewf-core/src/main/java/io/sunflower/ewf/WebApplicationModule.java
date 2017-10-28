@@ -15,21 +15,17 @@
 
 package io.sunflower.ewf;
 
-import java.util.Arrays;
-import java.util.List;
-import javax.inject.Singleton;
-
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
-import io.sunflower.ewf.spi.internal.BodyParserEnginePost;
 import io.sunflower.ewf.internal.RouteBuilderImpl;
 import io.sunflower.ewf.internal.RouterImpl;
 import io.sunflower.ewf.params.ParamParser;
-import io.sunflower.ewf.spi.internal.TemplateEngineJson;
-import io.sunflower.ewf.spi.internal.TemplateEngineJsonP;
-import io.sunflower.ewf.spi.internal.TemplateEngineText;
+import io.sunflower.ewf.spi.internal.*;
+
+import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * WebApplicationModule
@@ -38,39 +34,40 @@ import io.sunflower.ewf.spi.internal.TemplateEngineText;
  */
 public abstract class WebApplicationModule extends AbstractModule {
 
-  private final List<Class<? extends ParamParser>> paramParsers = Lists.newArrayList();
+    private final List<Class<? extends ParamParser>> paramParsers = Lists.newArrayList();
 
-  @Override
-  protected void configure() {
-    // Routing
-    Multibinder<ParamParser> multibinder
-        = Multibinder.newSetBinder(binder(), ParamParser.class);
+    @Override
+    protected void configure() {
+        // Routing
+        Multibinder<ParamParser> multibinder
+                = Multibinder.newSetBinder(binder(), ParamParser.class);
 
-    for (Class<? extends ParamParser> parser : paramParsers) {
-      multibinder.addBinding().to(parser);
+        for (Class<? extends ParamParser> parser : paramParsers) {
+            multibinder.addBinding().to(parser);
+        }
+
+        bind(RouteBuilder.class).to(RouteBuilderImpl.class);
+        bind(Router.class).to(RouterImpl.class).in(Singleton.class);
+
+        bind(BodyParserEnginePost.class);
+        bind(BodyParserEngineJson.class);
+
+        bind(TemplateEngineJson.class);
+        bind(TemplateEngineJsonP.class);
+        bind(TemplateEngineText.class);
+
+        bind(Context.class).to(getRequestContextImpl());
     }
 
-    bind(RouteBuilder.class).to(RouteBuilderImpl.class);
-    bind(Router.class).to(RouterImpl.class).in(Singleton.class);
+    @SafeVarargs
+    public final void registryParamParser(Class<? extends ParamParser>... parser) {
+        this.paramParsers.addAll(Arrays.asList(parser));
+    }
 
-    bind(BodyParserEnginePost.class);
-    bind(BodyParserEngineJson.class);
-
-    bind(TemplateEngineJson.class);
-    bind(TemplateEngineJsonP.class);
-    bind(TemplateEngineText.class);
-
-    bind(Context.class).to(getRequestContextImpl());
-  }
-
-  @SafeVarargs
-  public final void registryParamParser(Class<? extends ParamParser>... parser) {
-    this.paramParsers.addAll(Arrays.asList(parser));
-  }
-
-  /**
-   * context impl
-   * @return the context impl
-   */
-  protected abstract Class<? extends Context> getRequestContextImpl();
+    /**
+     * context impl
+     *
+     * @return the context impl
+     */
+    protected abstract Class<? extends Context> getRequestContextImpl();
 }

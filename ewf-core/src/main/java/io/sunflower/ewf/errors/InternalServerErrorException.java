@@ -20,31 +20,32 @@ import io.sunflower.ewf.Result;
 /**
  * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and
  * throw it.
- *
+ * <p>
  * Should signal a html error 500 (something went wrong on the server).
- *
+ * <p>
  * Useful inside resources or filters for instance.
- *
+ * <p>
  * RouteHandler is supposed to pick it up and render an appropriate error page.
+ *
  * @author michael
  */
 public class InternalServerErrorException extends WebApplicationException {
 
-  private final static String DEFAULT_MESSAGE = "That's an internal server error and all we know.";
+    private final static String DEFAULT_MESSAGE = "That's an internal server error and all we know.";
 
-  public InternalServerErrorException() {
-    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE);
-  }
+    public InternalServerErrorException() {
+        super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE);
+    }
 
-  public InternalServerErrorException(String message) {
-    super(Result.SC_500_INTERNAL_SERVER_ERROR, message);
-  }
+    public InternalServerErrorException(String message) {
+        super(Result.SC_500_INTERNAL_SERVER_ERROR, message);
+    }
 
-  public InternalServerErrorException(String message, Throwable cause) {
-    super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
-  }
+    public InternalServerErrorException(String message, Throwable cause) {
+        super(Result.SC_500_INTERNAL_SERVER_ERROR, message, cause);
+    }
 
-  public InternalServerErrorException(Throwable cause) {
-    super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE, cause);
-  }
+    public InternalServerErrorException(Throwable cause) {
+        super(Result.SC_500_INTERNAL_SERVER_ERROR, DEFAULT_MESSAGE, cause);
+    }
 }

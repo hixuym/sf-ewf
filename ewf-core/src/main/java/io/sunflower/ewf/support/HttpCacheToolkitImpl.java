@@ -15,98 +15,98 @@
 
 package io.sunflower.ewf.support;
 
-import java.util.Date;
-import java.util.Optional;
-
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+import java.util.Optional;
+
 public class HttpCacheToolkitImpl implements HttpCacheToolkit {
 
-  private static final Logger logger = LoggerFactory.getLogger(HttpCacheToolkitImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpCacheToolkitImpl.class);
 
-  private final Settings configuration;
+    private final Settings configuration;
 
-  @Inject
-  public HttpCacheToolkitImpl(Settings configuration) {
-    this.configuration = configuration;
+    @Inject
+    public HttpCacheToolkitImpl(Settings configuration) {
+        this.configuration = configuration;
 
-  }
-
-  public boolean isModified(Optional<String> etag, Optional<Long> lastModified, Context context) {
-
-    final String browserEtag = context.getHeader(HttpHeaderConstants.IF_NONE_MATCH);
-
-    if (browserEtag != null && etag.isPresent()) {
-      if (browserEtag.equals(etag.get())) {
-        return false;
-      } else {
-        return true;
-      }
     }
 
-    final String ifModifiedSince = context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE);
+    public boolean isModified(Optional<String> etag, Optional<Long> lastModified, Context context) {
 
-    if (ifModifiedSince != null && lastModified.isPresent()) {
+        final String browserEtag = context.getHeader(HttpHeaderConstants.IF_NONE_MATCH);
 
-      if (!ifModifiedSince.isEmpty()) {
-        try {
-          Date browserDate = DateUtil
-              .parseHttpDateFormat(ifModifiedSince);
-          if (browserDate.getTime() >= lastModified.get()) {
-            return false;
-          }
-        } catch (IllegalArgumentException ex) {
-          logger.warn("Can't parse HTTP date", ex);
+        if (browserEtag != null && etag.isPresent()) {
+            if (browserEtag.equals(etag.get())) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        final String ifModifiedSince = context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE);
+
+        if (ifModifiedSince != null && lastModified.isPresent()) {
+
+            if (!ifModifiedSince.isEmpty()) {
+                try {
+                    Date browserDate = DateUtil
+                            .parseHttpDateFormat(ifModifiedSince);
+                    if (browserDate.getTime() >= lastModified.get()) {
+                        return false;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    logger.warn("Can't parse HTTP date", ex);
+                }
+                return true;
+            }
         }
         return true;
-      }
-    }
-    return true;
-  }
-
-  public void addEtag(Context context, Result result, Long lastModified) {
-
-    if (!configuration.isProd()) {
-      result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
-    } else {
-      String maxAge = configuration.getHttpCacheMaxAge();
-
-      if (maxAge.equals("0")) {
-        result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
-      } else {
-        result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "max-age=" + maxAge);
-      }
     }
 
-    // Use etag on demand:
-    String etag = null;
+    public void addEtag(Context context, Result result, Long lastModified) {
 
-    if (configuration.isEtagEnable()) {
-      // ETag right now is only lastModified long.
-      // maybe we change that in the future.
-      etag = "\""
-          + lastModified.toString() + "\"";
-      result.addHeader(HttpHeaderConstants.ETAG, etag);
+        if (!configuration.isProd()) {
+            result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
+        } else {
+            String maxAge = configuration.getHttpCacheMaxAge();
+
+            if (maxAge.equals("0")) {
+                result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
+            } else {
+                result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "max-age=" + maxAge);
+            }
+        }
+
+        // Use etag on demand:
+        String etag = null;
+
+        if (configuration.isEtagEnable()) {
+            // ETag right now is only lastModified long.
+            // maybe we change that in the future.
+            etag = "\""
+                    + lastModified.toString() + "\"";
+            result.addHeader(HttpHeaderConstants.ETAG, etag);
+
+        }
+
+        if (!isModified(Optional.ofNullable(etag), Optional.ofNullable(lastModified), context)) {
+
+            if (context.getMethod().toLowerCase().equals("get")) {
+                result.status(Result.SC_304_NOT_MODIFIED);
+            }
+
+        } else {
+            result.addHeader(HttpHeaderConstants.LAST_MODIFIED,
+                    DateUtil.formatForHttpHeader(lastModified));
+
+        }
+
 
     }
-
-    if (!isModified(Optional.ofNullable(etag), Optional.ofNullable(lastModified), context)) {
-
-      if (context.getMethod().toLowerCase().equals("get")) {
-        result.status(Result.SC_304_NOT_MODIFIED);
-      }
-
-    } else {
-      result.addHeader(HttpHeaderConstants.LAST_MODIFIED,
-          DateUtil.formatForHttpHeader(lastModified));
-
-    }
-
-
-  }
 
 }

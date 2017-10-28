@@ -25,19 +25,19 @@ import io.sunflower.ewf.Context;
  */
 public interface Validator<T> {
 
-  /**
-   * Validate the given value
-   *
-   * @param value The value, may be null
-   * @param field The name of the field being validated, if applicable
-   * @param context The RouteHandler request context
-   */
-  void validate(T value, String field, Context context);
+    /**
+     * Validate the given value
+     *
+     * @param value   The value, may be null
+     * @param field   The name of the field being validated, if applicable
+     * @param context The RouteHandler request context
+     */
+    void validate(T value, String field, Context context);
 
-  /**
-   * Get the type that this validator validates
-   *
-   * @return The type that the validator validates
-   */
-  Class<T> getValidatedType();
+    /**
+     * Get the type that this validator validates
+     *
+     * @return The type that the validator validates
+     */
+    Class<T> getValidatedType();
 }

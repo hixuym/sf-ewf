@@ -15,18 +15,18 @@
 
 package io.sunflower.ewf.websocket.handler;
 
-import java.io.IOException;
-
 import io.sunflower.ewf.websocket.BinaryMessage;
 import io.sunflower.ewf.websocket.CloseStatus;
 import io.sunflower.ewf.websocket.WebSocketHandler;
 import io.sunflower.ewf.websocket.WebSocketSession;
 
+import java.io.IOException;
+
 
 /**
  * A convenient base class for {@link WebSocketHandler} implementations that process text messages
  * only.
- *
+ * <p>
  * <p>Binary messages are rejected with {@link CloseStatus#NOT_ACCEPTABLE}. All other methods have
  * empty implementations.
  *
@@ -36,13 +36,13 @@ import io.sunflower.ewf.websocket.WebSocketSession;
  */
 public class TextWebSocketHandler extends AbstractWebSocketHandler {
 
-  @Override
-  protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
-    try {
-      session.close(CloseStatus.NOT_ACCEPTABLE.withReason("Binary messages not supported"));
-    } catch (IOException ex) {
-      // ignore
+    @Override
+    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+        try {
+            session.close(CloseStatus.NOT_ACCEPTABLE.withReason("Binary messages not supported"));
+        } catch (IOException ex) {
+            // ignore
+        }
     }
-  }
 
 }

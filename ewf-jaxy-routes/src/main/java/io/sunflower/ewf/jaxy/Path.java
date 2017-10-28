@@ -12,30 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.sunflower.ewf.jaxy;
 
-package io.sunflower.ewf.auth;
+import java.lang.annotation.*;
 
 /**
- * UserManager
+ * Annotation for specifying a controller path or a controller method path.
  *
- * @author michael created on 17/10/27 14:31
+ * @author James Moger
  */
-public interface UserManager<T> {
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Path {
 
-  String REQUEST_UID_KEY = "ewf_request_uid";
-
-  /**
-   * find user by key
-   * @param uid
-   * @return
-   */
-  T getUser(String uid);
-
-  /**
-   * verify user credentials
-   * @param uid
-   * @param password
-   * @return
-   */
-  boolean verify(String uid, String password);
+    String[] value();
 }

@@ -18,30 +18,31 @@ package io.sunflower.ewf.errors;
 /**
  * A convenience unchecked exception. Allows you to wrap any exception (checked or unchecked) and
  * throw it.
- *
+ * <p>
  * Should signal a html error 400 - bad request (the client sent something strange).
- *
+ * <p>
  * Useful inside resources or filters for instance.
- *
+ * <p>
  * RouteHandler is supposed to pick it up and render an appropriate error page.
+ *
  * @author michael
  */
 public class WebApplicationException extends RuntimeException {
 
-  private int httpStatus;
+    private int httpStatus;
 
-  public WebApplicationException(int httpStatus, String httpMessage) {
-    super(httpMessage);
-    this.httpStatus = httpStatus;
-  }
+    public WebApplicationException(int httpStatus, String httpMessage) {
+        super(httpMessage);
+        this.httpStatus = httpStatus;
+    }
 
-  public WebApplicationException(int httpStatus, String httpMessage, Throwable cause) {
-    super(httpMessage, cause);
-    this.httpStatus = httpStatus;
-  }
+    public WebApplicationException(int httpStatus, String httpMessage, Throwable cause) {
+        super(httpMessage, cause);
+        this.httpStatus = httpStatus;
+    }
 
-  public int getHttpStatus() {
-    return this.httpStatus;
-  }
+    public int getHttpStatus() {
+        return this.httpStatus;
+    }
 
 }

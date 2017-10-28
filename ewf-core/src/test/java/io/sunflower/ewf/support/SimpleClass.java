@@ -20,7 +20,7 @@ package io.sunflower.ewf.support;
  */
 public class SimpleClass {
 
-  public String name;
-  public String test;
+    public String name;
+    public String test;
 
 }

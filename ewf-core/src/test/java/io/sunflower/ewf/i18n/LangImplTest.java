@@ -15,20 +15,13 @@
 
 package io.sunflower.ewf.i18n;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
-
 import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Cookie;
+import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
 import io.sunflower.ewf.i18n.internal.LangImpl;
 import io.sunflower.ewf.support.Constants;
-import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.support.Settings;
-import io.sunflower.ewf.Result;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,133 +30,140 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class LangImplTest {
 
-  @Mock
-  private Settings configuration;
+    @Mock
+    private Settings configuration;
 
-  @Mock
-  private Context context;
+    @Mock
+    private Context context;
 
-  @Captor
-  ArgumentCaptor<Cookie> captor = ArgumentCaptor.forClass(Cookie.class);
+    @Captor
+    ArgumentCaptor<Cookie> captor = ArgumentCaptor.forClass(Cookie.class);
 
-  @Before
-  public void before() {
-    when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("en"));
-  }
-
-
-  @Test
-  public void testGetLanguage() {
-
-    Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
-
-    when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
-    when(context.getCookie("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX)).thenReturn(cookie);
-
-    Lang lang = new LangImpl(configuration);
-
-    // 1) with context and result => but result does not have a default lang
-    Result result = Results.ok();
-    Optional<String> language = lang.getLanguage(context, Optional.of(result));
-    assertEquals("de", language.get());
-
-    // 2) with context and result => result has already new lang set...
-    result = Results.ok();
-    cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "en").build();
-    result.addCookie(cookie);
-
-    language = lang.getLanguage(context, Optional.of(result));
-    assertEquals("en", language.get());
+    @Before
+    public void before() {
+        when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("en"));
+    }
 
 
-  }
+    @Test
+    public void testGetLanguage() {
 
-  @Test
-  public void testChangeLanguage() {
+        Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
 
-    Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
-    when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
+        when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
+        when(context.getCookie("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX)).thenReturn(cookie);
 
-    Lang lang = new LangImpl(configuration);
+        Lang lang = new LangImpl(configuration);
 
-    // test with result
-    Result result = Results.noContent();
+        // 1) with context and result => but result does not have a default lang
+        Result result = Results.ok();
+        Optional<String> language = lang.getLanguage(context, Optional.of(result));
+        assertEquals("de", language.get());
 
-    result = lang.setLanguage("to", result);
-    assertEquals("to", result.getCookie(cookie.getName()).getValue());
-    assertEquals(Result.SC_204_NO_CONTENT, result.getStatusCode());
+        // 2) with context and result => result has already new lang set...
+        result = Results.ok();
+        cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "en").build();
+        result.addCookie(cookie);
 
-
-  }
-
-  @Test
-  public void testClearLanguage() {
-
-    Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
-
-    when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
-
-    Lang lang = new LangImpl(configuration);
-
-    Result result = Results.ok();
-
-    lang.clearLanguage(result);
-
-    Cookie returnCookie = result.getCookie(cookie.getName());
-    assertEquals("", returnCookie.getValue());
-    assertEquals(0, returnCookie.getMaxAge());
-
-  }
-
-  @Test
-  public void testGetLocaleFromStringOrDefault() {
-
-    // ONE DEFAULT LOCALE
-    when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("en"));
-    Lang lang = new LangImpl(configuration);
-
-    Optional<String> language = Optional.empty();
-    Locale locale = lang.getLocaleFromStringOrDefault(language);
-
-    assertEquals(Locale.ENGLISH, locale);
-
-    // GERMAN LOCALE
-    when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("de", "en"));
-    lang = new LangImpl(configuration);
-
-    language = Optional.empty();
-    locale = lang.getLocaleFromStringOrDefault(language);
-
-    assertEquals(Locale.GERMAN, locale);
-
-    // GERMANY LOCALE
-    when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("de-DE", "en"));
-    lang = new LangImpl(configuration);
-
-    language = Optional.empty();
-    locale = lang.getLocaleFromStringOrDefault(language);
-
-    assertEquals(Locale.GERMANY, locale);
+        language = lang.getLanguage(context, Optional.of(result));
+        assertEquals("en", language.get());
 
 
-  }
+    }
+
+    @Test
+    public void testChangeLanguage() {
+
+        Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
+        when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
+
+        Lang lang = new LangImpl(configuration);
+
+        // test with result
+        Result result = Results.noContent();
+
+        result = lang.setLanguage("to", result);
+        assertEquals("to", result.getCookie(cookie.getName()).getValue());
+        assertEquals(Result.SC_204_NO_CONTENT, result.getStatusCode());
 
 
-  @Test(expected = IllegalStateException.class)
-  public void testGetLocaleFromStringOrDefaultISEWhenNoApplicationLanguageDefined() {
+    }
 
-    // ONE DEFAULT LOCALE
-    when(configuration.getApplicationLangs()).thenReturn(Arrays.asList());
-    Lang lang = new LangImpl(configuration);
+    @Test
+    public void testClearLanguage() {
 
-    Optional<String> language = Optional.empty();
-    lang.getLocaleFromStringOrDefault(language);
+        Cookie cookie = Cookie.builder("NINJA_TEST" + Constants.LANG_COOKIE_SUFFIX, "de").build();
 
-    // ISE expected
+        when(configuration.getCookiePrefix()).thenReturn("NINJA_TEST");
 
-  }
+        Lang lang = new LangImpl(configuration);
+
+        Result result = Results.ok();
+
+        lang.clearLanguage(result);
+
+        Cookie returnCookie = result.getCookie(cookie.getName());
+        assertEquals("", returnCookie.getValue());
+        assertEquals(0, returnCookie.getMaxAge());
+
+    }
+
+    @Test
+    public void testGetLocaleFromStringOrDefault() {
+
+        // ONE DEFAULT LOCALE
+        when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("en"));
+        Lang lang = new LangImpl(configuration);
+
+        Optional<String> language = Optional.empty();
+        Locale locale = lang.getLocaleFromStringOrDefault(language);
+
+        assertEquals(Locale.ENGLISH, locale);
+
+        // GERMAN LOCALE
+        when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("de", "en"));
+        lang = new LangImpl(configuration);
+
+        language = Optional.empty();
+        locale = lang.getLocaleFromStringOrDefault(language);
+
+        assertEquals(Locale.GERMAN, locale);
+
+        // GERMANY LOCALE
+        when(configuration.getApplicationLangs()).thenReturn(Arrays.asList("de-DE", "en"));
+        lang = new LangImpl(configuration);
+
+        language = Optional.empty();
+        locale = lang.getLocaleFromStringOrDefault(language);
+
+        assertEquals(Locale.GERMANY, locale);
+
+
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void testGetLocaleFromStringOrDefaultISEWhenNoApplicationLanguageDefined() {
+
+        // ONE DEFAULT LOCALE
+        when(configuration.getApplicationLangs()).thenReturn(Arrays.asList());
+        Lang lang = new LangImpl(configuration);
+
+        Optional<String> language = Optional.empty();
+        lang.getLocaleFromStringOrDefault(language);
+
+        // ISE expected
+
+    }
 
 }

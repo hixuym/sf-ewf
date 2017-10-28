@@ -15,40 +15,40 @@
 
 package io.sunflower.ewf.params.internal;
 
-import java.util.Optional;
-
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.params.ArgumentExtractor;
+
+import java.util.Optional;
 
 /**
  * Argument extractor that wraps an extractor so that it can handle Optional<...> in controller
  * methods.
- *
+ * <p>
  * For example:
- *
+ * <p>
  * myControllerMethod(@Param("param1") Optional<String> myValue)
  */
 class OptionalArgumentExtractor<T> implements ArgumentExtractor<Optional<T>> {
 
-  private final ArgumentExtractor<T> wrapped;
+    private final ArgumentExtractor<T> wrapped;
 
-  public OptionalArgumentExtractor(ArgumentExtractor<T> wrapped) {
-    this.wrapped = wrapped;
-  }
+    public OptionalArgumentExtractor(ArgumentExtractor<T> wrapped) {
+        this.wrapped = wrapped;
+    }
 
-  @Override
-  public Optional<T> extract(Context context) {
-    return Optional.ofNullable(wrapped.extract(context));
-  }
+    @Override
+    public Optional<T> extract(Context context) {
+        return Optional.ofNullable(wrapped.extract(context));
+    }
 
-  @Override
-  public Class<Optional<T>> getExtractedType() {
-    throw new RuntimeException(
-        "This is a framework-internal ArgumentExtractor. This method should not be used by anyone.");
-  }
+    @Override
+    public Class<Optional<T>> getExtractedType() {
+        throw new RuntimeException(
+                "This is a framework-internal ArgumentExtractor. This method should not be used by anyone.");
+    }
 
-  @Override
-  public String getFieldName() {
-    return wrapped.getFieldName();
-  }
+    @Override
+    public String getFieldName() {
+        return wrapped.getFieldName();
+    }
 }

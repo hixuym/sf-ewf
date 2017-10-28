@@ -15,21 +15,21 @@
 
 package io.sunflower.ewf.spi;
 
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Cookie;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.internal.Route;
+import io.sunflower.ewf.session.FlashScope;
+import io.sunflower.ewf.session.Session;
+import io.sunflower.ewf.support.ResponseStreams;
+import io.sunflower.ewf.uploads.FileItem;
+import io.sunflower.ewf.validation.Validation;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Cookie;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.internal.Route;
-import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.session.FlashScope;
-import io.sunflower.ewf.uploads.FileItem;
-import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.validation.Validation;
 
 /**
  * A wrapped context. Useful if filters want to modify the context before sending it on.
@@ -38,264 +38,264 @@ import io.sunflower.ewf.validation.Validation;
  */
 public class WrappedContext implements Context {
 
-  private final Context wrapped;
+    private final Context wrapped;
 
-  public WrappedContext(Context wrapped) {
-    this.wrapped = wrapped;
-  }
+    public WrappedContext(Context wrapped) {
+        this.wrapped = wrapped;
+    }
 
-  @Override
-  public String getHostname() {
-    return wrapped.getHostname();
-  }
+    @Override
+    public String getHostname() {
+        return wrapped.getHostname();
+    }
 
-  @Override
-  public String getScheme() {
-    return wrapped.getScheme();
-  }
+    @Override
+    public String getScheme() {
+        return wrapped.getScheme();
+    }
 
-  @Override
-  public String getRemoteAddr() {
-    return wrapped.getRemoteAddr();
-  }
+    @Override
+    public String getRemoteAddr() {
+        return wrapped.getRemoteAddr();
+    }
 
-  @Override
-  public FlashScope getFlashScope() {
-    return wrapped.getFlashScope();
-  }
+    @Override
+    public FlashScope getFlashScope() {
+        return wrapped.getFlashScope();
+    }
 
-  @Override
-  public Session getSession() {
-    return wrapped.getSession();
-  }
+    @Override
+    public Session getSession() {
+        return wrapped.getSession();
+    }
 
-  @Override
-  public String getParameter(String key) {
-    return wrapped.getParameter(key);
-  }
+    @Override
+    public String getParameter(String key) {
+        return wrapped.getParameter(key);
+    }
 
-  @Override
-  public List<String> getParameterValues(String name) {
-    return wrapped.getParameterValues(name);
-  }
+    @Override
+    public List<String> getParameterValues(String name) {
+        return wrapped.getParameterValues(name);
+    }
 
-  @Override
-  public String getParameter(String key, String defaultValue) {
-    return wrapped.getParameter(key, defaultValue);
-  }
+    @Override
+    public String getParameter(String key, String defaultValue) {
+        return wrapped.getParameter(key, defaultValue);
+    }
 
-  @Override
-  public Integer getParameterAsInteger(String key) {
-    return wrapped.getParameterAsInteger(key);
-  }
+    @Override
+    public Integer getParameterAsInteger(String key) {
+        return wrapped.getParameterAsInteger(key);
+    }
 
-  @Override
-  public Integer getParameterAsInteger(String key, Integer defaultValue) {
-    return wrapped.getParameterAsInteger(key, defaultValue);
-  }
+    @Override
+    public Integer getParameterAsInteger(String key, Integer defaultValue) {
+        return wrapped.getParameterAsInteger(key, defaultValue);
+    }
 
-  @Override
-  public FileItem getParameterAsFileItem(String key) {
-    return wrapped.getParameterAsFileItem(key);
-  }
+    @Override
+    public FileItem getParameterAsFileItem(String key) {
+        return wrapped.getParameterAsFileItem(key);
+    }
 
-  @Override
-  public List<FileItem> getParameterAsFileItems(String name) {
-    return wrapped.getParameterAsFileItems(name);
-  }
+    @Override
+    public List<FileItem> getParameterAsFileItems(String name) {
+        return wrapped.getParameterAsFileItems(name);
+    }
 
-  @Override
-  public Map<String, List<FileItem>> getParameterFileItems() {
-    return wrapped.getParameterFileItems();
-  }
+    @Override
+    public Map<String, List<FileItem>> getParameterFileItems() {
+        return wrapped.getParameterFileItems();
+    }
 
-  @Override
-  public <T> T getParameterAs(String key, Class<T> clazz) {
-    return wrapped.getParameterAs(key, clazz);
-  }
+    @Override
+    public <T> T getParameterAs(String key, Class<T> clazz) {
+        return wrapped.getParameterAs(key, clazz);
+    }
 
-  @Override
-  public <T> T getParameterAs(String key, Class<T> clazz, T defaultValue) {
-    return wrapped.getParameterAs(key, clazz, defaultValue);
-  }
+    @Override
+    public <T> T getParameterAs(String key, Class<T> clazz, T defaultValue) {
+        return wrapped.getParameterAs(key, clazz, defaultValue);
+    }
 
-  @Override
-  public String getPathParameter(String key) {
-    return wrapped.getPathParameter(key);
-  }
+    @Override
+    public String getPathParameter(String key) {
+        return wrapped.getPathParameter(key);
+    }
 
-  @Override
-  public Integer getPathParameterAsInteger(String key) {
-    return wrapped.getPathParameterAsInteger(key);
-  }
+    @Override
+    public Integer getPathParameterAsInteger(String key) {
+        return wrapped.getPathParameterAsInteger(key);
+    }
 
-  @Override
-  public Map<String, String[]> getParameters() {
-    return wrapped.getParameters();
-  }
+    @Override
+    public Map<String, String[]> getParameters() {
+        return wrapped.getParameters();
+    }
 
-  @Override
-  public String getHeader(String name) {
-    return wrapped.getHeader(name);
-  }
+    @Override
+    public String getHeader(String name) {
+        return wrapped.getHeader(name);
+    }
 
-  @Override
-  public List<String> getHeaders(String name) {
-    return wrapped.getHeaders(name);
-  }
+    @Override
+    public List<String> getHeaders(String name) {
+        return wrapped.getHeaders(name);
+    }
 
-  @Override
-  public Map<String, List<String>> getHeaders() {
-    return wrapped.getHeaders();
-  }
+    @Override
+    public Map<String, List<String>> getHeaders() {
+        return wrapped.getHeaders();
+    }
 
-  @Override
-  public String getCookieValue(String name) {
-    return wrapped.getCookieValue(name);
-  }
+    @Override
+    public String getCookieValue(String name) {
+        return wrapped.getCookieValue(name);
+    }
 
-  @Override
-  public <T> T parseBody(Class<T> classOfT) {
-    return wrapped.parseBody(classOfT);
-  }
+    @Override
+    public <T> T parseBody(Class<T> classOfT) {
+        return wrapped.parseBody(classOfT);
+    }
 
-  @Override
-  public ResponseStreams finalizeHeaders(Result result) {
-    return wrapped.finalizeHeaders(result);
-  }
+    @Override
+    public ResponseStreams finalizeHeaders(Result result) {
+        return wrapped.finalizeHeaders(result);
+    }
 
-  @Override
-  public ResponseStreams finalizeHeadersWithoutFlashAndSessionCookie(Result result) {
-    return wrapped.finalizeHeadersWithoutFlashAndSessionCookie(result);
-  }
+    @Override
+    public ResponseStreams finalizeHeadersWithoutFlashAndSessionCookie(Result result) {
+        return wrapped.finalizeHeadersWithoutFlashAndSessionCookie(result);
+    }
 
-  @Override
-  public InputStream getInputStream() throws IOException {
-    return wrapped.getInputStream();
-  }
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return wrapped.getInputStream();
+    }
 
-  @Override
-  public BufferedReader getReader() throws IOException {
-    return wrapped.getReader();
-  }
+    @Override
+    public BufferedReader getReader() throws IOException {
+        return wrapped.getReader();
+    }
 
-  @Override
-  public String getRequestContentType() {
-    return wrapped.getRequestContentType();
-  }
+    @Override
+    public String getRequestContentType() {
+        return wrapped.getRequestContentType();
+    }
 
-  @Override
-  public Route getRoute() {
-    return wrapped.getRoute();
-  }
+    @Override
+    public Route getRoute() {
+        return wrapped.getRoute();
+    }
 
-  @Override
-  public boolean isMultipart() {
-    return wrapped.isMultipart();
-  }
+    @Override
+    public boolean isMultipart() {
+        return wrapped.isMultipart();
+    }
 
-  @Override
-  public String getRequestPath() {
-    return wrapped.getRequestPath();
-  }
+    @Override
+    public String getRequestPath() {
+        return wrapped.getRequestPath();
+    }
 
-  @Override
-  public Validation getValidation() {
-    return wrapped.getValidation();
-  }
+    @Override
+    public Validation getValidation() {
+        return wrapped.getValidation();
+    }
 
-  @Override
-  public String getPathParameterEncoded(String key) {
-    return wrapped.getPathParameterEncoded(key);
-  }
+    @Override
+    public String getPathParameterEncoded(String key) {
+        return wrapped.getPathParameterEncoded(key);
+    }
 
-  @Override
-  public String getAcceptContentType() {
-    return wrapped.getAcceptContentType();
-  }
+    @Override
+    public String getAcceptContentType() {
+        return wrapped.getAcceptContentType();
+    }
 
-  @Override
-  public String getAcceptEncoding() {
-    return wrapped.getAcceptEncoding();
-  }
+    @Override
+    public String getAcceptEncoding() {
+        return wrapped.getAcceptEncoding();
+    }
 
-  @Override
-  public String getAcceptLanguage() {
-    return wrapped.getAcceptLanguage();
-  }
+    @Override
+    public String getAcceptLanguage() {
+        return wrapped.getAcceptLanguage();
+    }
 
-  @Override
-  public String getAcceptCharset() {
-    return wrapped.getAcceptCharset();
-  }
+    @Override
+    public String getAcceptCharset() {
+        return wrapped.getAcceptCharset();
+    }
 
-  @Override
-  public Cookie getCookie(String cookieName) {
-    return wrapped.getCookie(cookieName);
-  }
+    @Override
+    public Cookie getCookie(String cookieName) {
+        return wrapped.getCookie(cookieName);
+    }
 
-  @Override
-  public boolean hasCookie(String cookieName) {
-    return wrapped.hasCookie(cookieName);
-  }
+    @Override
+    public boolean hasCookie(String cookieName) {
+        return wrapped.hasCookie(cookieName);
+    }
 
-  @Override
-  public List<Cookie> getCookies() {
-    return wrapped.getCookies();
-  }
+    @Override
+    public List<Cookie> getCookies() {
+        return wrapped.getCookies();
+    }
 
-  @Override
-  public String getMethod() {
-    return wrapped.getMethod();
-  }
+    @Override
+    public String getMethod() {
+        return wrapped.getMethod();
+    }
 
-  @Override
-  public Object getAttribute(String name) {
-    return wrapped.getAttribute(name);
-  }
+    @Override
+    public Object getAttribute(String name) {
+        return wrapped.getAttribute(name);
+    }
 
-  @Override
-  public <T> T getAttribute(String name, Class<T> clazz) {
-    return wrapped.getAttribute(name, clazz);
-  }
+    @Override
+    public <T> T getAttribute(String name, Class<T> clazz) {
+        return wrapped.getAttribute(name, clazz);
+    }
 
-  @Override
-  public void setAttribute(String name, Object value) {
-    wrapped.setAttribute(name, value);
-  }
+    @Override
+    public void setAttribute(String name, Object value) {
+        wrapped.setAttribute(name, value);
+    }
 
-  @Override
-  public Map<String, Object> getAttributes() {
-    return wrapped.getAttributes();
-  }
+    @Override
+    public Map<String, Object> getAttributes() {
+        return wrapped.getAttributes();
+    }
 
-  @Override
-  public String getContextPath() {
-    return wrapped.getContextPath();
-  }
+    @Override
+    public String getContextPath() {
+        return wrapped.getContextPath();
+    }
 
-  @Override
-  public boolean isRequestJson() {
-    return wrapped.isRequestJson();
-  }
+    @Override
+    public boolean isRequestJson() {
+        return wrapped.isRequestJson();
+    }
 
-  @Override
-  public boolean isRequestXml() {
-    return wrapped.isRequestXml();
-  }
+    @Override
+    public boolean isRequestXml() {
+        return wrapped.isRequestXml();
+    }
 
-  @Override
-  public void addCookie(Cookie cookie) {
-    wrapped.addCookie(cookie);
-  }
+    @Override
+    public void addCookie(Cookie cookie) {
+        wrapped.addCookie(cookie);
+    }
 
-  @Override
-  public void unsetCookie(Cookie cookie) {
-    wrapped.unsetCookie(cookie);
-  }
+    @Override
+    public void unsetCookie(Cookie cookie) {
+        wrapped.unsetCookie(cookie);
+    }
 
-  @Override
-  public void cleanup() {
-    wrapped.cleanup();
-  }
+    @Override
+    public void cleanup() {
+        wrapped.cleanup();
+    }
 }

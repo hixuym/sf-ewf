@@ -15,17 +15,17 @@
 
 package io.sunflower.ewf.spi;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Context.Impl;
 import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Router;
 import io.sunflower.ewf.internal.ResultHandler;
 import io.sunflower.ewf.internal.Route;
-import io.sunflower.ewf.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * @author michael
@@ -33,56 +33,56 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class RouteHandlerImpl implements RouteHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger(RouteHandlerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(RouteHandlerImpl.class);
 
-  @Inject
-  protected Router router;
+    @Inject
+    protected Router router;
 
-  @Inject
-  protected ResultHandler resultHandler;
+    @Inject
+    protected ResultHandler resultHandler;
 
-  @Inject
-  protected ExceptionHandler exceptionHandler;
+    @Inject
+    protected ExceptionHandler exceptionHandler;
 
-  @Override
-  public void handleRequest(Impl context) {
+    @Override
+    public void handleRequest(Impl context) {
 
-    String httpMethod = context.getMethod();
+        String httpMethod = context.getMethod();
 
-    Route route = router.getRouteFor(httpMethod, context.getRequestPath());
+        Route route = router.getRouteFor(httpMethod, context.getRequestPath());
 
-    if (route == null) {
-      // throw a 404 "not found" because we did not find the route
-      Result result = exceptionHandler.getNotFoundResult(context);
-      renderErrorResultAndCatchAndLogExceptions(result, context);
+        if (route == null) {
+            // throw a 404 "not found" because we did not find the route
+            Result result = exceptionHandler.getNotFoundResult(context);
+            renderErrorResultAndCatchAndLogExceptions(result, context);
 
-      return;
+            return;
+        }
+
+        context.setRoute(route);
+
+        Result underlyingResult;
+
+        try {
+
+            underlyingResult = route.getFilterChain().next(context);
+
+            resultHandler.handleResult(underlyingResult, context);
+
+        } catch (Exception exception) {
+            // call special handler to capture the underlying result if there is one
+            Result result = exceptionHandler.onException(context, exception);
+            renderErrorResultAndCatchAndLogExceptions(result, context);
+        } finally {
+            context.cleanup();
+        }
     }
 
-    context.setRoute(route);
-
-    Result underlyingResult;
-
-    try {
-
-      underlyingResult = route.getFilterChain().next(context);
-
-      resultHandler.handleResult(underlyingResult, context);
-
-    } catch (Exception exception) {
-      // call special handler to capture the underlying result if there is one
-      Result result = exceptionHandler.onException(context, exception);
-      renderErrorResultAndCatchAndLogExceptions(result, context);
-    } finally {
-      context.cleanup();
+    protected void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
+        try {
+            resultHandler.handleResult(errorResult, context);
+        } catch (Exception exceptionCausingRenderError) {
+            logger.error("Unable to handle result. That's really really fishy.", exceptionCausingRenderError);
+        }
     }
-  }
-
-  protected void renderErrorResultAndCatchAndLogExceptions(Result errorResult, Context context) {
-    try {
-      resultHandler.handleResult(errorResult, context);
-    } catch (Exception exceptionCausingRenderError) {
-      logger.error("Unable to handle result. That's really really fishy.", exceptionCausingRenderError);
-    }
-  }
 }

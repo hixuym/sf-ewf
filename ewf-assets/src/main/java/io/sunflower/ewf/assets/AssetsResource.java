@@ -15,6 +15,20 @@
 
 package io.sunflower.ewf.assets;
 
+import com.google.common.io.ByteStreams;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Renderable;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
+import io.sunflower.ewf.support.HttpCacheToolkit;
+import io.sunflower.ewf.support.MimeTypes;
+import io.sunflower.ewf.support.ResponseStreams;
+import io.sunflower.ewf.support.Settings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,216 +37,201 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.google.common.io.ByteStreams;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Renderable;
-import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.Results;
-import io.sunflower.ewf.support.Settings;
-import io.sunflower.ewf.support.HttpCacheToolkit;
-import io.sunflower.ewf.support.MimeTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This controller serves public resources under /assets. It is capable of serving static files,
  * webjars or files from a completely different directory on the server.
+ *
  * @author michael
  */
 @Singleton
 public class AssetsResource {
 
-  private final static Logger logger = LoggerFactory
-      .getLogger(AssetsResource.class);
+    private final static Logger logger = LoggerFactory
+            .getLogger(AssetsResource.class);
 
-  public final static String ASSETS_DIR = "assets";
+    public final static String ASSETS_DIR = "assets";
 
-  public final static String FILENAME_PATH_PARAM = "fileName";
+    public final static String FILENAME_PATH_PARAM = "fileName";
 
-  private final MimeTypes mimeTypes;
+    private final MimeTypes mimeTypes;
 
-  private final HttpCacheToolkit httpCacheToolkit;
+    private final HttpCacheToolkit httpCacheToolkit;
 
-  private final Settings configuration;
+    private final Settings configuration;
 
-  private final AssetsResourceHelper assetsResourceHelper;
+    private final AssetsResourceHelper assetsResourceHelper;
 
-  @Inject
-  public AssetsResource(AssetsResourceHelper assetsResourceHelper,
-      HttpCacheToolkit httpCacheToolkit,
-      MimeTypes mimeTypes,
-      Settings configuration) {
-    this.assetsResourceHelper = assetsResourceHelper;
-    this.httpCacheToolkit = httpCacheToolkit;
-    this.mimeTypes = mimeTypes;
-    this.configuration = configuration;
-  }
+    @Inject
+    public AssetsResource(AssetsResourceHelper assetsResourceHelper,
+                          HttpCacheToolkit httpCacheToolkit,
+                          MimeTypes mimeTypes,
+                          Settings configuration) {
+        this.assetsResourceHelper = assetsResourceHelper;
+        this.httpCacheToolkit = httpCacheToolkit;
+        this.mimeTypes = mimeTypes;
+        this.configuration = configuration;
+    }
 
-  /**
-   * Serves resources from the assets directory of your application.
-   *
-   * For instance: route: /robots.txt A request to /robots.txt will be served from
-   * /assets/robots.txt.
-   *
-   * You can also use a path like the following to serve files: route: /assets/{fileName: .*}
-   *
-   * matches /assets/app/app.css and will return /assets/app/app.css (from your jar).
-   */
-  public Result serveStatic() {
-    Object renderable = (Renderable) (context, result) -> {
-      String fileName = getFileNameFromPathOrReturnRequestPath(context);
-      URL url = getStaticFileFromAssetsDir(fileName);
-      streamOutUrlEntity(url, context, result);
-    };
-    return Results.ok().render(renderable);
-  }
+    /**
+     * Serves resources from the assets directory of your application.
+     * <p>
+     * For instance: route: /robots.txt A request to /robots.txt will be served from
+     * /assets/robots.txt.
+     * <p>
+     * You can also use a path like the following to serve files: route: /assets/{fileName: .*}
+     * <p>
+     * matches /assets/app/app.css and will return /assets/app/app.css (from your jar).
+     */
+    public Result serveStatic() {
+        Object renderable = (Renderable) (context, result) -> {
+            String fileName = getFileNameFromPathOrReturnRequestPath(context);
+            URL url = getStaticFileFromAssetsDir(fileName);
+            streamOutUrlEntity(url, context, result);
+        };
+        return Results.ok().render(renderable);
+    }
 
 
-  /**
-   * Serves resources from the assets directory of your application.
-   *
-   * For instance: A request to /robots.txt will be served from /assets/robots.txt. Request to
-   * /public/css/app.css will be served from /assets/css/app.css.
-   */
-  public Result serveWebJars() {
-    Object renderable = new Renderable() {
-      @Override
-      public void render(Context context, Result result) {
-        String fileName = getFileNameFromPathOrReturnRequestPath(context);
-        URL url = getStaticFileFromMetaInfResourcesDir(fileName);
-        streamOutUrlEntity(url, context, result);
-      }
-    };
-    return Results.ok().render(renderable);
-  }
+    /**
+     * Serves resources from the assets directory of your application.
+     * <p>
+     * For instance: A request to /robots.txt will be served from /assets/robots.txt. Request to
+     * /public/css/app.css will be served from /assets/css/app.css.
+     */
+    public Result serveWebJars() {
+        Object renderable = new Renderable() {
+            @Override
+            public void render(Context context, Result result) {
+                String fileName = getFileNameFromPathOrReturnRequestPath(context);
+                URL url = getStaticFileFromMetaInfResourcesDir(fileName);
+                streamOutUrlEntity(url, context, result);
+            }
+        };
+        return Results.ok().render(renderable);
+    }
 
-  private void streamOutUrlEntity(URL url, Context context, Result result) {
-    // check if stream exists. if not print a notfound exception
-    if (url == null) {
-      context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
-    } else if (assetsResourceHelper.isDirectoryURL(url)) {
-      // Disable listing of directory contents
-      context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
-    } else {
-      try {
-        URLConnection urlConnection = url.openConnection();
-        Long lastModified = urlConnection.getLastModified();
-        httpCacheToolkit.addEtag(context, result, lastModified);
-
-        if (result.getStatusCode() == Result.SC_304_NOT_MODIFIED) {
-          // Do not stream anything out. Simply return 304
-          context.finalizeHeadersWithoutFlashAndSessionCookie(result);
+    private void streamOutUrlEntity(URL url, Context context, Result result) {
+        // check if stream exists. if not print a notfound exception
+        if (url == null) {
+            context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
+        } else if (assetsResourceHelper.isDirectoryURL(url)) {
+            // Disable listing of directory contents
+            context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
         } else {
-          result.status(200);
+            try {
+                URLConnection urlConnection = url.openConnection();
+                Long lastModified = urlConnection.getLastModified();
+                httpCacheToolkit.addEtag(context, result, lastModified);
 
-          // Try to set the mimetype:
-          String mimeType = mimeTypes.getContentType(context,
-              url.getFile());
+                if (result.getStatusCode() == Result.SC_304_NOT_MODIFIED) {
+                    // Do not stream anything out. Simply return 304
+                    context.finalizeHeadersWithoutFlashAndSessionCookie(result);
+                } else {
+                    result.status(200);
 
-          if (mimeType != null && !mimeType.isEmpty()) {
-            result.contentType(mimeType);
-          }
+                    // Try to set the mimetype:
+                    String mimeType = mimeTypes.getContentType(context,
+                            url.getFile());
 
-          ResponseStreams responseStreams = context
-              .finalizeHeadersWithoutFlashAndSessionCookie(result);
+                    if (mimeType != null && !mimeType.isEmpty()) {
+                        result.contentType(mimeType);
+                    }
 
-          try (InputStream inputStream = urlConnection.getInputStream();
-              OutputStream outputStream = responseStreams.getOutputStream()) {
-            ByteStreams.copy(inputStream, outputStream);
-          }
+                    ResponseStreams responseStreams = context
+                            .finalizeHeadersWithoutFlashAndSessionCookie(result);
+
+                    try (InputStream inputStream = urlConnection.getInputStream();
+                         OutputStream outputStream = responseStreams.getOutputStream()) {
+                        ByteStreams.copy(inputStream, outputStream);
+                    }
+
+                }
+
+            } catch (IOException e) {
+                logger.error("error streaming file", e);
+            }
 
         }
 
-      } catch (IOException e) {
-        logger.error("error streaming file", e);
-      }
+    }
+
+    /**
+     * Loads files from assets directory. This is the default directory of Ninja where to store stuff.
+     * Usually in src/main/java/assets/.
+     */
+    private URL getStaticFileFromAssetsDir(String fileName) {
+
+        URL url;
+
+        if (configuration.isDev()
+                // Testing that the file exists is important because
+                // on some dev environments we do not get the correct asset dir
+                // via System.getPropery("user.dir").
+                // In that case we fall back to trying to load from classpath
+                && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
+            String finalNameWithoutLeadingSlash = assetsResourceHelper
+                    .normalizePathWithoutLeadingSlash(fileName, false);
+            File possibleFile = new File(
+                    assetsDirInDevModeWithoutTrailingSlash()
+                            + File.separator
+                            + finalNameWithoutLeadingSlash);
+            url = getUrlForFile(possibleFile);
+        } else {
+            String finalNameWithoutLeadingSlash = assetsResourceHelper
+                    .normalizePathWithoutLeadingSlash(fileName, true);
+            url = this.getClass().getClassLoader()
+                    .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
+        }
+
+        return url;
+    }
+
+    private URL getUrlForFile(File possibleFileInSrc) {
+        if (possibleFileInSrc.exists() && !possibleFileInSrc.isDirectory()) {
+            try {
+                return possibleFileInSrc.toURI().toURL();
+            } catch (MalformedURLException malformedURLException) {
+                logger
+                        .error("Error in dev mode while streaming files from src dir. ", malformedURLException);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Loads files from META-INF/resources directory. This is compatible with Servlet 3.0
+     * specification and allows to use e.g. webjars project.
+     */
+    private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
+        String finalNameWithoutLeadingSlash
+                = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, true);
+        return this.getClass().getClassLoader()
+                .getResource("META-INF/resources/webjars/" + finalNameWithoutLeadingSlash);
+    }
+
+    private static String getFileNameFromPathOrReturnRequestPath(Context context) {
+
+        String fileName = context.getPathParameter(FILENAME_PATH_PARAM);
+
+        if (fileName == null) {
+            fileName = context.getRequestPath();
+        }
+        return fileName;
 
     }
 
-  }
-
-  /**
-   * Loads files from assets directory. This is the default directory of Ninja where to store stuff.
-   * Usually in src/main/java/assets/.
-   */
-  private URL getStaticFileFromAssetsDir(String fileName) {
-
-    URL url;
-
-    if (configuration.isDev()
-        // Testing that the file exists is important because
-        // on some dev environments we do not get the correct asset dir
-        // via System.getPropery("user.dir").
-        // In that case we fall back to trying to load from classpath
-        && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
-      String finalNameWithoutLeadingSlash = assetsResourceHelper
-          .normalizePathWithoutLeadingSlash(fileName, false);
-      File possibleFile = new File(
-          assetsDirInDevModeWithoutTrailingSlash()
-              + File.separator
-              + finalNameWithoutLeadingSlash);
-      url = getUrlForFile(possibleFile);
-    } else {
-      String finalNameWithoutLeadingSlash = assetsResourceHelper
-          .normalizePathWithoutLeadingSlash(fileName, true);
-      url = this.getClass().getClassLoader()
-          .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
+    /**
+     * Used in dev mode: Streaming directly from src dir without jetty reload.
+     */
+    private String assetsDirInDevModeWithoutTrailingSlash() {
+        String srcDir = System.
+                getProperty("user.dir")
+                + File.separator
+                + "src"
+                + File.separator
+                + "main"
+                + File.separator
+                + "java";
+        return srcDir + File.separator + ASSETS_DIR;
     }
-
-    return url;
-  }
-
-  private URL getUrlForFile(File possibleFileInSrc) {
-    if (possibleFileInSrc.exists() && !possibleFileInSrc.isDirectory()) {
-      try {
-        return possibleFileInSrc.toURI().toURL();
-      } catch (MalformedURLException malformedURLException) {
-        logger
-            .error("Error in dev mode while streaming files from src dir. ", malformedURLException);
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Loads files from META-INF/resources directory. This is compatible with Servlet 3.0
-   * specification and allows to use e.g. webjars project.
-   */
-  private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
-    String finalNameWithoutLeadingSlash
-        = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, true);
-    URL url = null;
-    url = this.getClass().getClassLoader()
-        .getResource("META-INF/resources/webjars/" + finalNameWithoutLeadingSlash);
-    return url;
-  }
-
-  private static String getFileNameFromPathOrReturnRequestPath(Context context) {
-
-    String fileName = context.getPathParameter(FILENAME_PATH_PARAM);
-
-    if (fileName == null) {
-      fileName = context.getRequestPath();
-    }
-    return fileName;
-
-  }
-
-  /**
-   * Used in dev mode: Streaming directly from src dir without jetty reload.
-   */
-  private String assetsDirInDevModeWithoutTrailingSlash() {
-    String srcDir = System.
-        getProperty("user.dir")
-        + File.separator
-        + "src"
-        + File.separator
-        + "main"
-        + File.separator
-        + "java";
-    return srcDir + File.separator + ASSETS_DIR;
-  }
 }

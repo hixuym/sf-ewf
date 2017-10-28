@@ -15,16 +15,16 @@
 
 package io.sunflower.ewf.params;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.sunflower.ewf.params.internal.ArgumentExtractors;
-
 /**
  * Just an idea to guicey a header right into the methods...
- *
+ * <p>
  * This equals context.getHeader(...)
  *
  * @author James Moger
@@ -34,5 +34,5 @@ import io.sunflower.ewf.params.internal.ArgumentExtractors;
 @Target({ElementType.PARAMETER})
 public @interface Header {
 
-  String value();
+    String value();
 }

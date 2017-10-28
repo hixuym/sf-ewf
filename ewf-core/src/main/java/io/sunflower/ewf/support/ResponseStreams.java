@@ -26,24 +26,24 @@ import java.io.Writer;
  */
 public interface ResponseStreams {
 
-  /**
-   * Get the output stream to write the response.
-   *
-   * Must not be used if getWriter has been called.
-   *
-   * @return The output stream
-   * @throws IOException
-   */
-  OutputStream getOutputStream() throws IOException;
+    /**
+     * Get the output stream to write the response.
+     * <p>
+     * Must not be used if getWriter has been called.
+     *
+     * @return The output stream
+     * @throws IOException
+     */
+    OutputStream getOutputStream() throws IOException;
 
-  /**
-   * Get the writer to write the response.
-   *
-   * Must not be used if getOutputStream has been called.
-   *
-   * @return The writer
-   * @throws IOException
-   */
-  Writer getWriter() throws IOException;
+    /**
+     * Get the writer to write the response.
+     * <p>
+     * Must not be used if getOutputStream has been called.
+     *
+     * @return The writer
+     * @throws IOException
+     */
+    Writer getWriter() throws IOException;
 
 }

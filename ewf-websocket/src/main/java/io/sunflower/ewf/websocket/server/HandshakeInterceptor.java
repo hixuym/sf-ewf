@@ -16,10 +16,10 @@
 package io.sunflower.ewf.websocket.server;
 
 
-import java.util.Map;
-
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.websocket.WebSocketHandler;
+
+import java.util.Map;
 
 /**
  * Interceptor for WebSocket handshake requests. Can be used to inspect the handshake request and
@@ -31,26 +31,26 @@ import io.sunflower.ewf.websocket.WebSocketHandler;
 
 public interface HandshakeInterceptor {
 
-  /**
-   * Invoked before the handshake is processed.
-   *
-   * @param context the current context
-   * @param wsHandler the target WebSocket handler
-   * @param attributes attributes from the HTTP handshake to associate with the WebSocket session;
-   * the provided attributes are copied, the original map is not used.
-   * @return whether to proceed with the handshake ({@code true}) or abort ({@code false})
-   */
-  boolean beforeHandshake(Context context,
-      WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception;
+    /**
+     * Invoked before the handshake is processed.
+     *
+     * @param context    the current context
+     * @param wsHandler  the target WebSocket handler
+     * @param attributes attributes from the HTTP handshake to associate with the WebSocket session;
+     *                   the provided attributes are copied, the original map is not used.
+     * @return whether to proceed with the handshake ({@code true}) or abort ({@code false})
+     */
+    boolean beforeHandshake(Context context,
+                            WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception;
 
-  /**
-   * Invoked after the handshake is done. The response status and headers indicate the results of
-   * the handshake, i.e. whether it was successful or not.
-   *
-   * @param context the current context
-   * @param wsHandler the target WebSocket handler
-   * @param exception an exception raised during the handshake, or {@code null} if none
-   */
-  void afterHandshake(Context context, WebSocketHandler wsHandler, Exception exception);
+    /**
+     * Invoked after the handshake is done. The response status and headers indicate the results of
+     * the handshake, i.e. whether it was successful or not.
+     *
+     * @param context   the current context
+     * @param wsHandler the target WebSocket handler
+     * @param exception an exception raised during the handshake, or {@code null} if none
+     */
+    void afterHandshake(Context context, WebSocketHandler wsHandler, Exception exception);
 
 }

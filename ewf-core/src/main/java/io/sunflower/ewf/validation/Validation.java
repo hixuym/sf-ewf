@@ -15,10 +15,10 @@
 
 package io.sunflower.ewf.validation;
 
-import java.util.List;
-
 import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.internal.ValidationImpl;
+
+import java.util.List;
 
 /**
  * This interface means the validation context (implemented by {@link ValidationImpl}) and can be
@@ -36,38 +36,40 @@ import io.sunflower.ewf.internal.ValidationImpl;
 @ImplementedBy(ValidationImpl.class)
 public interface Validation {
 
-  /**
-   * Whether the validation context has violations (including field and bean violations)
-   *
-   * @return True if it does
-   */
-  boolean hasViolations();
+    /**
+     * Whether the validation context has violations (including field and bean violations)
+     *
+     * @return True if it does
+     */
+    boolean hasViolations();
 
-  /**
-   * Whether the validation context has a violation for the given field
-   * @param paramName key
-   * @return True if it does
-   */
-  boolean hasViolation(String paramName);
+    /**
+     * Whether the validation context has a violation for the given field
+     *
+     * @param paramName key
+     * @return True if it does
+     */
+    boolean hasViolation(String paramName);
 
-  /**
-   * Get all constraint violations.
-   *
-   * @return The list of all violations.
-   */
-  List<ConstraintViolation> getViolations();
+    /**
+     * Get all constraint violations.
+     *
+     * @return The list of all violations.
+     */
+    List<ConstraintViolation> getViolations();
 
-  /**
-   * Get a complete list of field violations for a specified parameter.
-   * @param paramName key
-   * @return A List of FieldViolation-objects
-   */
-  List<ConstraintViolation> getViolations(String paramName);
+    /**
+     * Get a complete list of field violations for a specified parameter.
+     *
+     * @param paramName key
+     * @return A List of FieldViolation-objects
+     */
+    List<ConstraintViolation> getViolations(String paramName);
 
-  /**
-   * Add a violation
-   *
-   * @param constraintViolation The constraint violation
-   */
-  void addViolation(ConstraintViolation constraintViolation);
+    /**
+     * Add a violation
+     *
+     * @param constraintViolation The constraint violation
+     */
+    void addViolation(ConstraintViolation constraintViolation);
 }

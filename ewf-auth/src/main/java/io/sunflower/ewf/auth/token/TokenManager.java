@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.auth;
+package io.sunflower.ewf.auth.token;
 
 import com.google.inject.ImplementedBy;
-import io.sunflower.ewf.auth.internal.JwtTokenManager;
+import io.sunflower.ewf.auth.token.internal.JwtTokenManager;
 
 /**
  * TokenManager
@@ -26,33 +26,37 @@ import io.sunflower.ewf.auth.internal.JwtTokenManager;
 @ImplementedBy(JwtTokenManager.class)
 public interface TokenManager {
 
-  /**
-   * generate user token.
-   * @param uid
-   * @return
-   */
-  String generate(String uid);
+    /**
+     * generate user token.
+     *
+     * @param uid
+     * @return
+     */
+    String generate(String uid);
 
-  /**
-   * extract user key by token
-   * @param token
-   * @return uid
-   * @throws TokenVerificationException
-   */
-  String verify(String token) throws TokenVerificationException;
+    /**
+     * extract user key by token
+     *
+     * @param token
+     * @return uid
+     * @throws TokenVerificationException
+     */
+    String verify(String token) throws TokenVerificationException;
 
-  /**
-   * refresh token base on valid pre token
-   * @param token
-   * @return the refreshed token
-   * @throws TokenVerificationException
-   */
-  String refresh(String token) throws TokenVerificationException;
+    /**
+     * refresh token base on valid pre token
+     *
+     * @param token
+     * @return the refreshed token
+     * @throws TokenVerificationException
+     */
+    String refresh(String token) throws TokenVerificationException;
 
-  /**
-   * invalid token
-   * @param token
-   */
-  void delete(String token);
+    /**
+     * invalid token
+     *
+     * @param token
+     */
+    void delete(String token);
 
 }

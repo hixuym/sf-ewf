@@ -15,18 +15,22 @@
 
 package io.sunflower.ewf.auth;
 
+import io.sunflower.ewf.auth.internal.UsernameArgumentExtractor;
+import io.sunflower.ewf.params.WithArgumentExtractor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Auth
+ * Auth extract username from context.
  *
  * @author michael created on 17/10/27 14:29
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
+@WithArgumentExtractor(UsernameArgumentExtractor.class)
 public @interface Auth {
 
 }

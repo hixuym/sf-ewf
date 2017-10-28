@@ -28,37 +28,37 @@ import java.util.Map;
 
 public interface FileItem {
 
-  /**
-   * Returns the original filename in the client's filesystem, as provided by the browser (or other
-   * client software). In most cases, this will be the base file name, without path information.
-   * However, some clients, such as the Opera browser, do include path information.
-   */
-  String getFileName();
+    /**
+     * Returns the original filename in the client's filesystem, as provided by the browser (or other
+     * client software). In most cases, this will be the base file name, without path information.
+     * However, some clients, such as the Opera browser, do include path information.
+     */
+    String getFileName();
 
-  /**
-   * Returns an {@link java.io.InputStream InputStream} that can be used to retrieve the contents of
-   * the file.
-   */
-  InputStream getInputStream();
+    /**
+     * Returns an {@link java.io.InputStream InputStream} that can be used to retrieve the contents of
+     * the file.
+     */
+    InputStream getInputStream();
 
-  /**
-   * Returns an {@link File} that can be used to retrieve the contents of the file.
-   */
-  File getFile();
+    /**
+     * Returns an {@link File} that can be used to retrieve the contents of the file.
+     */
+    File getFile();
 
-  /**
-   * Returns the content type passed by the browser or <code>null</code> if not defined.
-   */
-  String getContentType();
+    /**
+     * Returns the content type passed by the browser or <code>null</code> if not defined.
+     */
+    String getContentType();
 
-  /**
-   * Returns the file item headers.
-   */
-  Map<String, String> getHeaders();
+    /**
+     * Returns the file item headers.
+     */
+    Map<String, String> getHeaders();
 
-  /**
-   * Cleanup resources if needed.
-   */
-  void cleanup();
+    /**
+     * Cleanup resources if needed.
+     */
+    void cleanup();
 
 }

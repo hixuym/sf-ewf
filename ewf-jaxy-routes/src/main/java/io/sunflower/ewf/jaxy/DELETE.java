@@ -12,27 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.sunflower.ewf.jaxy;
 
-package io.sunflower.ewf;
-
-import java.util.List;
-
-import io.sunflower.ewf.support.WithResourceMethod;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * @author michael
+ * Specifies HTTP DELETE method.
+ *
+ * @author James Moger
  */
-public interface RouteBuilder extends WithResourceMethod<Void> {
-
-  RouteBuilder route(String uri);
-
-  RouteBuilder globalFilters(Class<? extends Filter>... filters);
-
-  RouteBuilder globalFilters(List<Class<? extends Filter>> filters);
-
-  RouteBuilder filters(Class<? extends Filter>... filters);
-
-  RouteBuilder filters(List<Class<? extends Filter>> filters);
-
-  void with(Class<?> resourceClass, String resourceMethod);
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@HttpMethod(HttpMethod.DELETE)
+public @interface DELETE {
 }

@@ -15,24 +15,16 @@
 
 package io.sunflower.ewf.websocket.server.support;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
 import io.sunflower.ewf.undertow.UndertowContext;
 import io.sunflower.ewf.websocket.WebSocketExtension;
 import io.sunflower.ewf.websocket.WebSocketHandler;
 import io.sunflower.ewf.websocket.WebSocketSession;
 import io.sunflower.ewf.websocket.server.HandshakeFailureException;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.Results;
 import io.sunflower.ewf.websocket.server.RequestUpgradeStrategy;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.server.HttpUpgradeListener;
 import io.undertow.websockets.core.WebSocketChannel;
 import io.undertow.websockets.core.WebSocketLogger;
 import io.undertow.websockets.core.WebSocketVersion;
@@ -41,7 +33,9 @@ import io.undertow.websockets.core.protocol.version07.Hybi07Handshake;
 import io.undertow.websockets.core.protocol.version08.Hybi08Handshake;
 import io.undertow.websockets.core.protocol.version13.Hybi13Handshake;
 import io.undertow.websockets.spi.AsyncWebSocketHttpServerExchange;
-import org.xnio.StreamConnection;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * DefaultRequestUpgradeStrategy
@@ -51,85 +45,85 @@ import org.xnio.StreamConnection;
  */
 public class DefaultRequestUpgradeStrategy implements RequestUpgradeStrategy {
 
-  private final Set<WebSocketChannel> peerConnections = Collections
-      .newSetFromMap(new ConcurrentHashMap<WebSocketChannel, Boolean>());
+    private final Set<WebSocketChannel> peerConnections = Collections
+            .newSetFromMap(new ConcurrentHashMap<WebSocketChannel, Boolean>());
 
-  private final Set<Handshake> handshakes;
-  private final Set<WebSocketSession> sessions;
+    private final Set<Handshake> handshakes;
+    private final Set<WebSocketSession> sessions;
 
-  public DefaultRequestUpgradeStrategy(Set<WebSocketSession> sessions) {
-    Set<Handshake> handshakes = new HashSet<>();
-    handshakes.add(new Hybi13Handshake());
-    handshakes.add(new Hybi08Handshake());
-    handshakes.add(new Hybi07Handshake());
-    this.handshakes = handshakes;
-    this.sessions = sessions;
-  }
-
-  @Override
-  public String[] getSupportedVersions() {
-    return new String[]{
-        WebSocketVersion.V13.toHttpHeaderValue(),
-        WebSocketVersion.V08.toHttpHeaderValue(),
-        WebSocketVersion.V07.toHttpHeaderValue()
-    };
-  }
-
-  @Override
-  public List<WebSocketExtension> getSupportedExtensions(Context context) {
-    return Collections.emptyList();
-  }
-
-  @Override
-  public Result upgrade(Context context, String selectedProtocol,
-      List<WebSocketExtension> selectedExtensions, WebSocketHandler wsHandler,
-      Map<String, Object> attributes) throws HandshakeFailureException {
-
-    UndertowContext undertowContext = (UndertowContext) context;
-
-    HttpServerExchange exchange = undertowContext.getExchange();
-
-    final AsyncWebSocketHttpServerExchange facade = new AsyncWebSocketHttpServerExchange(exchange, peerConnections);
-
-    Handshake handshaker = null;
-    for (Handshake method : handshakes) {
-      if (method.matches(facade)) {
-        handshaker = method;
-        break;
-      }
+    public DefaultRequestUpgradeStrategy(Set<WebSocketSession> sessions) {
+        Set<Handshake> handshakes = new HashSet<>();
+        handshakes.add(new Hybi13Handshake());
+        handshakes.add(new Hybi08Handshake());
+        handshakes.add(new Hybi07Handshake());
+        this.handshakes = handshakes;
+        this.sessions = sessions;
     }
 
-    if (handshaker == null) {
-      return Results.status(Result.SC_404_NOT_FOUND).render(Result.NO_HTTP_BODY);
-    } else {
-      WebSocketLogger.REQUEST_LOGGER
-          .debugf("Attempting websocket handshake with %s on %s", handshaker, exchange);
-
-      final Handshake selected = handshaker;
-
-      exchange.upgradeChannel((streamConnection, exchange1) -> {
-        WebSocketChannel channel = selected
-            .createChannel(facade, streamConnection, facade.getBufferPool());
-
-        peerConnections.add(channel);
-
-        WebSocketSession session = new DefaultWebSocketSession(
-            attributes, selectedProtocol, selectedExtensions, channel, context);
-
-        sessions.add(session);
-
-        wsHandler.afterConnectionEstablished(session);
-        channel.getReceiveSetter().set(new DefaultWebSocketReceiveListener(session, wsHandler));
-        channel.resumeReceives();
-      });
-
-      handshaker.handshake(facade);
+    @Override
+    public String[] getSupportedVersions() {
+        return new String[]{
+                WebSocketVersion.V13.toHttpHeaderValue(),
+                WebSocketVersion.V08.toHttpHeaderValue(),
+                WebSocketVersion.V07.toHttpHeaderValue()
+        };
     }
 
-    return null;
-  }
+    @Override
+    public List<WebSocketExtension> getSupportedExtensions(Context context) {
+        return Collections.emptyList();
+    }
 
-  public Set<WebSocketChannel> getPeerConnections() {
-    return peerConnections;
-  }
+    @Override
+    public Result upgrade(Context context, String selectedProtocol,
+                          List<WebSocketExtension> selectedExtensions, WebSocketHandler wsHandler,
+                          Map<String, Object> attributes) throws HandshakeFailureException {
+
+        UndertowContext undertowContext = (UndertowContext) context;
+
+        HttpServerExchange exchange = undertowContext.getExchange();
+
+        final AsyncWebSocketHttpServerExchange facade = new AsyncWebSocketHttpServerExchange(exchange, peerConnections);
+
+        Handshake handshaker = null;
+        for (Handshake method : handshakes) {
+            if (method.matches(facade)) {
+                handshaker = method;
+                break;
+            }
+        }
+
+        if (handshaker == null) {
+            return Results.status(Result.SC_404_NOT_FOUND).render(Result.NO_HTTP_BODY);
+        } else {
+            WebSocketLogger.REQUEST_LOGGER
+                    .debugf("Attempting websocket handshake with %s on %s", handshaker, exchange);
+
+            final Handshake selected = handshaker;
+
+            exchange.upgradeChannel((streamConnection, exchange1) -> {
+                WebSocketChannel channel = selected
+                        .createChannel(facade, streamConnection, facade.getBufferPool());
+
+                peerConnections.add(channel);
+
+                WebSocketSession session = new DefaultWebSocketSession(
+                        attributes, selectedProtocol, selectedExtensions, channel, context);
+
+                sessions.add(session);
+
+                wsHandler.afterConnectionEstablished(session);
+                channel.getReceiveSetter().set(new DefaultWebSocketReceiveListener(session, wsHandler));
+                channel.resumeReceives();
+            });
+
+            handshaker.handshake(facade);
+        }
+
+        return null;
+    }
+
+    public Set<WebSocketChannel> getPeerConnections() {
+        return peerConnections;
+    }
 }

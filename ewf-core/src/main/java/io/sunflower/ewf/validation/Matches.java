@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.validation;
 
+import io.sunflower.ewf.internal.Validators;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.sunflower.ewf.internal.Validators;
 
 /**
  * Validates that the parameter matches the given regular expression
@@ -30,29 +30,29 @@ import io.sunflower.ewf.internal.Validators;
 @Target(ElementType.PARAMETER)
 public @interface Matches {
 
-  /**
-   * The regular expression to match
-   */
-  String regexp();
+    /**
+     * The regular expression to match
+     */
+    String regexp();
 
-  /**
-   * The key for the violation message
-   *
-   * @return The key of the violation message
-   */
-  String key() default "validation.matches.violation";
+    /**
+     * The key for the violation message
+     *
+     * @return The key of the violation message
+     */
+    String key() default "validation.matches.violation";
 
-  /**
-   * Default message if the key isn't found
-   *
-   * @return The default message
-   */
-  String message() default "{0} is doesn't match the format {1}";
+    /**
+     * Default message if the key isn't found
+     *
+     * @return The default message
+     */
+    String message() default "{0} is doesn't match the format {1}";
 
-  /**
-   * The key for formatting the field
-   *
-   * @return The key
-   */
-  String fieldKey() default "";
+    /**
+     * The key for formatting the field
+     *
+     * @return The key
+     */
+    String fieldKey() default "";
 }

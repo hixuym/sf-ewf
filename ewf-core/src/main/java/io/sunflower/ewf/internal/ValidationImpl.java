@@ -15,13 +15,13 @@
 
 package io.sunflower.ewf.internal;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sunflower.ewf.validation.ConstraintViolation;
 import io.sunflower.ewf.validation.Validation;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Validation object
@@ -32,45 +32,45 @@ import io.sunflower.ewf.validation.Validation;
  */
 public class ValidationImpl implements Validation {
 
-  private final static String HIBERNATE_VALIDATION_PREFIX = "org.hibernate.";
+    private final static String HIBERNATE_VALIDATION_PREFIX = "org.hibernate.";
 
-  private final static String JAVAX_VALIDATION_PREFIX = "javax.validation.";
+    private final static String JAVAX_VALIDATION_PREFIX = "javax.validation.";
 
-  private final Map<String, List<ConstraintViolation>> violations = Maps.newHashMap();
+    private final Map<String, List<ConstraintViolation>> violations = Maps.newHashMap();
 
-  @Override
-  public boolean hasViolations() {
-    return !this.violations.isEmpty();
-  }
-
-  @Override
-  public boolean hasViolation(String paramName) {
-    return this.violations.containsKey(paramName);
-  }
-
-  @Override
-  public List<ConstraintViolation> getViolations() {
-    List<ConstraintViolation> sumViolations = Lists.newArrayList();
-    for (List<ConstraintViolation> fieldViolation : this.violations.values()) {
-      sumViolations.addAll(fieldViolation);
+    @Override
+    public boolean hasViolations() {
+        return !this.violations.isEmpty();
     }
-    return sumViolations;
-  }
 
-  @Override
-  public List<ConstraintViolation> getViolations(String paramName) {
-    if (this.violations.containsKey(paramName)) {
-      return this.violations.get(paramName);
-    } else {
-      return Lists.newArrayList();
+    @Override
+    public boolean hasViolation(String paramName) {
+        return this.violations.containsKey(paramName);
     }
-  }
 
-  @Override
-  public void addViolation(ConstraintViolation violation) {
-    if (!this.violations.containsKey(violation.getFieldKey())) {
-      this.violations.put(violation.getFieldKey(), Lists.newArrayList());
+    @Override
+    public List<ConstraintViolation> getViolations() {
+        List<ConstraintViolation> sumViolations = Lists.newArrayList();
+        for (List<ConstraintViolation> fieldViolation : this.violations.values()) {
+            sumViolations.addAll(fieldViolation);
+        }
+        return sumViolations;
     }
-    this.violations.get(violation.getFieldKey()).add(violation);
-  }
+
+    @Override
+    public List<ConstraintViolation> getViolations(String paramName) {
+        if (this.violations.containsKey(paramName)) {
+            return this.violations.get(paramName);
+        } else {
+            return Lists.newArrayList();
+        }
+    }
+
+    @Override
+    public void addViolation(ConstraintViolation violation) {
+        if (!this.violations.containsKey(violation.getFieldKey())) {
+            this.violations.put(violation.getFieldKey(), Lists.newArrayList());
+        }
+        this.violations.get(violation.getFieldKey()).add(violation);
+    }
 }

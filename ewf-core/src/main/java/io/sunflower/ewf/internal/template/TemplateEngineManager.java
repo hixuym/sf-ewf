@@ -15,32 +15,33 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.Set;
-
 import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.spi.TemplateEngine;
+
+import java.util.Set;
 
 /**
  * Template engine manager. Has a number of built in template engines, and allows registering custom
  * template engines by registering explicit bindings of things that implement TemplateEngine.
+ *
  * @author michael
  */
 @ImplementedBy(TemplateEngineManagerImpl.class)
 public interface TemplateEngineManager {
 
-  /**
-   * Returns a set of the registered template engine content types.
-   *
-   * @return the registered content types
-   */
-  Set<String> getContentTypes();
+    /**
+     * Returns a set of the registered template engine content types.
+     *
+     * @return the registered content types
+     */
+    Set<String> getContentTypes();
 
-  /**
-   * Find the template engine for the given content type
-   *
-   * @param contentType The content type
-   * @return The template engine, if found
-   */
-  TemplateEngine getTemplateEngineForContentType(String contentType);
+    /**
+     * Find the template engine for the given content type
+     *
+     * @param contentType The content type
+     * @return The template engine, if found
+     */
+    TemplateEngine getTemplateEngineForContentType(String contentType);
 
 }

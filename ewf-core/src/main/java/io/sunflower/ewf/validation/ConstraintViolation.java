@@ -22,43 +22,43 @@ package io.sunflower.ewf.validation;
  */
 public class ConstraintViolation {
 
-  private final String messageKey;
-  private String fieldKey;
-  private final String defaultMessage;
-  private final Object[] messageParams;
+    private final String messageKey;
+    private String fieldKey;
+    private final String defaultMessage;
+    private final Object[] messageParams;
 
-  /**
-   * Create a constraint violation
-   *
-   * @param messageKey The message key
-   * @param fieldKey The field key. May be null.
-   * @param defaultMessage The default message. May be null.
-   * @param messageParams The message params
-   */
-  public ConstraintViolation(String messageKey,
-      String fieldKey,
-      String defaultMessage,
-      Object... messageParams) {
-    this.messageKey = messageKey;
-    this.fieldKey = fieldKey;
-    this.defaultMessage =
-        fieldKey != null ? defaultMessage.replace("{0}", fieldKey) : defaultMessage;
-    this.messageParams = messageParams;
-  }
+    /**
+     * Create a constraint violation
+     *
+     * @param messageKey     The message key
+     * @param fieldKey       The field key. May be null.
+     * @param defaultMessage The default message. May be null.
+     * @param messageParams  The message params
+     */
+    public ConstraintViolation(String messageKey,
+                               String fieldKey,
+                               String defaultMessage,
+                               Object... messageParams) {
+        this.messageKey = messageKey;
+        this.fieldKey = fieldKey;
+        this.defaultMessage =
+                fieldKey != null ? defaultMessage.replace("{0}", fieldKey) : defaultMessage;
+        this.messageParams = messageParams;
+    }
 
-  public String getMessageKey() {
-    return messageKey;
-  }
+    public String getMessageKey() {
+        return messageKey;
+    }
 
-  public String getFieldKey() {
-    return fieldKey;
-  }
+    public String getFieldKey() {
+        return fieldKey;
+    }
 
-  public String getDefaultMessage() {
-    return defaultMessage;
-  }
+    public String getDefaultMessage() {
+        return defaultMessage;
+    }
 
-  public Object[] getMessageParams() {
-    return messageParams;
-  }
+    public Object[] getMessageParams() {
+        return messageParams;
+    }
 }

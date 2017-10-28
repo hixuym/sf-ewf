@@ -15,31 +15,31 @@
 
 package io.sunflower.ewf.support;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class SwissKnifeTest {
 
-  // just for testing that camel case conversion stuff works
-  public class MySuperTestObject {
+    // just for testing that camel case conversion stuff works
+    public class MySuperTestObject {
 
-  }
+    }
 
-  @Test
-  public void testGetRealClassNameLowerCamelCase() {
+    @Test
+    public void testGetRealClassNameLowerCamelCase() {
 
-    MySuperTestObject mySuperTestObject = new MySuperTestObject();
+        MySuperTestObject mySuperTestObject = new MySuperTestObject();
 
-    assertEquals("mySuperTestObject",
-        SwissKnife.getRealClassNameLowerCamelCase(mySuperTestObject));
+        assertEquals("mySuperTestObject",
+                SwissKnife.getRealClassNameLowerCamelCase(mySuperTestObject));
 
-  }
+    }
 
-  @Test
-  public void testDoesClassExist() {
-    assertEquals(false, SwissKnife.doesClassExist("sdfsfasdf.sadfasdfasdf.asdfasfasdf", this));
-    assertEquals(true, SwissKnife.doesClassExist("java.lang.String", this));
-  }
+    @Test
+    public void testDoesClassExist() {
+        assertEquals(false, SwissKnife.doesClassExist("sdfsfasdf.sadfasdfasdf.asdfasfasdf", this));
+        assertEquals(true, SwissKnife.doesClassExist("java.lang.String", this));
+    }
 
 }

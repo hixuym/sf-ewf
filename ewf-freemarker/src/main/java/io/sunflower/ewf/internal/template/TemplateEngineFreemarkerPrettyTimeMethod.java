@@ -15,18 +15,14 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import freemarker.template.SimpleDate;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateMethodModelEx;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import freemarker.template.*;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * PrettyTime integration for Ninja-FreeMarker.
@@ -34,36 +30,36 @@ import org.slf4j.LoggerFactory;
  * @author James Moger
  */
 public class TemplateEngineFreemarkerPrettyTimeMethod implements
-    TemplateMethodModelEx {
+        TemplateMethodModelEx {
 
-  public final static Logger logger = LoggerFactory
-      .getLogger(TemplateEngineFreemarkerPrettyTimeMethod.class);
+    public final static Logger logger = LoggerFactory
+            .getLogger(TemplateEngineFreemarkerPrettyTimeMethod.class);
 
-  private final PrettyTime prettyTime;
+    private final PrettyTime prettyTime;
 
-  public TemplateEngineFreemarkerPrettyTimeMethod(Locale locale) {
+    public TemplateEngineFreemarkerPrettyTimeMethod(Locale locale) {
 
-    this.prettyTime = new PrettyTime(locale);
+        this.prettyTime = new PrettyTime(locale);
 
-  }
-
-  @Override
-  public TemplateModel exec(List args) throws TemplateModelException {
-
-    Date date = getFormattableObject(args.get(0));
-
-    String result = prettyTime.format(date);
-
-    return new SimpleScalar(result);
-
-  }
-
-  private Date getFormattableObject(Object value) {
-
-    if (value instanceof SimpleDate) {
-      return ((SimpleDate) value).getAsDate();
-    } else {
-      throw new RuntimeException("Formattable object for PrettyTime not found!");
     }
-  }
+
+    @Override
+    public TemplateModel exec(List args) throws TemplateModelException {
+
+        Date date = getFormattableObject(args.get(0));
+
+        String result = prettyTime.format(date);
+
+        return new SimpleScalar(result);
+
+    }
+
+    private Date getFormattableObject(Object value) {
+
+        if (value instanceof SimpleDate) {
+            return ((SimpleDate) value).getAsDate();
+        } else {
+            throw new RuntimeException("Formattable object for PrettyTime not found!");
+        }
+    }
 }

@@ -19,14 +19,14 @@ import io.sunflower.ewf.internal.ResultHandler;
 
 /**
  * This is a marker class used to handle Results in {@link ResultHandler}.
- *
+ * <p>
  * It causes the ResultHandler to render no body, just the header. Useful when issuing a redirect
  * and no corresponding content should be shown.
- *
+ * <p>
  * You might want to use Result.NO_HTTP_BODY as static shortcut.
  *
  * @author ra
  */
 public class NoHttpBody {
-  // intentionally left empty. Just a marker class.
+    // intentionally left empty. Just a marker class.
 }

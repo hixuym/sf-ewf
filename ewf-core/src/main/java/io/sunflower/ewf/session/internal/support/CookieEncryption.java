@@ -14,139 +14,140 @@
  */
 package io.sunflower.ewf.session.internal.support;
 
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.Optional;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * This class encrypts/decrypts session cookie data. Resultant encrypted strings are encoded in
  * base64, and decryption expects base64 encoded string.
+ *
  * @author michael
  */
 @Singleton
 public class CookieEncryption {
 
-  public static final String ALGORITHM = "AES";
+    public static final String ALGORITHM = "AES";
 
-  private static final Logger logger = LoggerFactory.getLogger(CookieEncryption.class);
+    private static final Logger logger = LoggerFactory.getLogger(CookieEncryption.class);
 
-  private final Optional<SecretKeySpec> secretKeySpec;
+    private final Optional<SecretKeySpec> secretKeySpec;
 
-  @Inject
-  public CookieEncryption(Settings configuration) {
+    @Inject
+    public CookieEncryption(Settings configuration) {
 
-    Optional<SecretKeySpec> secretKeySpec = Optional.empty();
+        Optional<SecretKeySpec> secretKeySpec = Optional.empty();
 
-    if (configuration.isCookieEncrypted()) {
+        if (configuration.isCookieEncrypted()) {
 
-      String secret = configuration.getApplicationSecret();
+            String secret = configuration.getApplicationSecret();
 
-      try {
-        int maxKeyLengthBits = Cipher.getMaxAllowedKeyLength(ALGORITHM);
-        if (maxKeyLengthBits == Integer.MAX_VALUE) {
-          maxKeyLengthBits = 256;
+            try {
+                int maxKeyLengthBits = Cipher.getMaxAllowedKeyLength(ALGORITHM);
+                if (maxKeyLengthBits == Integer.MAX_VALUE) {
+                    maxKeyLengthBits = 256;
+                }
+
+                secretKeySpec = Optional.of(
+                        new SecretKeySpec(secret.getBytes(), 0, maxKeyLengthBits / Byte.SIZE, ALGORITHM));
+
+                logger.info("RouteHandler session encryption is using {} / {} bit.",
+                        secretKeySpec.get().getAlgorithm(), maxKeyLengthBits);
+
+            } catch (Exception exception) {
+                logger.error("Can not create class to encrypt cookie.", exception);
+                throw new RuntimeException(exception);
+            }
+
         }
 
-        secretKeySpec = Optional.of(
-            new SecretKeySpec(secret.getBytes(), 0, maxKeyLengthBits / Byte.SIZE, ALGORITHM));
-
-        logger.info("RouteHandler session encryption is using {} / {} bit.",
-            secretKeySpec.get().getAlgorithm(), maxKeyLengthBits);
-
-      } catch (Exception exception) {
-        logger.error("Can not create class to encrypt cookie.", exception);
-        throw new RuntimeException(exception);
-      }
+        this.secretKeySpec = secretKeySpec;
 
     }
 
-    this.secretKeySpec = secretKeySpec;
+    /**
+     * Encrypts data with secret key.
+     *
+     * @param data text to encrypt
+     * @return encrypted text in base64 format
+     */
+    public String encrypt(String data) {
 
-  }
+        Objects.requireNonNull(data, "Data to be encrypted");
 
-  /**
-   * Encrypts data with secret key.
-   *
-   * @param data text to encrypt
-   * @return encrypted text in base64 format
-   */
-  public String encrypt(String data) {
+        if (!secretKeySpec.isPresent()) {
+            return data;
+        }
 
-    Objects.requireNonNull(data, "Data to be encrypted");
+        try {
+            // encrypt data
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec.get());
+            byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
 
-    if (!secretKeySpec.isPresent()) {
-      return data;
+            // convert encrypted bytes to string in base64
+            return Base64.getUrlEncoder().encodeToString(encrypted);
+
+        } catch (InvalidKeyException ex) {
+            logger.error(getHelperLogMessage(), ex);
+            throw new RuntimeException(ex);
+        } catch (GeneralSecurityException ex) {
+            logger.error("Failed to encrypt data.", ex);
+            return "";
+        }
     }
 
-    try {
-      // encrypt data
-      Cipher cipher = Cipher.getInstance(ALGORITHM);
-      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec.get());
-      byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
+    /**
+     * Decrypts data with secret key.
+     *
+     * @param data text to decrypt in base64 format
+     * @return decrypted text
+     */
+    public String decrypt(String data) {
 
-      // convert encrypted bytes to string in base64
-      return Base64.getUrlEncoder().encodeToString(encrypted);
+        Objects.requireNonNull(data, "Data to be decrypted");
 
-    } catch (InvalidKeyException ex) {
-      logger.error(getHelperLogMessage(), ex);
-      throw new RuntimeException(ex);
-    } catch (GeneralSecurityException ex) {
-      logger.error("Failed to encrypt data.", ex);
-      return "";
+        if (!secretKeySpec.isPresent()) {
+            return data;
+        }
+
+        // convert base64 encoded string to bytes
+        byte[] decoded = Base64.getUrlDecoder().decode(data);
+        try {
+            // decrypt bytes
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec.get());
+            byte[] decrypted = cipher.doFinal(decoded);
+
+            // convert bytes to string
+            return new String(decrypted, StandardCharsets.UTF_8);
+
+        } catch (InvalidKeyException ex) {
+            logger.error(getHelperLogMessage(), ex);
+            throw new RuntimeException(ex);
+        } catch (GeneralSecurityException ex) {
+            logger.error("Failed to decrypt data.", ex);
+            return "";
+        }
     }
-  }
 
-  /**
-   * Decrypts data with secret key.
-   *
-   * @param data text to decrypt in base64 format
-   * @return decrypted text
-   */
-  public String decrypt(String data) {
-
-    Objects.requireNonNull(data, "Data to be decrypted");
-
-    if (!secretKeySpec.isPresent()) {
-      return data;
+    private String getHelperLogMessage() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Invalid key provided. Check if application secret is properly set.")
+                .append(System.lineSeparator());
+        sb.append("You can remove gizmo.applicationSecret key in configuration file ");
+        sb.append("and restart application. RouteHandler will generate new key for you.");
+        return sb.toString();
     }
-
-    // convert base64 encoded string to bytes
-    byte[] decoded = Base64.getUrlDecoder().decode(data);
-    try {
-      // decrypt bytes
-      Cipher cipher = Cipher.getInstance(ALGORITHM);
-      cipher.init(Cipher.DECRYPT_MODE, secretKeySpec.get());
-      byte[] decrypted = cipher.doFinal(decoded);
-
-      // convert bytes to string
-      return new String(decrypted, StandardCharsets.UTF_8);
-
-    } catch (InvalidKeyException ex) {
-      logger.error(getHelperLogMessage(), ex);
-      throw new RuntimeException(ex);
-    } catch (GeneralSecurityException ex) {
-      logger.error("Failed to decrypt data.", ex);
-      return "";
-    }
-  }
-
-  private String getHelperLogMessage() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Invalid key provided. Check if application secret is properly set.")
-        .append(System.lineSeparator());
-    sb.append("You can remove gizmo.applicationSecret key in configuration file ");
-    sb.append("and restart application. RouteHandler will generate new key for you.");
-    return sb.toString();
-  }
 }

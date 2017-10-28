@@ -15,14 +15,14 @@
 
 package io.sunflower.ewf.websocket.handler;
 
-import java.io.IOException;
-
-import io.sunflower.ewf.websocket.WebSocketMessage;
 import io.sunflower.ewf.websocket.CloseStatus;
 import io.sunflower.ewf.websocket.WebSocketHandler;
+import io.sunflower.ewf.websocket.WebSocketMessage;
 import io.sunflower.ewf.websocket.WebSocketSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 
 /**
@@ -33,44 +33,44 @@ import org.slf4j.LoggerFactory;
  */
 public class LoggingWebSocketHandlerDecorator extends WebSocketHandlerDecorator {
 
-  private static final Logger logger = LoggerFactory.getLogger(LoggingWebSocketHandlerDecorator.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingWebSocketHandlerDecorator.class);
 
 
-  public LoggingWebSocketHandlerDecorator(WebSocketHandler delegate) {
-    super(delegate);
-  }
-
-
-  @Override
-  public void afterConnectionEstablished(WebSocketSession session) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("New " + session);
+    public LoggingWebSocketHandlerDecorator(WebSocketHandler delegate) {
+        super(delegate);
     }
-    super.afterConnectionEstablished(session);
-  }
 
-  @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
-    if (logger.isTraceEnabled()) {
-      logger.trace("Handling " + message + " in " + session);
-    }
-    super.handleMessage(session, message);
-  }
 
-  @Override
-  public void handleTransportError(WebSocketSession session, Throwable exception) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Transport error in " + session, exception);
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("New " + session);
+        }
+        super.afterConnectionEstablished(session);
     }
-    super.handleTransportError(session, exception);
-  }
 
-  @Override
-  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
-    if (logger.isDebugEnabled()) {
-      logger.debug(session + " closed with " + closeStatus);
+    @Override
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
+        if (logger.isTraceEnabled()) {
+            logger.trace("Handling " + message + " in " + session);
+        }
+        super.handleMessage(session, message);
     }
-    super.afterConnectionClosed(session, closeStatus);
-  }
+
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Transport error in " + session, exception);
+        }
+        super.handleTransportError(session, exception);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
+        if (logger.isDebugEnabled()) {
+            logger.debug(session + " closed with " + closeStatus);
+        }
+        super.afterConnectionClosed(session, closeStatus);
+    }
 
 }

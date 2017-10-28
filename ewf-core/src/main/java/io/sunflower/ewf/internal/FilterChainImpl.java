@@ -26,16 +26,16 @@ import io.sunflower.ewf.Result;
  */
 class FilterChainImpl implements FilterChain {
 
-  private final Provider<? extends Filter> filterProvider;
-  private final FilterChain next;
+    private final Provider<? extends Filter> filterProvider;
+    private final FilterChain next;
 
-  FilterChainImpl(Provider<? extends Filter> filterProvider, FilterChain next) {
-    this.filterProvider = filterProvider;
-    this.next = next;
-  }
+    FilterChainImpl(Provider<? extends Filter> filterProvider, FilterChain next) {
+        this.filterProvider = filterProvider;
+        this.next = next;
+    }
 
-  @Override
-  public Result next(Context context) {
-    return filterProvider.get().filter(next, context);
-  }
+    @Override
+    public Result next(Context context) {
+        return filterProvider.get().filter(next, context);
+    }
 }

@@ -27,73 +27,79 @@ import io.sunflower.ewf.spi.internal.DefaultExceptionHandler;
 @ImplementedBy(DefaultExceptionHandler.class)
 public interface ExceptionHandler {
 
-  /**
-   * transform exception to response result.
-   * @param context
-   * @param exception
-   * @return errorResult
-   */
-  Result onException(Context context, Exception exception);
+    /**
+     * transform exception to response result.
+     *
+     * @param context
+     * @param exception
+     * @return errorResult
+     */
+    Result onException(Context context, Exception exception);
 
-  /**
-   * Should handle cases where an exception is thrown when handling a route that let to an internal
-   * server error.
-   *
-   * Should lead to a html error 500 - internal sever error (and be used with the same mindset).
-   *
-   * Usually used by onRouteRequest(...).
-   * @param context
-   * @param exception
-   * @return
-   */
-  Result getInternalServerErrorResult(Context context, Exception exception);
+    /**
+     * Should handle cases where an exception is thrown when handling a route that let to an internal
+     * server error.
+     * <p>
+     * Should lead to a html error 500 - internal sever error (and be used with the same mindset).
+     * <p>
+     * Usually used by onRouteRequest(...).
+     *
+     * @param context
+     * @param exception
+     * @return
+     */
+    Result getInternalServerErrorResult(Context context, Exception exception);
 
-  /**
-   * Should handle cases where the client sent strange date that led to an error.
-   *
-   * Should lead to a html error 400 - bad request (and be used with the same mindset).
-   *
-   * Usually used by onRouteRequest(...).
-   * @param context
-   * @param exception
-   * @return
-   */
-  Result getBadRequestResult(Context context, BadRequestException exception);
+    /**
+     * Should handle cases where the client sent strange date that led to an error.
+     * <p>
+     * Should lead to a html error 400 - bad request (and be used with the same mindset).
+     * <p>
+     * Usually used by onRouteRequest(...).
+     *
+     * @param context
+     * @param exception
+     * @return
+     */
+    Result getBadRequestResult(Context context, BadRequestException exception);
 
-  /**
-   * Should handle cases where no route can be found for a given request.
-   *
-   * Should lead to a html error 404 - not found (and be used with the same mindset).
-   *
-   * Usually used by handleRequest(...).
-   * @param context
-   * @return result
-   */
-  Result getNotFoundResult(Context context);
+    /**
+     * Should handle cases where no route can be found for a given request.
+     * <p>
+     * Should lead to a html error 404 - not found (and be used with the same mindset).
+     * <p>
+     * Usually used by handleRequest(...).
+     *
+     * @param context
+     * @return result
+     */
+    Result getNotFoundResult(Context context);
 
-  /**
-   * Should handle cases where access is unauthorized
-   *
-   * Should lead to a html error 401 - unauthorized
-   * (and be used with the same mindset).
-   *
-   * By default, WWW-Authenticate is set to None.
-   *
-   * Usually used by BasicAuthFilter for instance(...).
-   * @param context
-   * @return
-   */
-  Result getUnauthorizedResult(Context context);
+    /**
+     * Should handle cases where access is unauthorized
+     * <p>
+     * Should lead to a html error 401 - unauthorized
+     * (and be used with the same mindset).
+     * <p>
+     * By default, WWW-Authenticate is set to None.
+     * <p>
+     * Usually used by BasicAuthFilter for instance(...).
+     *
+     * @param context
+     * @return
+     */
+    Result getUnauthorizedResult(Context context);
 
-  /**
-   * Should handle cases where access is forbidden
-   *
-   * Should lead to a html error 403 - forbidden (and be used with the same mindset).
-   *
-   * Usually used by SecureFilter for instance(...).
-   * @param context
-   * @return result
-   */
-  Result getForbiddenResult(Context context);
+    /**
+     * Should handle cases where access is forbidden
+     * <p>
+     * Should lead to a html error 403 - forbidden (and be used with the same mindset).
+     * <p>
+     * Usually used by SecureFilter for instance(...).
+     *
+     * @param context
+     * @return result
+     */
+    Result getForbiddenResult(Context context);
 
 }

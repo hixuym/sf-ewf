@@ -27,19 +27,19 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
  */
 public class XmlMappers {
 
-  public static XmlMapper newXmlMapper() {
-    JacksonXmlModule xmlModule = new JacksonXmlModule();
+    public static XmlMapper newXmlMapper() {
+        JacksonXmlModule xmlModule = new JacksonXmlModule();
 
-    // Check out: https://github.com/FasterXML/jackson-dataformat-xml
-    // setDefaultUseWrapper produces more similar output to
-    // the Json output. You can change that with annotations in your
-    // models.
-    xmlModule.setDefaultUseWrapper(false);
+        // Check out: https://github.com/FasterXML/jackson-dataformat-xml
+        // setDefaultUseWrapper produces more similar output to
+        // the Json output. You can change that with annotations in your
+        // models.
+        xmlModule.setDefaultUseWrapper(false);
 
-    XmlMapper xmlMapper = new XmlMapper(xmlModule);
+        XmlMapper xmlMapper = new XmlMapper(xmlModule);
 
-    xmlMapper.registerModule(new AfterburnerModule());
+        xmlMapper.registerModule(new AfterburnerModule());
 
-    return xmlMapper;
-  }
+        return xmlMapper;
+    }
 }

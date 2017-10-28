@@ -15,72 +15,72 @@
 
 package io.sunflower.ewf.undertow;
 
-import javax.validation.constraints.NotNull;
-
 import io.undertow.server.handlers.Cookie;
 import io.undertow.server.handlers.CookieImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author michael
  */
 public class UndertowCookieHelper {
 
-  private static final Logger log = LoggerFactory.getLogger(UndertowCookieHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(UndertowCookieHelper.class);
 
-  static public Cookie convertNinjaCookieToUndertowCookie(io.sunflower.ewf.Cookie gizmoCookie) {
-    Cookie undertowCookie = new CookieImpl(gizmoCookie.getName(), gizmoCookie.getValue());
+    static public Cookie convertNinjaCookieToUndertowCookie(io.sunflower.ewf.Cookie gizmoCookie) {
+        Cookie undertowCookie = new CookieImpl(gizmoCookie.getName(), gizmoCookie.getValue());
 
-    undertowCookie.setMaxAge(gizmoCookie.getMaxAge());
+        undertowCookie.setMaxAge(gizmoCookie.getMaxAge());
 
-    if (gizmoCookie.getComment() != null) {
-      undertowCookie.setComment(gizmoCookie.getComment());
+        if (gizmoCookie.getComment() != null) {
+            undertowCookie.setComment(gizmoCookie.getComment());
+        }
+
+        if (gizmoCookie.getDomain() != null) {
+            undertowCookie.setDomain(gizmoCookie.getDomain());
+        }
+
+        if (gizmoCookie.getPath() != null) {
+            undertowCookie.setPath(gizmoCookie.getPath());
+        }
+
+        undertowCookie.setSecure(gizmoCookie.isSecure());
+        undertowCookie.setHttpOnly(gizmoCookie.isHttpOnly());
+
+        // TODO: discard, version, and expires???
+
+        return undertowCookie;
     }
 
-    if (gizmoCookie.getDomain() != null) {
-      undertowCookie.setDomain(gizmoCookie.getDomain());
+    static public io.sunflower.ewf.Cookie convertUndertowCookieToNinjaCookie(
+            @NotNull Cookie undertowCookie) {
+        io.sunflower.ewf.Cookie.Builder gizmoCookieBuilder
+                = io.sunflower.ewf.Cookie.builder(undertowCookie.getName(), undertowCookie.getValue());
+
+        if (undertowCookie.getMaxAge() != null) {
+            gizmoCookieBuilder.setMaxAge(undertowCookie.getMaxAge());
+        }
+
+        if (undertowCookie.getComment() != null) {
+            gizmoCookieBuilder.setComment(undertowCookie.getComment());
+        }
+
+        if (undertowCookie.getDomain() != null) {
+            gizmoCookieBuilder.setDomain(undertowCookie.getDomain());
+        }
+
+        if (undertowCookie.getPath() != null) {
+            gizmoCookieBuilder.setPath(undertowCookie.getPath());
+        }
+
+        gizmoCookieBuilder.setHttpOnly(undertowCookie.isHttpOnly());
+        gizmoCookieBuilder.setSecure(undertowCookie.isSecure());
+
+        // TODO: discard, version, and expires???
+
+        return gizmoCookieBuilder.build();
     }
-
-    if (gizmoCookie.getPath() != null) {
-      undertowCookie.setPath(gizmoCookie.getPath());
-    }
-
-    undertowCookie.setSecure(gizmoCookie.isSecure());
-    undertowCookie.setHttpOnly(gizmoCookie.isHttpOnly());
-
-    // TODO: discard, version, and expires???
-
-    return undertowCookie;
-  }
-
-  static public io.sunflower.ewf.Cookie convertUndertowCookieToNinjaCookie(
-      @NotNull Cookie undertowCookie) {
-    io.sunflower.ewf.Cookie.Builder gizmoCookieBuilder
-        = io.sunflower.ewf.Cookie.builder(undertowCookie.getName(), undertowCookie.getValue());
-
-    if (undertowCookie.getMaxAge() != null) {
-      gizmoCookieBuilder.setMaxAge(undertowCookie.getMaxAge());
-    }
-
-    if (undertowCookie.getComment() != null) {
-      gizmoCookieBuilder.setComment(undertowCookie.getComment());
-    }
-
-    if (undertowCookie.getDomain() != null) {
-      gizmoCookieBuilder.setDomain(undertowCookie.getDomain());
-    }
-
-    if (undertowCookie.getPath() != null) {
-      gizmoCookieBuilder.setPath(undertowCookie.getPath());
-    }
-
-    gizmoCookieBuilder.setHttpOnly(undertowCookie.isHttpOnly());
-    gizmoCookieBuilder.setSecure(undertowCookie.isSecure());
-
-    // TODO: discard, version, and expires???
-
-    return gizmoCookieBuilder.build();
-  }
 
 }

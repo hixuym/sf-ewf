@@ -26,33 +26,33 @@ import java.util.List;
  */
 public class SourceSnippet {
 
-  private final URI sourceLocation;
-  private final List<String> lines;
-  private final int lineNumberFrom;
-  private final int lineNumberTo;
+    private final URI sourceLocation;
+    private final List<String> lines;
+    private final int lineNumberFrom;
+    private final int lineNumberTo;
 
-  public SourceSnippet(URI sourceLocation, List<String> lines, int lineNumberFrom,
-      int lineNumberTo) {
-    this.sourceLocation = sourceLocation;
-    this.lines = lines;
-    this.lineNumberFrom = lineNumberFrom;
-    this.lineNumberTo = lineNumberTo;
-  }
+    public SourceSnippet(URI sourceLocation, List<String> lines, int lineNumberFrom,
+                         int lineNumberTo) {
+        this.sourceLocation = sourceLocation;
+        this.lines = lines;
+        this.lineNumberFrom = lineNumberFrom;
+        this.lineNumberTo = lineNumberTo;
+    }
 
-  public URI getSourceLocation() {
-    return sourceLocation;
-  }
+    public URI getSourceLocation() {
+        return sourceLocation;
+    }
 
-  public List<String> getLines() {
-    return lines;
-  }
+    public List<String> getLines() {
+        return lines;
+    }
 
-  public int getLineNumberFrom() {
-    return lineNumberFrom;
-  }
+    public int getLineNumberFrom() {
+        return lineNumberFrom;
+    }
 
-  public int getLineNumberTo() {
-    return lineNumberTo;
-  }
+    public int getLineNumberTo() {
+        return lineNumberTo;
+    }
 
 }

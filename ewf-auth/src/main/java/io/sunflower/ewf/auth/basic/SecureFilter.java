@@ -13,9 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.auth;
-
-import javax.inject.Inject;
+package io.sunflower.ewf.auth.basic;
 
 import com.google.common.base.Strings;
 import io.sunflower.ewf.Context;
@@ -24,26 +22,31 @@ import io.sunflower.ewf.FilterChain;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.spi.ExceptionHandler;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import static io.sunflower.ewf.auth.Constant.USERNAME_KEY;
+
 /**
- * SessionSecureFilter
+ * SecureFilter
  *
  * @author michael created on 17/10/27 15:58
  */
-public class SessionSecureFilter implements Filter {
+@Singleton
+public class SecureFilter implements Filter {
 
-  /** If a username is saved we assume the session is valid */
-  public static final String USERNAME = "username";
+    @Inject
+    private ExceptionHandler exceptionHandler;
 
-  @Inject
-  private ExceptionHandler exceptionHandler;
+    @Override
+    public Result filter(FilterChain filterChain, Context context) {
 
-  @Override
-  public Result filter(FilterChain filterChain, Context context) {
+        String uid = context.getSession().get(USERNAME_KEY);
 
-    if (!Strings.isNullOrEmpty(context.getSession().get(USERNAME))) {
-      return filterChain.next(context);
+        if (!Strings.isNullOrEmpty(uid)) {
+            return filterChain.next(context);
+        }
+
+        return exceptionHandler.getUnauthorizedResult(context);
     }
-
-    return exceptionHandler.getForbiddenResult(context);
-  }
 }

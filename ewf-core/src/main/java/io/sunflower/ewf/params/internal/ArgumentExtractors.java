@@ -15,28 +15,20 @@
 
 package io.sunflower.ewf.params.internal;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.params.*;
+import io.sunflower.ewf.session.FlashScope;
+import io.sunflower.ewf.session.Session;
+import io.sunflower.ewf.uploads.FileItem;
+import io.sunflower.ewf.validation.Validation;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.params.ArgumentClassHolder;
-import io.sunflower.ewf.params.ArgumentExtractor;
-import io.sunflower.ewf.params.Attribute;
-import io.sunflower.ewf.params.Header;
-import io.sunflower.ewf.params.Headers;
-import io.sunflower.ewf.params.Param;
-import io.sunflower.ewf.params.Params;
-import io.sunflower.ewf.params.PathParam;
-import io.sunflower.ewf.params.SessionParam;
-import io.sunflower.ewf.session.FlashScope;
-import io.sunflower.ewf.uploads.FileItem;
-import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.validation.Validation;
 
 /**
  * Built in argument extractors
@@ -45,448 +37,448 @@ import io.sunflower.ewf.validation.Validation;
  */
 public class ArgumentExtractors {
 
-  private static final Map<Class<?>, ArgumentExtractor<?>> STATIC_EXTRACTORS =
-      ImmutableMap.<Class<?>, ArgumentExtractor<?>>builder()
-          .put(Context.class, new ContextExtractor())
-          .put(Validation.class, new ValidationExtractor())
-          .put(Session.class, new SessionExtractor())
-          .put(FlashScope.class, new FlashExtractor())
-          .build();
+    private static final Map<Class<?>, ArgumentExtractor<?>> STATIC_EXTRACTORS =
+            ImmutableMap.<Class<?>, ArgumentExtractor<?>>builder()
+                    .put(Context.class, new ContextExtractor())
+                    .put(Validation.class, new ValidationExtractor())
+                    .put(Session.class, new SessionExtractor())
+                    .put(FlashScope.class, new FlashExtractor())
+                    .build();
 
-  public static ArgumentExtractor<?> getExtractorForType(Class<?> type) {
-    return STATIC_EXTRACTORS.get(type);
-  }
+    public static ArgumentExtractor<?> getExtractorForType(Class<?> type) {
+        return STATIC_EXTRACTORS.get(type);
+    }
 
 
-  public static class ContextExtractor implements ArgumentExtractor<Context> {
+    public static class ContextExtractor implements ArgumentExtractor<Context> {
 
-    @Override
-    public Context extract(Context context) {
-      return context;
-    }
+        @Override
+        public Context extract(Context context) {
+            return context;
+        }
 
-    @Override
-    public Class<Context> getExtractedType() {
-      return Context.class;
-    }
+        @Override
+        public Class<Context> getExtractedType() {
+            return Context.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return null;
+        @Override
+        public String getFieldName() {
+            return null;
+        }
     }
-  }
 
-  public static class ValidationExtractor implements ArgumentExtractor<Validation> {
+    public static class ValidationExtractor implements ArgumentExtractor<Validation> {
 
-    @Override
-    public Validation extract(Context context) {
-      return context.getValidation();
-    }
+        @Override
+        public Validation extract(Context context) {
+            return context.getValidation();
+        }
 
-    @Override
-    public Class<Validation> getExtractedType() {
-      return Validation.class;
-    }
+        @Override
+        public Class<Validation> getExtractedType() {
+            return Validation.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return null;
+        @Override
+        public String getFieldName() {
+            return null;
+        }
     }
-  }
 
-  public static class SessionExtractor implements ArgumentExtractor<Session> {
+    public static class SessionExtractor implements ArgumentExtractor<Session> {
 
-    @Override
-    public Session extract(Context context) {
-      return context.getSession();
-    }
+        @Override
+        public Session extract(Context context) {
+            return context.getSession();
+        }
 
-    @Override
-    public Class<Session> getExtractedType() {
-      return Session.class;
-    }
+        @Override
+        public Class<Session> getExtractedType() {
+            return Session.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return null;
+        @Override
+        public String getFieldName() {
+            return null;
+        }
     }
-  }
 
-  public static class FlashExtractor implements ArgumentExtractor<FlashScope> {
+    public static class FlashExtractor implements ArgumentExtractor<FlashScope> {
 
-    @Override
-    public FlashScope extract(Context context) {
-      return context.getFlashScope();
-    }
+        @Override
+        public FlashScope extract(Context context) {
+            return context.getFlashScope();
+        }
 
-    @Override
-    public Class<FlashScope> getExtractedType() {
-      return FlashScope.class;
-    }
+        @Override
+        public Class<FlashScope> getExtractedType() {
+            return FlashScope.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return null;
+        @Override
+        public String getFieldName() {
+            return null;
+        }
     }
-  }
 
-  public static class PathParamExtractor implements ArgumentExtractor<String> {
+    public static class PathParamExtractor implements ArgumentExtractor<String> {
 
-    private final String key;
+        private final String key;
 
-    public PathParamExtractor(PathParam pathParam) {
-      this.key = pathParam.value();
-    }
+        public PathParamExtractor(PathParam pathParam) {
+            this.key = pathParam.value();
+        }
 
-    @Override
-    public String extract(Context context) {
-      return context.getPathParameter(key);
-    }
+        @Override
+        public String extract(Context context) {
+            return context.getPathParameter(key);
+        }
 
-    @Override
-    public Class<String> getExtractedType() {
-      return String.class;
-    }
+        @Override
+        public Class<String> getExtractedType() {
+            return String.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class ParamExtractor implements ArgumentExtractor<String> {
+    public static class ParamExtractor implements ArgumentExtractor<String> {
 
-    private final String key;
+        private final String key;
 
-    public ParamExtractor(Param param) {
-      this.key = param.value();
-    }
+        public ParamExtractor(Param param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public String extract(Context context) {
-      return context.getParameter(key);
-    }
+        @Override
+        public String extract(Context context) {
+            return context.getParameter(key);
+        }
 
-    @Override
-    public Class<String> getExtractedType() {
-      return String.class;
-    }
+        @Override
+        public Class<String> getExtractedType() {
+            return String.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class ParamsExtractor implements ArgumentExtractor<String[]> {
+    public static class ParamsExtractor implements ArgumentExtractor<String[]> {
 
-    private final String key;
+        private final String key;
 
-    public ParamsExtractor(Params param) {
-      this.key = param.value();
-    }
+        public ParamsExtractor(Params param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public String[] extract(Context context) {
-      List<String> values = context.getParameterValues(key);
-      if (values == null || values.isEmpty()) {
-        return null;
-      }
-      return values.toArray(new String[values.size()]);
-    }
+        @Override
+        public String[] extract(Context context) {
+            List<String> values = context.getParameterValues(key);
+            if (values == null || values.isEmpty()) {
+                return null;
+            }
+            return values.toArray(new String[values.size()]);
+        }
 
-    @Override
-    public Class<String[]> getExtractedType() {
-      return String[].class;
-    }
+        @Override
+        public Class<String[]> getExtractedType() {
+            return String[].class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class FileItemParamExtractor implements ArgumentExtractor<FileItem> {
+    public static class FileItemParamExtractor implements ArgumentExtractor<FileItem> {
 
-    private final String key;
+        private final String key;
 
-    public FileItemParamExtractor(Param param) {
-      this.key = param.value();
-    }
+        public FileItemParamExtractor(Param param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public FileItem extract(Context context) {
-      return context.getParameterAsFileItem(key);
-    }
+        @Override
+        public FileItem extract(Context context) {
+            return context.getParameterAsFileItem(key);
+        }
 
-    @Override
-    public Class<FileItem> getExtractedType() {
-      return FileItem.class;
-    }
+        @Override
+        public Class<FileItem> getExtractedType() {
+            return FileItem.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class FileItemParamsExtractor implements ArgumentExtractor<FileItem[]> {
+    public static class FileItemParamsExtractor implements ArgumentExtractor<FileItem[]> {
 
-    private final String key;
+        private final String key;
 
-    public FileItemParamsExtractor(Params param) {
-      this.key = param.value();
-    }
+        public FileItemParamsExtractor(Params param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public FileItem[] extract(Context context) {
-      List<FileItem> values = new ArrayList<>();
-      for (FileItem fileItem : context.getParameterAsFileItems(key)) {
-        values.add(fileItem);
-      }
-      return values.toArray(new FileItem[values.size()]);
-    }
+        @Override
+        public FileItem[] extract(Context context) {
+            List<FileItem> values = new ArrayList<>();
+            for (FileItem fileItem : context.getParameterAsFileItems(key)) {
+                values.add(fileItem);
+            }
+            return values.toArray(new FileItem[values.size()]);
+        }
 
-    @Override
-    public Class<FileItem[]> getExtractedType() {
-      return FileItem[].class;
-    }
+        @Override
+        public Class<FileItem[]> getExtractedType() {
+            return FileItem[].class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class FileParamExtractor implements ArgumentExtractor<File> {
+    public static class FileParamExtractor implements ArgumentExtractor<File> {
 
-    private final String key;
+        private final String key;
 
-    public FileParamExtractor(Param param) {
-      this.key = param.value();
-    }
+        public FileParamExtractor(Param param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public File extract(Context context) {
-      return context.getParameterAsFileItem(key).getFile();
-    }
+        @Override
+        public File extract(Context context) {
+            return context.getParameterAsFileItem(key).getFile();
+        }
 
-    @Override
-    public Class<File> getExtractedType() {
-      return File.class;
-    }
+        @Override
+        public Class<File> getExtractedType() {
+            return File.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class FileParamsExtractor implements ArgumentExtractor<File[]> {
+    public static class FileParamsExtractor implements ArgumentExtractor<File[]> {
 
-    private final String key;
+        private final String key;
 
-    public FileParamsExtractor(Params param) {
-      this.key = param.value();
-    }
+        public FileParamsExtractor(Params param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public File[] extract(Context context) {
-      List<File> values = new ArrayList<>();
-      for (FileItem fileItem : context.getParameterAsFileItems(key)) {
-        values.add(fileItem.getFile());
-      }
-      return values.toArray(new File[values.size()]);
-    }
+        @Override
+        public File[] extract(Context context) {
+            List<File> values = new ArrayList<>();
+            for (FileItem fileItem : context.getParameterAsFileItems(key)) {
+                values.add(fileItem.getFile());
+            }
+            return values.toArray(new File[values.size()]);
+        }
 
-    @Override
-    public Class<File[]> getExtractedType() {
-      return File[].class;
-    }
+        @Override
+        public Class<File[]> getExtractedType() {
+            return File[].class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class InputStreamParamExtractor implements ArgumentExtractor<InputStream> {
+    public static class InputStreamParamExtractor implements ArgumentExtractor<InputStream> {
 
-    private final String key;
+        private final String key;
 
-    public InputStreamParamExtractor(Param param) {
-      this.key = param.value();
-    }
+        public InputStreamParamExtractor(Param param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public InputStream extract(Context context) {
-      return context.getParameterAsFileItem(key).getInputStream();
-    }
+        @Override
+        public InputStream extract(Context context) {
+            return context.getParameterAsFileItem(key).getInputStream();
+        }
 
-    @Override
-    public Class<InputStream> getExtractedType() {
-      return InputStream.class;
-    }
+        @Override
+        public Class<InputStream> getExtractedType() {
+            return InputStream.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class InputStreamParamsExtractor implements ArgumentExtractor<InputStream[]> {
+    public static class InputStreamParamsExtractor implements ArgumentExtractor<InputStream[]> {
 
-    private final String key;
+        private final String key;
 
-    public InputStreamParamsExtractor(Params param) {
-      this.key = param.value();
-    }
+        public InputStreamParamsExtractor(Params param) {
+            this.key = param.value();
+        }
 
-    @Override
-    public InputStream[] extract(Context context) {
-      List<InputStream> values = new ArrayList<>();
-      for (FileItem fileItem : context.getParameterAsFileItems(key)) {
-        values.add(fileItem.getInputStream());
-      }
-      return values.toArray(new InputStream[values.size()]);
-    }
+        @Override
+        public InputStream[] extract(Context context) {
+            List<InputStream> values = new ArrayList<>();
+            for (FileItem fileItem : context.getParameterAsFileItems(key)) {
+                values.add(fileItem.getInputStream());
+            }
+            return values.toArray(new InputStream[values.size()]);
+        }
 
-    @Override
-    public Class<InputStream[]> getExtractedType() {
-      return InputStream[].class;
-    }
+        @Override
+        public Class<InputStream[]> getExtractedType() {
+            return InputStream[].class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class HeaderExtractor implements ArgumentExtractor<String> {
+    public static class HeaderExtractor implements ArgumentExtractor<String> {
 
-    private final String key;
+        private final String key;
 
-    public HeaderExtractor(Header header) {
-      this.key = header.value();
-    }
+        public HeaderExtractor(Header header) {
+            this.key = header.value();
+        }
 
-    @Override
-    public String extract(Context context) {
-      return context.getHeader(key);
-    }
+        @Override
+        public String extract(Context context) {
+            return context.getHeader(key);
+        }
 
-    @Override
-    public Class<String> getExtractedType() {
-      return String.class;
-    }
+        @Override
+        public Class<String> getExtractedType() {
+            return String.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class HeadersExtractor implements ArgumentExtractor<String[]> {
+    public static class HeadersExtractor implements ArgumentExtractor<String[]> {
 
-    private final String key;
+        private final String key;
 
-    public HeadersExtractor(Headers headers) {
-      this.key = headers.value();
-    }
+        public HeadersExtractor(Headers headers) {
+            this.key = headers.value();
+        }
 
-    @Override
-    public String[] extract(Context context) {
-      List<String> values = context.getHeaders(key);
-      if (values == null || values.isEmpty()) {
-        return null;
-      }
-      return values.toArray(new String[values.size()]);
-    }
+        @Override
+        public String[] extract(Context context) {
+            List<String> values = context.getHeaders(key);
+            if (values == null || values.isEmpty()) {
+                return null;
+            }
+            return values.toArray(new String[values.size()]);
+        }
 
-    @Override
-    public Class<String[]> getExtractedType() {
-      return String[].class;
-    }
+        @Override
+        public Class<String[]> getExtractedType() {
+            return String[].class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class SessionParamExtractor implements ArgumentExtractor<String> {
+    public static class SessionParamExtractor implements ArgumentExtractor<String> {
 
-    private final String key;
+        private final String key;
 
-    public SessionParamExtractor(SessionParam sessionParam) {
-      this.key = sessionParam.value();
-    }
+        public SessionParamExtractor(SessionParam sessionParam) {
+            this.key = sessionParam.value();
+        }
 
-    @Override
-    public String extract(Context context) {
-      return context.getSession().get(key);
-    }
+        @Override
+        public String extract(Context context) {
+            return context.getSession().get(key);
+        }
 
-    @Override
-    public Class<String> getExtractedType() {
-      return String.class;
-    }
+        @Override
+        public Class<String> getExtractedType() {
+            return String.class;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class AttributeExtractor implements ArgumentExtractor<Object> {
+    public static class AttributeExtractor implements ArgumentExtractor<Object> {
 
-    private final String key;
-    private final Class<?> attributeType;
+        private final String key;
+        private final Class<?> attributeType;
 
-    @Inject
-    public AttributeExtractor(Attribute attribute, ArgumentClassHolder attributeType) {
-      this.key = attribute.value();
-      this.attributeType = attributeType.getArgumentClass();
-    }
+        @Inject
+        public AttributeExtractor(Attribute attribute, ArgumentClassHolder attributeType) {
+            this.key = attribute.value();
+            this.attributeType = attributeType.getArgumentClass();
+        }
 
-    @Override
-    public Object extract(Context context) {
-      return context.getAttribute(key, attributeType);
-    }
+        @Override
+        public Object extract(Context context) {
+            return context.getAttribute(key, attributeType);
+        }
 
-    @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public Class getExtractedType() {
-      return attributeType;
-    }
+        @Override
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        public Class getExtractedType() {
+            return attributeType;
+        }
 
-    @Override
-    public String getFieldName() {
-      return key;
+        @Override
+        public String getFieldName() {
+            return key;
+        }
     }
-  }
 
-  public static class BodyAsExtractor<T> implements ArgumentExtractor<T> {
+    public static class BodyAsExtractor<T> implements ArgumentExtractor<T> {
 
-    private final Class<T> bodyType;
+        private final Class<T> bodyType;
 
-    public BodyAsExtractor(Class<T> bodyType) {
-      this.bodyType = bodyType;
-    }
+        public BodyAsExtractor(Class<T> bodyType) {
+            this.bodyType = bodyType;
+        }
 
-    @Override
-    public T extract(Context context) {
-      return context.parseBody(bodyType);
-    }
+        @Override
+        public T extract(Context context) {
+            return context.parseBody(bodyType);
+        }
 
-    @Override
-    public Class<T> getExtractedType() {
-      return bodyType;
-    }
+        @Override
+        public Class<T> getExtractedType() {
+            return bodyType;
+        }
 
-    @Override
-    public String getFieldName() {
-      return null;
+        @Override
+        public String getFieldName() {
+            return null;
+        }
     }
-  }
 }

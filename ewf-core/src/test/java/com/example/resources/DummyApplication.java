@@ -21,8 +21,8 @@ import io.sunflower.ewf.Results;
 
 public class DummyApplication {
 
-  public Result dummyMethod() {
-    return Results.ok();
-  }
+    public Result dummyMethod() {
+        return Results.ok();
+    }
 
 }

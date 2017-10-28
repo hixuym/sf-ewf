@@ -15,58 +15,58 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
 import freemarker.cache.TemplateLoader;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
 /**
  * This class html-escapes variables like ${...} in all templates (ftl.html). If you don't want to
  * have something escaped you can use at your own risk: <p>
- *
+ * <p>
  * <code> <#noescape>${...}</#noescape> </code>
- *
+ * <p>
  * (inside your template). <p> See also http://freemarker.org/docs/ref_directive_escape.html
  */
 public class TemplateEngineFreemarkerEscapedLoader implements TemplateLoader {
 
-  public static final String ESCAPE_PREFIX = "<#ftl strip_whitespace=true><#escape x as x?html>";
-  public static final String ESCAPE_SUFFIX = "</#escape>";
+    public static final String ESCAPE_PREFIX = "<#ftl strip_whitespace=true><#escape x as x?html>";
+    public static final String ESCAPE_SUFFIX = "</#escape>";
 
-  private final TemplateLoader delegate;
+    private final TemplateLoader delegate;
 
-  public TemplateEngineFreemarkerEscapedLoader(TemplateLoader delegate) {
-    this.delegate = delegate;
-  }
-
-  @Override
-  public Object findTemplateSource(String name) throws IOException {
-    return delegate.findTemplateSource(name);
-  }
-
-  @Override
-  public long getLastModified(Object templateSource) {
-    return delegate.getLastModified(templateSource);
-  }
-
-  @Override
-  public Reader getReader(Object templateSource, String encoding)
-      throws IOException {
-    Reader reader = delegate.getReader(templateSource, encoding);
-    try {
-      String templateText = CharStreams.toString(reader);
-      return new StringReader(ESCAPE_PREFIX + templateText
-          + ESCAPE_SUFFIX);
-    } finally {
-      Closeables.closeQuietly(reader);
+    public TemplateEngineFreemarkerEscapedLoader(TemplateLoader delegate) {
+        this.delegate = delegate;
     }
-  }
 
-  @Override
-  public void closeTemplateSource(Object templateSource) throws IOException {
-    delegate.closeTemplateSource(templateSource);
-  }
+    @Override
+    public Object findTemplateSource(String name) throws IOException {
+        return delegate.findTemplateSource(name);
+    }
+
+    @Override
+    public long getLastModified(Object templateSource) {
+        return delegate.getLastModified(templateSource);
+    }
+
+    @Override
+    public Reader getReader(Object templateSource, String encoding)
+            throws IOException {
+        Reader reader = delegate.getReader(templateSource, encoding);
+        try {
+            String templateText = CharStreams.toString(reader);
+            return new StringReader(ESCAPE_PREFIX + templateText
+                    + ESCAPE_SUFFIX);
+        } finally {
+            Closeables.closeQuietly(reader);
+        }
+    }
+
+    @Override
+    public void closeTemplateSource(Object templateSource) throws IOException {
+        delegate.closeTemplateSource(templateSource);
+    }
 }

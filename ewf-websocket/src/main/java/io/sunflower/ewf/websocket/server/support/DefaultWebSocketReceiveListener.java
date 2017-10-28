@@ -15,23 +15,13 @@
 
 package io.sunflower.ewf.websocket.server.support;
 
-import static io.undertow.websockets.core.WebSockets.mergeBuffers;
+import io.sunflower.ewf.websocket.*;
+import io.undertow.websockets.core.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import io.sunflower.ewf.websocket.BinaryMessage;
-import io.sunflower.ewf.websocket.PingMessage;
-import io.sunflower.ewf.websocket.PongMessage;
-import io.sunflower.ewf.websocket.TextMessage;
-import io.sunflower.ewf.websocket.WebSocketSession;
-import io.sunflower.ewf.websocket.CloseStatus;
-import io.sunflower.ewf.websocket.WebSocketHandler;
-import io.undertow.websockets.core.AbstractReceiveListener;
-import io.undertow.websockets.core.BufferedBinaryMessage;
-import io.undertow.websockets.core.BufferedTextMessage;
-import io.undertow.websockets.core.CloseMessage;
-import io.undertow.websockets.core.WebSocketChannel;
+import static io.undertow.websockets.core.WebSockets.mergeBuffers;
 
 /**
  * DefaultWebSocketReceiveListener
@@ -41,59 +31,59 @@ import io.undertow.websockets.core.WebSocketChannel;
  */
 public class DefaultWebSocketReceiveListener extends AbstractReceiveListener {
 
-  private final WebSocketSession session;
-  private final WebSocketHandler wsHandler;
+    private final WebSocketSession session;
+    private final WebSocketHandler wsHandler;
 
-  public DefaultWebSocketReceiveListener(WebSocketSession session,
-      WebSocketHandler wsHandler) {
-    this.session = session;
-    this.wsHandler = wsHandler;
-  }
+    public DefaultWebSocketReceiveListener(WebSocketSession session,
+                                           WebSocketHandler wsHandler) {
+        this.session = session;
+        this.wsHandler = wsHandler;
+    }
 
-  @Override
-  protected void onFullTextMessage(WebSocketChannel channel, BufferedTextMessage message)
-      throws IOException {
-    wsHandler.handleMessage(session, new TextMessage(message.getData()));
-  }
+    @Override
+    protected void onFullTextMessage(WebSocketChannel channel, BufferedTextMessage message)
+            throws IOException {
+        wsHandler.handleMessage(session, new TextMessage(message.getData()));
+    }
 
-  @Override
-  protected void onFullBinaryMessage(WebSocketChannel channel,
-      BufferedBinaryMessage message)
-      throws IOException {
+    @Override
+    protected void onFullBinaryMessage(WebSocketChannel channel,
+                                       BufferedBinaryMessage message)
+            throws IOException {
 
-    ByteBuffer[] byteBuffers = message.getData().getResource();
+        ByteBuffer[] byteBuffers = message.getData().getResource();
 
-    wsHandler.handleMessage(session, new BinaryMessage(mergeBuffers(byteBuffers)));
+        wsHandler.handleMessage(session, new BinaryMessage(mergeBuffers(byteBuffers)));
 
-    super.onFullBinaryMessage(channel, message);
-  }
+        super.onFullBinaryMessage(channel, message);
+    }
 
-  @Override
-  protected void onCloseMessage(CloseMessage cm, WebSocketChannel channel) {
-    wsHandler.afterConnectionClosed(session,
-        new CloseStatus(cm.getCode(), cm.getReason()));
-  }
+    @Override
+    protected void onCloseMessage(CloseMessage cm, WebSocketChannel channel) {
+        wsHandler.afterConnectionClosed(session,
+                new CloseStatus(cm.getCode(), cm.getReason()));
+    }
 
-  @Override
-  protected void onFullPingMessage(WebSocketChannel channel,
-      BufferedBinaryMessage message)
-      throws IOException {
-    super.onFullPingMessage(channel, message);
-    wsHandler.handleMessage(session, new PingMessage(mergeBuffers(message.getData().getResource())));
-  }
+    @Override
+    protected void onFullPingMessage(WebSocketChannel channel,
+                                     BufferedBinaryMessage message)
+            throws IOException {
+        super.onFullPingMessage(channel, message);
+        wsHandler.handleMessage(session, new PingMessage(mergeBuffers(message.getData().getResource())));
+    }
 
-  @Override
-  protected void onFullPongMessage(WebSocketChannel channel,
-      BufferedBinaryMessage message)
-      throws IOException {
-    wsHandler.handleMessage(session, new PongMessage(mergeBuffers(message.getData().getResource())));
-    super.onFullPongMessage(channel, message);
-  }
+    @Override
+    protected void onFullPongMessage(WebSocketChannel channel,
+                                     BufferedBinaryMessage message)
+            throws IOException {
+        wsHandler.handleMessage(session, new PongMessage(mergeBuffers(message.getData().getResource())));
+        super.onFullPongMessage(channel, message);
+    }
 
-  @Override
-  protected void onError(WebSocketChannel channel, Throwable error) {
-    wsHandler.handleTransportError(session, error);
-    super.onError(channel, error);
-  }
+    @Override
+    protected void onError(WebSocketChannel channel, Throwable error) {
+        wsHandler.handleTransportError(session, error);
+        super.onError(channel, error);
+    }
 
 }

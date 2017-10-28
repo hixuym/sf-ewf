@@ -15,15 +15,8 @@
 
 package io.sunflower.ewf.auth;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
-
-import com.auth0.jwt.interfaces.Claim;
-import io.sunflower.ewf.auth.internal.JwtTokenManager;
+import io.sunflower.ewf.auth.token.internal.JwtTokenManager;
 import io.sunflower.ewf.support.Settings;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -33,22 +26,22 @@ import org.junit.Test;
  */
 public class JwtTokenManagerTests {
 
-  @Test
-  public void testJwtToken() throws Exception {
+    @Test
+    public void testJwtToken() throws Exception {
 
-    JwtTokenManager tokenManager = new JwtTokenManager(new Settings());
+        JwtTokenManager tokenManager = new JwtTokenManager(new Settings());
 
-    String token = tokenManager.generate("michael");
+        String token = tokenManager.generate("michael");
 
-    System.out.println(token);
+        System.out.println(token);
 
-    String uid = tokenManager.verify(token);
+        String uid = tokenManager.verify(token);
 
-    System.out.println(uid);
+        System.out.println(uid);
 
-    String refreshToken = tokenManager.refresh(token);
+        String refreshToken = tokenManager.refresh(token);
 
-    System.out.println(refreshToken);
-  }
+        System.out.println(refreshToken);
+    }
 
 }

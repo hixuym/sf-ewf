@@ -15,31 +15,25 @@
 
 package io.sunflower.ewf.auth;
 
+import io.sunflower.ewf.ApplicationRoutes;
+import io.sunflower.ewf.Router;
+import io.sunflower.ewf.auth.token.TokenResource;
+
 /**
- * TokenVerificationException
+ * AuthRoutes
  *
- * @author michael created on 17/10/27 23:20
+ * @author michael created on 17/10/28 10:14
  */
-public class TokenVerificationException extends Exception {
+public class AuthRoutes implements ApplicationRoutes {
 
-  public TokenVerificationException() {
-    super();
-  }
+    @Override
+    public void init(Router router) {
 
-  public TokenVerificationException(String message) {
-    super(message);
-  }
+        router.POST().route("/api/auth/get_token")
+                .noGlobalFilters().with(TokenResource::auth);
 
-  public TokenVerificationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+        router.POST().route("/api/auth/refresh_token")
+                .with(TokenResource::refresh);
 
-  public TokenVerificationException(Throwable cause) {
-    super(cause);
-  }
-
-  protected TokenVerificationException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+    }
 }

@@ -15,88 +15,86 @@
 
 package io.sunflower.ewf.internal.template;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.spi.internal.TemplateEngineJson;
+import io.sunflower.ewf.support.ResponseStreams;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.spi.internal.TemplateEngineJson;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for application/json render.
  */
 public class TemplateEngineJsonTest {
 
-  Context context;
-  ResponseStreams responseStreams;
-  Result result;
-  ObjectMapper objectMapper;
-  ByteArrayOutputStream outputStream;
+    Context context;
+    ResponseStreams responseStreams;
+    Result result;
+    ObjectMapper objectMapper;
+    ByteArrayOutputStream outputStream;
 
-  @Before
-  public void setUp() throws IOException {
-    context = mock(Context.class);
-    responseStreams = mock(ResponseStreams.class);
-    result = mock(Result.class);
+    @Before
+    public void setUp() throws IOException {
+        context = mock(Context.class);
+        responseStreams = mock(ResponseStreams.class);
+        result = mock(Result.class);
 
-    objectMapper = new ObjectMapper();
-    outputStream = new ByteArrayOutputStream();
+        objectMapper = new ObjectMapper();
+        outputStream = new ByteArrayOutputStream();
 
-    TestObject testObj = new TestObject();
-    testObj.field1 = "field_one";
-    testObj.field2 = "field_two";
+        TestObject testObj = new TestObject();
+        testObj.field1 = "field_one";
+        testObj.field2 = "field_two";
 
-    when(result.getRenderable()).thenReturn(testObj);
-    when(context.finalizeHeaders(result)).thenReturn(responseStreams);
-    when(responseStreams.getOutputStream()).thenReturn(outputStream);
-  }
-
-  @Test
-  public void testJsonViewWorks() throws IOException {
-    Mockito.<Class<?>>when(result.getJsonView()).thenReturn(View.Public.class);
-
-    TemplateEngineJson jsonEngine = new TemplateEngineJson(objectMapper);
-    jsonEngine.invoke(context, result);
-
-    String json = new String(outputStream.toByteArray(), "UTF-8");
-    assertTrue(json.contains("field_one"));
-    assertFalse(json.contains("field_two"));
-
-    verify(context).finalizeHeaders(result);
-  }
-
-
-  private static class TestObject {
-
-    @JsonView(View.Public.class)
-    public String field1;
-
-    @JsonView(View.Private.class)
-    public String field2;
-  }
-
-
-  private static class View {
-
-    public static class Public {
-
+        when(result.getRenderable()).thenReturn(testObj);
+        when(context.finalizeHeaders(result)).thenReturn(responseStreams);
+        when(responseStreams.getOutputStream()).thenReturn(outputStream);
     }
 
-    public static class Private {
+    @Test
+    public void testJsonViewWorks() throws IOException {
+        Mockito.<Class<?>>when(result.getJsonView()).thenReturn(View.Public.class);
 
+        TemplateEngineJson jsonEngine = new TemplateEngineJson(objectMapper);
+        jsonEngine.invoke(context, result);
+
+        String json = new String(outputStream.toByteArray(), "UTF-8");
+        assertTrue(json.contains("field_one"));
+        assertFalse(json.contains("field_two"));
+
+        verify(context).finalizeHeaders(result);
     }
-  }
+
+
+    private static class TestObject {
+
+        @JsonView(View.Public.class)
+        public String field1;
+
+        @JsonView(View.Private.class)
+        public String field2;
+    }
+
+
+    private static class View {
+
+        public static class Public {
+
+        }
+
+        public static class Private {
+
+        }
+    }
 
 }

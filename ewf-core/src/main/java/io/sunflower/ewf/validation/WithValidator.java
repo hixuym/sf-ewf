@@ -29,10 +29,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface WithValidator {
 
-  /**
-   * Validator that should be used to validate parameters annotated with this annotation.
-   *
-   * @return The validator class
-   */
-  Class<? extends Validator<?>> value();
+    /**
+     * Validator that should be used to validate parameters annotated with this annotation.
+     *
+     * @return The validator class
+     */
+    Class<? extends Validator<?>> value();
 }

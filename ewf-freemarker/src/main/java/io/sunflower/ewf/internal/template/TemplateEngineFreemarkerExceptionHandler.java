@@ -15,9 +15,6 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.core.Environment;
@@ -25,6 +22,9 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
+
+import java.io.PrintWriter;
+import java.io.Writer;
 
 /**
  * A general exception handler for Freemarker. - Outputs a readable error in test / dev mode. -
@@ -34,51 +34,51 @@ import org.slf4j.Logger;
  */
 @Singleton
 public class TemplateEngineFreemarkerExceptionHandler implements
-    TemplateExceptionHandler {
+        TemplateExceptionHandler {
 
-  private final Settings configuration;
-  private final Logger logger;
+    private final Settings configuration;
+    private final Logger logger;
 
-  @Inject
-  public TemplateEngineFreemarkerExceptionHandler(Logger logger,
-      Settings configuration) {
-    this.logger = logger;
-    this.configuration = configuration;
-  }
-
-  public void handleTemplateException(TemplateException te,
-      Environment env,
-      Writer out) throws TemplateException {
-
-    if (configuration.isProd()) {
-      // Let the exception bubble up to the central handlers
-      // so the application can return the correct error page
-      // or perform some other application specific action.
-      throw te;
-    } else {
-      // print out full stacktrace if we are in test or dev mode
-
-      PrintWriter pw = (out instanceof PrintWriter) ? (PrintWriter) out : new PrintWriter(out);
-      pw.println("<!-- FREEMARKER ERROR MESSAGE STARTS HERE -->"
-          + "<script language=javascript>//\"></script>"
-          + "<script language=javascript>//\'></script>"
-          + "<script language=javascript>//\"></script>"
-          + "<script language=javascript>//\'></script>"
-          + "</title></xmp></script></noscript></style></object>"
-          + "</head></pre></table>"
-          + "</form></table></table></table></a></u></i></b>"
-          + "<div align=left "
-          + "style='background-color:#FFFF00; color:#FF0000; "
-          + "display:block; border-top:double; padding:2pt; "
-          + "font-size:medium; font-family:Arial,sans-serif; "
-          + "font-style: normal; font-variant: normal; "
-          + "font-weight: normal; text-decoration: none; "
-          + "text-transform: none'>"
-          + "<b style='font-size:medium'>FreeMarker template error!</b>"
-          + "<pre><xmp>");
-      te.printStackTrace(pw);
-      pw.println("</xmp></pre></div></html>");
-      logger.error("Templating error.", te);
+    @Inject
+    public TemplateEngineFreemarkerExceptionHandler(Logger logger,
+                                                    Settings configuration) {
+        this.logger = logger;
+        this.configuration = configuration;
     }
-  }
+
+    public void handleTemplateException(TemplateException te,
+                                        Environment env,
+                                        Writer out) throws TemplateException {
+
+        if (configuration.isProd()) {
+            // Let the exception bubble up to the central handlers
+            // so the application can return the correct error page
+            // or perform some other application specific action.
+            throw te;
+        } else {
+            // print out full stacktrace if we are in test or dev mode
+
+            PrintWriter pw = (out instanceof PrintWriter) ? (PrintWriter) out : new PrintWriter(out);
+            pw.println("<!-- FREEMARKER ERROR MESSAGE STARTS HERE -->"
+                    + "<script language=javascript>//\"></script>"
+                    + "<script language=javascript>//\'></script>"
+                    + "<script language=javascript>//\"></script>"
+                    + "<script language=javascript>//\'></script>"
+                    + "</title></xmp></script></noscript></style></object>"
+                    + "</head></pre></table>"
+                    + "</form></table></table></table></a></u></i></b>"
+                    + "<div align=left "
+                    + "style='background-color:#FFFF00; color:#FF0000; "
+                    + "display:block; border-top:double; padding:2pt; "
+                    + "font-size:medium; font-family:Arial,sans-serif; "
+                    + "font-style: normal; font-variant: normal; "
+                    + "font-weight: normal; text-decoration: none; "
+                    + "text-transform: none'>"
+                    + "<b style='font-size:medium'>FreeMarker template error!</b>"
+                    + "<pre><xmp>");
+            te.printStackTrace(pw);
+            pw.println("</xmp></pre></div></html>");
+            logger.error("Templating error.", te);
+        }
+    }
 }

@@ -15,167 +15,167 @@
 
 package io.sunflower.ewf.support;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.Results;
+import io.sunflower.ewf.support.ResourceMethods.ResourceMethod1;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.nio.charset.StandardCharsets;
 
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.support.ResourceMethods.ResourceMethod1;
-import io.sunflower.ewf.Results;
-import io.sunflower.ewf.Result;
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class LambdasTest {
 
-  @FunctionalInterface
-  public interface Function1<T, R> extends Serializable {
+    @FunctionalInterface
+    public interface Function1<T, R> extends Serializable {
 
-    R apply(T t);
-  }
-
-  @FunctionalInterface
-  public interface Function2<C, T, R> extends Serializable {
-
-    R apply(C c, T t);
-  }
-
-  static private String longToString(Long value) {
-    return value.toString();
-  }
-
-  @Test
-  public void staticMethodReference() throws Exception {
-    Function1<Long, String> lambda = LambdasTest::longToString;
-
-    Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
-
-    assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.STATIC_METHOD_REFERENCE));
-
-    SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
-
-    assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
-    assertThat(serializedLambda.getImplClass().replace('/', '.'),
-        is(LambdasTest.class.getCanonicalName()));
-    assertThat(serializedLambda.getImplMethodName(), is("longToString"));
-    assertThat(serializedLambda.getImplMethodKind(), is(6));    // 6 = static method
-    assertThat(serializedLambda.getCapturedArgCount(), is(0));
-
-    // verify it can be dynamically invoked
-    String value = (String) lambdaInfo.getImplementationMethod().invoke(null, 1L);
-
-    assertThat(value, is("1"));
-  }
-
-  static public class Calculator {
-
-    private final Long initial;
-
-    public Calculator(Long initial) {
-      this.initial = initial;
+        R apply(T t);
     }
 
-    public String l2s(Long value) {
-      long calculated = initial + value;
-      return Long.toString(calculated);
+    @FunctionalInterface
+    public interface Function2<C, T, R> extends Serializable {
+
+        R apply(C c, T t);
     }
-  }
 
-  @Test
-  public void specificInstanceMethodReference() throws Exception {
-    Calculator calc = new Calculator(1L);
-
-    Function1<Long, String> lambda = calc::l2s;
-
-    Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
-
-    assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.SPECIFIC_INSTANCE_METHOD_REFERENCE));
-
-    SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
-
-    assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
-    assertThat(serializedLambda.getImplClass().replace('/', '.').replace('$', '.'),
-        is(Calculator.class.getCanonicalName()));
-    assertThat(serializedLambda.getImplMethodName(), is("l2s"));
-    assertThat(serializedLambda.getImplMethodSignature(),
-        is("(Ljava/lang/Long;)Ljava/lang/String;"));
-    assertThat(serializedLambda.getCapturedArgCount(), is(1));  // captured "this"
-    assertThat(serializedLambda.getCapturedArg(0), is(calc));   // captured "this"
-
-    // verify it can be dynamically invoked
-    String value = (String) lambdaInfo.getFunctionalMethod().invoke(lambda, 1L);
-    //String value = (String)lambda.getClass().getMethod("apply", Long.class).invoke(calc, 1L);
-
-    assertThat(value, is("2"));
-  }
-
-  private Result home() {
-    return Results.html().renderRaw("Hi".getBytes(StandardCharsets.UTF_8));
-  }
-
-  @Test
-  public void anyInstanceMethodReference() throws Exception {
-    ResourceMethod1<LambdasTest> lambda = LambdasTest::home;
-
-    Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
-
-    assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.ANY_INSTANCE_METHOD_REFERENCE));
-
-    SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
-
-    assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
-    assertThat(serializedLambda.getImplClass().replace('/', '.'),
-        is(LambdasTest.class.getCanonicalName()));
-    assertThat(serializedLambda.getImplMethodName(), is("home"));
-    assertThat(serializedLambda.getImplMethodSignature(), is("()Lio/sunflower/ewf/Result;"));
-    assertThat(serializedLambda.getCapturedArgCount(), is(0));
-  }
-
-  @Test
-  public void anonymousClassReference() throws Exception {
-    @SuppressWarnings("Convert2Lambda")
-    ResourceMethod1<Context> lambda = new ResourceMethod1<Context>() {
-      @Override
-      public Result apply(Context a) {
-        return Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
-      }
-    };
-
-    try {
-      Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
-      fail();
-    } catch (IllegalArgumentException e) {
-      // expected
+    static private String longToString(Long value) {
+        return value.toString();
     }
-  }
 
-  @Test
-  public void anonymousMethodReference() throws Exception {
-    ResourceMethod1<Context> lambda = (Context context) -> Results.html()
-        .renderRaw("".getBytes(StandardCharsets.UTF_8));
+    @Test
+    public void staticMethodReference() throws Exception {
+        Function1<Long, String> lambda = LambdasTest::longToString;
 
-    Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
+        Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
 
-    assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.ANONYMOUS_METHOD_REFERENCE));
+        assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.STATIC_METHOD_REFERENCE));
 
-    SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
+        SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
 
-    assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
-    assertThat(serializedLambda.getImplClass().replace('/', '.'),
-        is(LambdasTest.class.getCanonicalName()));
-    assertThat(serializedLambda.getImplMethodName(), startsWith("lambda$"));
-    assertThat(serializedLambda.getInstantiatedMethodType(),
-        is("(Lio/sunflower/ewf/Context;)Lio/sunflower/ewf/Result;"));
-    // includes captured args btw...
-    assertThat(serializedLambda.getImplMethodSignature(),
-        is("(Lio/sunflower/ewf/Context;)Lio/sunflower/ewf/Result;"));
-    assertThat(serializedLambda.getImplMethodKind(), is(6));    // 6 = REF_invokeStatic
-    assertThat(serializedLambda.getCapturedArgCount(), is(0));
-  }
+        assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
+        assertThat(serializedLambda.getImplClass().replace('/', '.'),
+                is(LambdasTest.class.getCanonicalName()));
+        assertThat(serializedLambda.getImplMethodName(), is("longToString"));
+        assertThat(serializedLambda.getImplMethodKind(), is(6));    // 6 = static method
+        assertThat(serializedLambda.getCapturedArgCount(), is(0));
+
+        // verify it can be dynamically invoked
+        String value = (String) lambdaInfo.getImplementationMethod().invoke(null, 1L);
+
+        assertThat(value, is("1"));
+    }
+
+    static public class Calculator {
+
+        private final Long initial;
+
+        public Calculator(Long initial) {
+            this.initial = initial;
+        }
+
+        public String l2s(Long value) {
+            long calculated = initial + value;
+            return Long.toString(calculated);
+        }
+    }
+
+    @Test
+    public void specificInstanceMethodReference() throws Exception {
+        Calculator calc = new Calculator(1L);
+
+        Function1<Long, String> lambda = calc::l2s;
+
+        Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
+
+        assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.SPECIFIC_INSTANCE_METHOD_REFERENCE));
+
+        SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
+
+        assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
+        assertThat(serializedLambda.getImplClass().replace('/', '.').replace('$', '.'),
+                is(Calculator.class.getCanonicalName()));
+        assertThat(serializedLambda.getImplMethodName(), is("l2s"));
+        assertThat(serializedLambda.getImplMethodSignature(),
+                is("(Ljava/lang/Long;)Ljava/lang/String;"));
+        assertThat(serializedLambda.getCapturedArgCount(), is(1));  // captured "this"
+        assertThat(serializedLambda.getCapturedArg(0), is(calc));   // captured "this"
+
+        // verify it can be dynamically invoked
+        String value = (String) lambdaInfo.getFunctionalMethod().invoke(lambda, 1L);
+        //String value = (String)lambda.getClass().getMethod("apply", Long.class).invoke(calc, 1L);
+
+        assertThat(value, is("2"));
+    }
+
+    private Result home() {
+        return Results.html().renderRaw("Hi".getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void anyInstanceMethodReference() throws Exception {
+        ResourceMethod1<LambdasTest> lambda = LambdasTest::home;
+
+        Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
+
+        assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.ANY_INSTANCE_METHOD_REFERENCE));
+
+        SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
+
+        assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
+        assertThat(serializedLambda.getImplClass().replace('/', '.'),
+                is(LambdasTest.class.getCanonicalName()));
+        assertThat(serializedLambda.getImplMethodName(), is("home"));
+        assertThat(serializedLambda.getImplMethodSignature(), is("()Lio/sunflower/ewf/Result;"));
+        assertThat(serializedLambda.getCapturedArgCount(), is(0));
+    }
+
+    @Test
+    public void anonymousClassReference() throws Exception {
+        @SuppressWarnings("Convert2Lambda")
+        ResourceMethod1<Context> lambda = new ResourceMethod1<Context>() {
+            @Override
+            public Result apply(Context a) {
+                return Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
+            }
+        };
+
+        try {
+            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void anonymousMethodReference() throws Exception {
+        ResourceMethod1<Context> lambda = (Context context) -> Results.html()
+                .renderRaw("".getBytes(StandardCharsets.UTF_8));
+
+        Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
+
+        assertThat(lambdaInfo.getKind(), CoreMatchers.is(Lambdas.Kind.ANONYMOUS_METHOD_REFERENCE));
+
+        SerializedLambda serializedLambda = lambdaInfo.getSerializedLambda();
+
+        assertThat(serializedLambda.getFunctionalInterfaceMethodName(), is("apply"));
+        assertThat(serializedLambda.getImplClass().replace('/', '.'),
+                is(LambdasTest.class.getCanonicalName()));
+        assertThat(serializedLambda.getImplMethodName(), startsWith("lambda$"));
+        assertThat(serializedLambda.getInstantiatedMethodType(),
+                is("(Lio/sunflower/ewf/Context;)Lio/sunflower/ewf/Result;"));
+        // includes captured args btw...
+        assertThat(serializedLambda.getImplMethodSignature(),
+                is("(Lio/sunflower/ewf/Context;)Lio/sunflower/ewf/Result;"));
+        assertThat(serializedLambda.getImplMethodKind(), is(6));    // 6 = REF_invokeStatic
+        assertThat(serializedLambda.getCapturedArgCount(), is(0));
+    }
 
 }

@@ -15,16 +15,16 @@
 
 package io.sunflower.ewf.spi.internal;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import com.google.inject.Singleton;
-import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.spi.TemplateEngine;
+import io.sunflower.ewf.support.ResponseStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * @author michael
@@ -32,33 +32,33 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class TemplateEngineText implements TemplateEngine {
 
-  private final Logger logger = LoggerFactory.getLogger(TemplateEngineText.class);
+    private final Logger logger = LoggerFactory.getLogger(TemplateEngineText.class);
 
-  @Override
-  public void invoke(Context context, Result result) {
+    @Override
+    public void invoke(Context context, Result result) {
 
-    ResponseStreams responseStreams = context.finalizeHeaders(result);
+        ResponseStreams responseStreams = context.finalizeHeaders(result);
 
-    try (Writer outputWriter = responseStreams.getWriter()) {
+        try (Writer outputWriter = responseStreams.getWriter()) {
 
-      outputWriter.write(result.getRenderable().toString());
+            outputWriter.write(result.getRenderable().toString());
 
-    } catch (IOException e) {
+        } catch (IOException e) {
 
-      logger.error("Error while rendering plain text", e);
+            logger.error("Error while rendering plain text", e);
+        }
+
+
     }
 
+    @Override
+    public String getContentType() {
+        return Result.TEXT_PLAIN;
+    }
 
-  }
-
-  @Override
-  public String getContentType() {
-    return Result.TEXT_PLAIN;
-  }
-
-  @Override
-  public String getSuffixOfTemplatingEngine() {
-    // intentionally returns null...
-    return null;
-  }
+    @Override
+    public String getSuffixOfTemplatingEngine() {
+        // intentionally returns null...
+        return null;
+    }
 }

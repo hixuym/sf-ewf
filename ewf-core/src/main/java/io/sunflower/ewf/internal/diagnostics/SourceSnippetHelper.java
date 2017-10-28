@@ -15,17 +15,12 @@
 
 package io.sunflower.ewf.internal.diagnostics;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.google.common.base.Charsets;
+
+import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.base.Charsets;
 
 /**
  * Utility class for reading lines (snippet) from a source file.
@@ -35,104 +30,104 @@ import com.google.common.base.Charsets;
  */
 public class SourceSnippetHelper {
 
-  static public SourceSnippet readFromQualifiedSourceCodePath(File baseDirectory,
-      String packageName,
-      String fileName,
-      int lineFrom,
-      int lineTo) throws IOException {
-    // try to find source template as local file
-    if (baseDirectory != null) {
-      File templateFile = new File(
-          baseDirectory.getAbsolutePath()
-              + File.separator
-              + packageName.replace(".", File.separator)
-              + File.separator
-              + fileName);
-      return readFromFile(templateFile, lineFrom, lineTo);
-    }
-
-    return null;
-  }
-
-  static public SourceSnippet readFromRelativeFilePath(File baseDirectory,
-      String templateRelativePath,
-      int lineFrom,
-      int lineTo) throws IOException {
-    // try to find source template as local file
-    if (baseDirectory != null && templateRelativePath != null) {
-      File templateFile = new File(baseDirectory.getAbsolutePath()
-          + File.separator
-          + templateRelativePath);
-      return readFromFile(templateFile, lineFrom, lineTo);
-    }
-
-    return null;
-  }
-
-  static public SourceSnippet readFromFile(File file,
-      int lineFrom,
-      int lineTo) throws IOException {
-    // try to find source as local file
-    if (file != null) {
-      if (file.exists()) {
-        try (FileInputStream fis = new FileInputStream(file)) {
-          URI source = file.toURI();
-          return readFromInputStream(fis, source, lineFrom, lineTo);
+    static public SourceSnippet readFromQualifiedSourceCodePath(File baseDirectory,
+                                                                String packageName,
+                                                                String fileName,
+                                                                int lineFrom,
+                                                                int lineTo) throws IOException {
+        // try to find source template as local file
+        if (baseDirectory != null) {
+            File templateFile = new File(
+                    baseDirectory.getAbsolutePath()
+                            + File.separator
+                            + packageName.replace(".", File.separator)
+                            + File.separator
+                            + fileName);
+            return readFromFile(templateFile, lineFrom, lineTo);
         }
-      }
-    }
 
-    return null;
-  }
-
-  static private SourceSnippet readFromInputStream(InputStream is,
-      URI source,
-      int lineFrom,
-      int lineTo) throws IOException {
-    // did the user provide a strange range (e.g. negative values)?
-    // this sometimes may happen when a range is provided like an error
-    // on line 3 and you want 5 before and 5 after
-    if (lineFrom < 1 && lineTo > 0) {
-      // calculate intended range
-      int intendedRange = lineTo - lineFrom;
-      lineFrom = 1;
-      lineTo = lineFrom + intendedRange;
-    } else if (lineFrom < 0 && lineTo < 0) {
-      if (lineFrom < lineTo) {
-        int intendedRange = -1 * (lineFrom - lineTo);
-        lineFrom = 1;
-        lineTo = lineFrom + intendedRange;
-      } else {
-        // giving up
         return null;
-      }
     }
 
-    BufferedReader in = new BufferedReader(
-        new InputStreamReader(is, Charsets.UTF_8));
-
-    List<String> lines = new ArrayList<>();
-
-    int i = 0;
-    String line;
-    while ((line = in.readLine()) != null) {
-      i++;                        // lines index are 1-based
-      if (i >= lineFrom) {
-        if (i <= lineTo) {
-          lines.add(line);
-        } else {
-          break;
+    static public SourceSnippet readFromRelativeFilePath(File baseDirectory,
+                                                         String templateRelativePath,
+                                                         int lineFrom,
+                                                         int lineTo) throws IOException {
+        // try to find source template as local file
+        if (baseDirectory != null && templateRelativePath != null) {
+            File templateFile = new File(baseDirectory.getAbsolutePath()
+                    + File.separator
+                    + templateRelativePath);
+            return readFromFile(templateFile, lineFrom, lineTo);
         }
-      }
+
+        return null;
     }
 
-    if (lines.isEmpty()) {
-      return null;
+    static public SourceSnippet readFromFile(File file,
+                                             int lineFrom,
+                                             int lineTo) throws IOException {
+        // try to find source as local file
+        if (file != null) {
+            if (file.exists()) {
+                try (FileInputStream fis = new FileInputStream(file)) {
+                    URI source = file.toURI();
+                    return readFromInputStream(fis, source, lineFrom, lineTo);
+                }
+            }
+        }
+
+        return null;
     }
 
-    // since file may not contain enough lines for requested lineTo --
-    // we calculate the actual range here by number read "from" line
-    // since we are inclusive and not zero based we adjust the "from" by 1
-    return new SourceSnippet(source, lines, lineFrom, lineFrom + lines.size() - 1);
-  }
+    static private SourceSnippet readFromInputStream(InputStream is,
+                                                     URI source,
+                                                     int lineFrom,
+                                                     int lineTo) throws IOException {
+        // did the user provide a strange range (e.g. negative values)?
+        // this sometimes may happen when a range is provided like an error
+        // on line 3 and you want 5 before and 5 after
+        if (lineFrom < 1 && lineTo > 0) {
+            // calculate intended range
+            int intendedRange = lineTo - lineFrom;
+            lineFrom = 1;
+            lineTo = lineFrom + intendedRange;
+        } else if (lineFrom < 0 && lineTo < 0) {
+            if (lineFrom < lineTo) {
+                int intendedRange = -1 * (lineFrom - lineTo);
+                lineFrom = 1;
+                lineTo = lineFrom + intendedRange;
+            } else {
+                // giving up
+                return null;
+            }
+        }
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(is, Charsets.UTF_8));
+
+        List<String> lines = new ArrayList<>();
+
+        int i = 0;
+        String line;
+        while ((line = in.readLine()) != null) {
+            i++;                        // lines index are 1-based
+            if (i >= lineFrom) {
+                if (i <= lineTo) {
+                    lines.add(line);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        if (lines.isEmpty()) {
+            return null;
+        }
+
+        // since file may not contain enough lines for requested lineTo --
+        // we calculate the actual range here by number read "from" line
+        // since we are inclusive and not zero based we adjust the "from" by 1
+        return new SourceSnippet(source, lines, lineFrom, lineFrom + lines.size() - 1);
+    }
 }

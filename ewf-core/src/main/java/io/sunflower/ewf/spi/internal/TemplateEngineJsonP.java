@@ -14,22 +14,22 @@
  */
 package io.sunflower.ewf.spi.internal;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.Context;
-import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.spi.TemplateEngine;
+import io.sunflower.ewf.support.ResponseStreams;
+import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.regex.Pattern;
 
 /**
  * JSONP engine. Outputs the given result as JSONP output: Javascript callback with data as a
@@ -45,61 +45,61 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class TemplateEngineJsonP implements TemplateEngine {
 
-  private final Logger logger = LoggerFactory.getLogger(TemplateEngineJsonP.class);
+    private final Logger logger = LoggerFactory.getLogger(TemplateEngineJsonP.class);
 
-  public static final String DEFAULT_CALLBACK_PARAMETER_VALUE = "onResponse";
+    public static final String DEFAULT_CALLBACK_PARAMETER_VALUE = "onResponse";
 
-  static final Pattern CALLBACK_SECURITY_VALIDATION_REGEXP
-      = Pattern.compile("^([a-zA-Z$_]{1}[a-zA-Z0-9$_.]*[a-zA-Z0-9$_]{1}){1,}$");
+    static final Pattern CALLBACK_SECURITY_VALIDATION_REGEXP
+            = Pattern.compile("^([a-zA-Z$_]{1}[a-zA-Z0-9$_.]*[a-zA-Z0-9$_]{1}){1,}$");
 
-  private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-  private final String callbackParameterName;
+    private final String callbackParameterName;
 
-  @Inject
-  public TemplateEngineJsonP(ObjectMapper objectMapper, Settings properties) {
+    @Inject
+    public TemplateEngineJsonP(ObjectMapper objectMapper, Settings properties) {
 
-    this.objectMapper = objectMapper;
-    this.callbackParameterName = properties.getJsonpCallbackParam();
-  }
-
-  @Override
-  public void invoke(Context context, Result result) {
-    ResponseStreams responseStreams = context.finalizeHeaders(result);
-    String callback = getCallbackName(context);
-    try (OutputStream outputStream = responseStreams.getOutputStream()) {
-      objectMapper.writeValue(outputStream, new JSONPObject(callback, result.getRenderable()));
-    } catch (IOException e) {
-      logger.error("Error while rendering jsonp.", e);
+        this.objectMapper = objectMapper;
+        this.callbackParameterName = properties.getJsonpCallbackParam();
     }
-  }
 
-  @Override
-  public String getContentType() {
-    return Result.APPLICATION_JSONP;
-  }
+    @Override
+    public void invoke(Context context, Result result) {
+        ResponseStreams responseStreams = context.finalizeHeaders(result);
+        String callback = getCallbackName(context);
+        try (OutputStream outputStream = responseStreams.getOutputStream()) {
+            objectMapper.writeValue(outputStream, new JSONPObject(callback, result.getRenderable()));
+        } catch (IOException e) {
+            logger.error("Error while rendering jsonp.", e);
+        }
+    }
 
-  @Override
-  public String getSuffixOfTemplatingEngine() {
-    // intentionally returns null...
-    return null;
-  }
+    @Override
+    public String getContentType() {
+        return Result.APPLICATION_JSONP;
+    }
 
-  private String getCallbackName(Context context) {
-    String callback = context
-        .getParameter(this.callbackParameterName, DEFAULT_CALLBACK_PARAMETER_VALUE);
-    return isThisASecureCallbackName(callback) ? callback : DEFAULT_CALLBACK_PARAMETER_VALUE;
-  }
+    @Override
+    public String getSuffixOfTemplatingEngine() {
+        // intentionally returns null...
+        return null;
+    }
 
-  /**
-   * Tests whether the given function name is a valid JSONP function name/path.
-   *
-   * @param callback Callback value to test.
-   * @return Whether the given function name is a valid JSONP function name/path.
-   */
-  public static boolean isThisASecureCallbackName(String callback) {
-    return !Strings.isNullOrEmpty(callback)
-        && !callback.contains("..")
-        && CALLBACK_SECURITY_VALIDATION_REGEXP.matcher(callback).matches();
-  }
+    private String getCallbackName(Context context) {
+        String callback = context
+                .getParameter(this.callbackParameterName, DEFAULT_CALLBACK_PARAMETER_VALUE);
+        return isThisASecureCallbackName(callback) ? callback : DEFAULT_CALLBACK_PARAMETER_VALUE;
+    }
+
+    /**
+     * Tests whether the given function name is a valid JSONP function name/path.
+     *
+     * @param callback Callback value to test.
+     * @return Whether the given function name is a valid JSONP function name/path.
+     */
+    public static boolean isThisASecureCallbackName(String callback) {
+        return !Strings.isNullOrEmpty(callback)
+                && !callback.contains("..")
+                && CALLBACK_SECURITY_VALIDATION_REGEXP.matcher(callback).matches();
+    }
 }

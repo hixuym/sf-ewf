@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.params;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.sunflower.ewf.params.internal.ArgumentExtractors;
 
 /**
  * Inject a session value to a controller method invocation
@@ -32,10 +32,10 @@ import io.sunflower.ewf.params.internal.ArgumentExtractors;
 @Target(ElementType.PARAMETER)
 public @interface SessionParam {
 
-  /**
-   * The key to look up the session value
-   *
-   * @return The key
-   */
-  String value();
+    /**
+     * The key to look up the session value
+     *
+     * @return The key
+     */
+    String value();
 }

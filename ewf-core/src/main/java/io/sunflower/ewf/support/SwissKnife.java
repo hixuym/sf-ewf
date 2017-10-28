@@ -26,40 +26,40 @@ import org.slf4j.LoggerFactory;
  */
 public class SwissKnife {
 
-  private static final Logger logger = LoggerFactory.getLogger(SwissKnife.class);
+    private static final Logger logger = LoggerFactory.getLogger(SwissKnife.class);
 
-  /**
-   * Returns the lower class name. Eg. A class named MyObject will become "myObject".
-   *
-   * @param object Object for which to return the lowerCamelCaseName
-   * @return the lowerCamelCaseName of the Object
-   */
-  public static String getRealClassNameLowerCamelCase(Object object) {
+    /**
+     * Returns the lower class name. Eg. A class named MyObject will become "myObject".
+     *
+     * @param object Object for which to return the lowerCamelCaseName
+     * @return the lowerCamelCaseName of the Object
+     */
+    public static String getRealClassNameLowerCamelCase(Object object) {
 
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, object.getClass().getSimpleName());
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, object.getClass().getSimpleName());
 
-  }
-
-  /**
-   * Used to check whether a class exists on the classpath.
-   *
-   * @param nameWithPackage for instance com.example.conf.GloablFilters
-   * @param instanceToGetClassloaderFrom usually "this" if you call this method.
-   * @return true if class exists, false if not.
-   */
-  public static boolean doesClassExist(String nameWithPackage,
-      Object instanceToGetClassloaderFrom) {
-    boolean exists;
-
-    try {
-      Class.forName(nameWithPackage, false,
-          instanceToGetClassloaderFrom.getClass().getClassLoader());
-      exists = true;
-    } catch (ClassNotFoundException e) {
-      exists = false;
     }
 
-    return exists;
-  }
+    /**
+     * Used to check whether a class exists on the classpath.
+     *
+     * @param nameWithPackage              for instance com.example.conf.GloablFilters
+     * @param instanceToGetClassloaderFrom usually "this" if you call this method.
+     * @return true if class exists, false if not.
+     */
+    public static boolean doesClassExist(String nameWithPackage,
+                                         Object instanceToGetClassloaderFrom) {
+        boolean exists;
+
+        try {
+            Class.forName(nameWithPackage, false,
+                    instanceToGetClassloaderFrom.getClass().getClassLoader());
+            exists = true;
+        } catch (ClassNotFoundException e) {
+            exists = false;
+        }
+
+        return exists;
+    }
 
 }

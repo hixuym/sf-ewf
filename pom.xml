@@ -1,85 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.sunflower</groupId>
-    <artifactId>sunflower</artifactId>
-    <version>1</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-
-  <artifactId>sf-ewf</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
-
-  <packaging>pom</packaging>
-
-  <name>sunflower ewf project</name>
-
-  <url>${ewf.url}</url>
-
-  <description>
-    Sunflower Excellent Web Framework Project.
-  </description>
-
-  <properties>
-    <ewf.url>http://www.sunflower.io/ewf/${project.version}</ewf.url>
-  </properties>
-
-  <scm>
-    <url>https://github.com/hixuym/sf-ewf</url>
-    <connection>scm:git:git@github.com:hixuym/sf-ewf.git</connection>
-    <developerConnection>scm:git:git@github.com:hixuym/sf-ewf.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/hixuym/sf-ewf/issues/</url>
-  </issueManagement>
-
-  <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/sunflower/sf-ewf</url>
-  </ciManagement>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
+    <parent>
         <groupId>io.sunflower</groupId>
-        <artifactId>sf-bom</artifactId>
-        <version>${sf-bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-ewf-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-ewf-assets</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.sunflower</groupId>
-        <artifactId>sf-ewf-undertow</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+        <artifactId>sunflower</artifactId>
+        <version>1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <modules>
-    <module>ewf-core</module>
-    <module>ewf-assets</module>
-    <module>ewf-xml</module>
-    <module>ewf-auth</module>
-    <module>ewf-freemarker</module>
-    <module>ewf-websocket</module>
-    <module>ewf-undertow</module>
-    <module>ewf-archetypes</module>
-  </modules>
+    <artifactId>sf-ewf</artifactId>
+    <version>1.1.1-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <name>sunflower ewf project</name>
+
+    <url>${ewf.url}</url>
+
+    <description>
+        Sunflower Excellent Web Framework Project.
+    </description>
+
+    <properties>
+        <ewf.url>http://www.sunflower.io/ewf/${project.version}</ewf.url>
+    </properties>
+
+    <scm>
+        <url>https://github.com/hixuym/sf-ewf</url>
+        <connection>scm:git:git@github.com:hixuym/sf-ewf.git</connection>
+        <developerConnection>scm:git:git@github.com:hixuym/sf-ewf.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/hixuym/sf-ewf/issues/</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/sunflower/sf-ewf</url>
+    </ciManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-bom</artifactId>
+                <version>${sf-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ewf-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ewf-assets</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ewf-undertow</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ewf-jaxy-routes</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>ewf-core</module>
+        <module>ewf-assets</module>
+        <module>ewf-xml</module>
+        <module>ewf-auth</module>
+        <module>ewf-freemarker</module>
+        <module>ewf-websocket</module>
+        <module>ewf-undertow</module>
+        <module>ewf-jaxy-routes</module>
+        <module>ewf-archetypes</module>
+    </modules>
 
 </project>

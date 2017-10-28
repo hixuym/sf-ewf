@@ -28,17 +28,17 @@ import io.sunflower.ewf.params.internal.ResourceMethodInvoker;
  */
 class FilterChainEnd implements FilterChain {
 
-  private final Provider<?> targetObjectProvider;
-  private final ResourceMethodInvoker resourceMethodInvoker;
+    private final Provider<?> targetObjectProvider;
+    private final ResourceMethodInvoker resourceMethodInvoker;
 
-  FilterChainEnd(Provider<?> targetObjectProvider,
-      ResourceMethodInvoker resourceMethodInvoker) {
-    this.targetObjectProvider = targetObjectProvider;
-    this.resourceMethodInvoker = resourceMethodInvoker;
-  }
+    FilterChainEnd(Provider<?> targetObjectProvider,
+                   ResourceMethodInvoker resourceMethodInvoker) {
+        this.targetObjectProvider = targetObjectProvider;
+        this.resourceMethodInvoker = resourceMethodInvoker;
+    }
 
-  @Override
-  public Result next(Context context) {
-    return (Result) resourceMethodInvoker.invoke(targetObjectProvider.get(), context);
-  }
+    @Override
+    public Result next(Context context) {
+        return (Result) resourceMethodInvoker.invoke(targetObjectProvider.get(), context);
+    }
 }

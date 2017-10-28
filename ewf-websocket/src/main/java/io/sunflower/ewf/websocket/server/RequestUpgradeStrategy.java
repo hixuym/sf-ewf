@@ -16,13 +16,13 @@
 package io.sunflower.ewf.websocket.server;
 
 
-import java.util.List;
-import java.util.Map;
-
-import io.sunflower.ewf.websocket.WebSocketExtension;
-import io.sunflower.ewf.websocket.WebSocketHandler;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
+import io.sunflower.ewf.websocket.WebSocketExtension;
+import io.sunflower.ewf.websocket.WebSocketHandler;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * A server-specific strategy for performing the actual upgrade to a WebSocket exchange.
@@ -32,31 +32,31 @@ import io.sunflower.ewf.Result;
  */
 public interface RequestUpgradeStrategy {
 
-  /**
-   * Return the supported WebSocket protocol versions.
-   */
-  String[] getSupportedVersions();
+    /**
+     * Return the supported WebSocket protocol versions.
+     */
+    String[] getSupportedVersions();
 
-  /**
-   * Return the WebSocket protocol extensions supported by the underlying WebSocket server.
-   */
-  List<WebSocketExtension> getSupportedExtensions(Context context);
+    /**
+     * Return the WebSocket protocol extensions supported by the underlying WebSocket server.
+     */
+    List<WebSocketExtension> getSupportedExtensions(Context context);
 
-  /**
-   * Perform runtime specific steps to complete the upgrade. Invoked after successful negotiation of
-   * the handshake request.
-   *
-   * @param context the current context
-   * @param selectedProtocol the selected sub-protocol, if any
-   * @param selectedExtensions the selected WebSocket protocol extensions
-   * @param wsHandler the handler for WebSocket messages
-   * @param attributes handshake request specific attributes to be set on the WebSocket
-   * @throws HandshakeFailureException thrown when handshake processing failed to complete due to an
-   * internal, unrecoverable error, i.e. a server error as opposed to a failure to successfully
-   * negotiate the requirements of the handshake request.
-   */
-  Result upgrade(Context context,
-      String selectedProtocol, List<WebSocketExtension> selectedExtensions,
-      WebSocketHandler wsHandler, Map<String, Object> attributes) throws HandshakeFailureException;
+    /**
+     * Perform runtime specific steps to complete the upgrade. Invoked after successful negotiation of
+     * the handshake request.
+     *
+     * @param context            the current context
+     * @param selectedProtocol   the selected sub-protocol, if any
+     * @param selectedExtensions the selected WebSocket protocol extensions
+     * @param wsHandler          the handler for WebSocket messages
+     * @param attributes         handshake request specific attributes to be set on the WebSocket
+     * @throws HandshakeFailureException thrown when handshake processing failed to complete due to an
+     *                                   internal, unrecoverable error, i.e. a server error as opposed to a failure to successfully
+     *                                   negotiate the requirements of the handshake request.
+     */
+    Result upgrade(Context context,
+                   String selectedProtocol, List<WebSocketExtension> selectedExtensions,
+                   WebSocketHandler wsHandler, Map<String, Object> attributes) throws HandshakeFailureException;
 
 }

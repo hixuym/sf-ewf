@@ -16,8 +16,8 @@
 package com.example.conf;
 
 import com.example.resources.DummyApplication;
-import io.sunflower.ewf.Router;
 import io.sunflower.ewf.ApplicationRoutes;
+import io.sunflower.ewf.Router;
 
 
 // Just a dummy for testing.
@@ -25,11 +25,11 @@ import io.sunflower.ewf.ApplicationRoutes;
 // works properly.
 public class Routes implements ApplicationRoutes {
 
-  @Override
-  public void init(Router router) {
+    @Override
+    public void init(Router router) {
 
-    router.GET().route("/").with(DummyApplication.class, "dummyMethod");
+        router.GET().route("/").with(DummyApplication.class, "dummyMethod");
 
-  }
+    }
 
 }

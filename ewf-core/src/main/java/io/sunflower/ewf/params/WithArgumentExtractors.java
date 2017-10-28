@@ -30,8 +30,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WithArgumentExtractors {
 
-  /**
-   * The argument extractors that should be used with this annotation
-   */
-  Class<? extends ArgumentExtractor<?>>[] value();
+    /**
+     * The argument extractors that should be used with this annotation
+     */
+    Class<? extends ArgumentExtractor<?>>[] value();
 }

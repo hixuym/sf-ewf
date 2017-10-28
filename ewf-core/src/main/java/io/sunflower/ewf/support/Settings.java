@@ -15,263 +15,271 @@
 
 package io.sunflower.ewf.support;
 
+import com.google.common.base.Splitter;
+import io.sunflower.util.Duration;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Singleton;
-
-import com.google.common.base.Splitter;
-import io.sunflower.ewf.support.Mode;
-import io.sunflower.ewf.support.ModeHelper;
-import io.sunflower.ewf.support.SecretGenerator;
-import io.sunflower.util.Duration;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * ewf framework settings
+ *
  * @author michael
  */
 @Singleton
 public class Settings {
 
-  private String applicationSecret = SecretGenerator.generateSecret();
+    private String applicationSecret = SecretGenerator.generateSecret();
 
-  private List<String> applicationLangs = Arrays.asList("zh", "en");
+    private List<String> applicationLangs = Arrays.asList("zh", "en");
 
-  private String cookieDomain = "sunflower.io";
-  private String cookiePrefix = "ewf_";
-  private boolean cookieEncrypted = false;
+    private String cookieDomain = "sunflower.io";
+    private String cookiePrefix = "ewf_";
+    private boolean cookieEncrypted = false;
 
-  private Duration sessionExpireTime = Duration.hours(1);
-  private boolean sessionSendOnlyIfChanged = true;
-  private boolean sessionTransferredOverHttpsOnly = false;
-  private boolean sessionHttpOnly = true;
+    private Duration sessionExpireTime = Duration.hours(1);
+    private boolean sessionSendOnlyIfChanged = true;
+    private boolean sessionTransferredOverHttpsOnly = false;
+    private boolean sessionHttpOnly = true;
 
-  private Duration tokenExpireTime = Duration.days(7);
+    private Duration tokenExpireTime = Duration.days(7);
 
-  private String httpCacheMaxAge = "3600";
+    private String httpCacheMaxAge = "3600";
 
-  private boolean etagEnable = true;
+    private boolean etagEnable = true;
 
-  private Map<String, String> mimetypes = new HashMap<>();
+    private Map<String, String> mimetypes = new HashMap<>();
 
-  private String uploadTempFolder;
-  private String jsonpCallbackParam = "jsonpCallback";
-  private boolean diagnosticsEnabled = false;
-  private boolean usageOfXForwardedHeaderEnabled = false;
+    private String uploadTempFolder;
+    private String jsonpCallbackParam = "jsonpCallback";
+    private boolean diagnosticsEnabled = false;
+    private boolean usageOfXForwardedHeaderEnabled = false;
 
-  private Mode mode = ModeHelper.determineModeFromSystemPropertiesOrProdIfNotSet();
+    private Mode mode = ModeHelper.determineModeFromSystemPropertiesOrProdIfNotSet();
 
-  private String handlerPath = "/";
+    private String handlerPath = "/";
 
-  private String contextPath = "";
+    private String contextPath = "";
 
-  public Settings() {
-  }
+    private String resourcePkgs = "resources";
 
-  public Settings(Map<String, String> rawSettings) {
-    loadSettings(rawSettings);
-  }
-
-  private static final String HANDLER_PATH_KEY = "ewf.handlerPath";
-  private static final String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
-  private static final String MODE_KEY = "ewf.mode";
-  private static final String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
-  private static final String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
-
-  private void loadSettings(Map<String, String> rawSettings) {
-    if (rawSettings.containsKey(HANDLER_PATH_KEY)) {
-      this.handlerPath = rawSettings.get(HANDLER_PATH_KEY);
+    public Settings() {
     }
 
-    if (rawSettings.containsKey(SF_UNDERTOW_CTX_PATH_KEY)) {
-      String contextPath =
-          StringUtils.removeEnd(rawSettings.get(SF_UNDERTOW_CTX_PATH_KEY), "/");
-
-      String handlerPath = StringUtils.removeEnd(this.handlerPath, "/");
-
-      this.contextPath = contextPath + handlerPath;
+    public Settings(Map<String, String> rawSettings) {
+        loadSettings(rawSettings);
     }
 
-    if (rawSettings.containsKey(MODE_KEY)) {
-      this.mode = Mode.valueOf(rawSettings.get(MODE_KEY));
+    private static final String HANDLER_PATH_KEY = "ewf.handlerPath";
+    private static final String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
+    private static final String MODE_KEY = "ewf.mode";
+    private static final String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
+    private static final String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
+
+    private void loadSettings(Map<String, String> rawSettings) {
+        if (rawSettings.containsKey(HANDLER_PATH_KEY)) {
+            this.handlerPath = rawSettings.get(HANDLER_PATH_KEY);
+        }
+
+        if (rawSettings.containsKey(SF_UNDERTOW_CTX_PATH_KEY)) {
+            String contextPath =
+                    StringUtils.removeEnd(rawSettings.get(SF_UNDERTOW_CTX_PATH_KEY), "/");
+
+            String handlerPath = StringUtils.removeEnd(this.handlerPath, "/");
+
+            this.contextPath = contextPath + handlerPath;
+        }
+
+        if (rawSettings.containsKey(MODE_KEY)) {
+            this.mode = Mode.valueOf(rawSettings.get(MODE_KEY));
+        }
+
+        if (rawSettings.containsKey(UPLOAD_FOLDER_KEY)) {
+            this.uploadTempFolder = rawSettings.get(UPLOAD_FOLDER_KEY);
+        }
+
+        if (rawSettings.containsKey(JSONP_CALLBACK_PARAM_KEY)) {
+            this.jsonpCallbackParam = rawSettings.get(JSONP_CALLBACK_PARAM_KEY);
+        }
+
+        if (rawSettings.containsKey("ewf.resourcePkgs")) {
+            this.resourcePkgs = rawSettings.get("ewf.resourcePkgs");
+        }
+
+        if (rawSettings.containsKey("ewf.diagnosticsEnabled")) {
+            this.diagnosticsEnabled = Boolean.parseBoolean(rawSettings.get("ewf.diagnosticsEnabled"));
+        }
+
+        if (rawSettings.containsKey("ewf.usageOfXForwardedHeaderEnabled")) {
+            this.usageOfXForwardedHeaderEnabled = Boolean
+                    .parseBoolean(rawSettings.get("ewf.usageOfXForwardedHeaderEnabled"));
+        }
+
+        if (rawSettings.containsKey("ewf.etagEnable")) {
+            this.etagEnable = Boolean.parseBoolean(rawSettings.get("ewf.etagEnable"));
+        }
+
+        if (rawSettings.containsKey("ewf.sessionSendOnlyIfChanged")) {
+            this.sessionSendOnlyIfChanged = Boolean
+                    .parseBoolean(rawSettings.get("ewf.sessionSendOnlyIfChanged"));
+        }
+
+        if (rawSettings.containsKey("ewf.sessionTransferredOverHttpsOnly")) {
+            this.sessionTransferredOverHttpsOnly = Boolean
+                    .parseBoolean(rawSettings.get("ewf.sessionTransferredOverHttpsOnly"));
+        }
+
+        if (rawSettings.containsKey("ewf.sessionHttpOnly")) {
+            this.sessionHttpOnly = Boolean.parseBoolean(rawSettings.get("ewf.sessionHttpOnly"));
+        }
+
+        if (rawSettings.containsKey("ewf.cookieEncrypted")) {
+            this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get("ewf.cookieEncrypted"));
+        }
+
+        if (rawSettings.containsKey("ewf.cookiePrefix")) {
+            this.cookiePrefix = rawSettings.get("ewf.cookiePrefix");
+        }
+
+        if (rawSettings.containsKey("ewf.cookieDomain")) {
+            this.cookieDomain = rawSettings.get("ewf.cookieDomain");
+        }
+
+        if (rawSettings.containsKey("ewf.supportedLangs")) {
+            this.applicationLangs = Splitter.on(",")
+                    .omitEmptyStrings()
+                    .trimResults()
+                    .splitToList(rawSettings.get("ewf.supportedLangs"));
+        }
+
+        if (rawSettings.containsKey("ewf.secret")) {
+            this.applicationSecret = rawSettings.get("ewf.secret");
+        }
+
+        if (rawSettings.containsKey("ewf.cacheMaxAge")) {
+            this.httpCacheMaxAge = rawSettings.get("ewf.cacheMaxAge");
+        }
+
+        if (rawSettings.containsKey("ewf.tokenExpireTime")) {
+            this.tokenExpireTime = Duration.parse(rawSettings.get("ewf.tokenExpireTime"));
+        }
+
+        if (rawSettings.containsKey("ewf.sessionExpireTime")) {
+            this.sessionExpireTime = Duration.parse(rawSettings.get("ewf.sessionExpireTime"));
+        }
+
+        for (Map.Entry<String, String> e : rawSettings.entrySet()) {
+            String key = e.getKey();
+            String v = e.getValue();
+
+            if (key.startsWith(PROPERTY_MIMETYPE_PREFIX)) {
+                String type = key.substring(key.indexOf('.') + 1).toLowerCase();
+                String value = rawSettings.get(key);
+                mimetypes.put(type, value);
+            }
+        }
+
     }
 
-    if (rawSettings.containsKey(UPLOAD_FOLDER_KEY)) {
-      this.uploadTempFolder = rawSettings.get(UPLOAD_FOLDER_KEY);
+    public String getContextPath() {
+        return contextPath;
     }
 
-    if (rawSettings.containsKey(JSONP_CALLBACK_PARAM_KEY)) {
-      this.jsonpCallbackParam = rawSettings.get(JSONP_CALLBACK_PARAM_KEY);
+    private static final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
+
+    public String getHandlerPath() {
+        return handlerPath;
     }
 
-    if (rawSettings.containsKey("ewf.diagnosticsEnabled")) {
-      this.diagnosticsEnabled = Boolean.parseBoolean(rawSettings.get("ewf.diagnosticsEnabled"));
+    public String getCookieDomain() {
+        return cookieDomain;
     }
 
-    if (rawSettings.containsKey("ewf.usageOfXForwardedHeaderEnabled")) {
-      this.usageOfXForwardedHeaderEnabled = Boolean
-          .parseBoolean(rawSettings.get("ewf.usageOfXForwardedHeaderEnabled"));
+    public boolean isCookieEncrypted() {
+        return cookieEncrypted;
     }
 
-    if (rawSettings.containsKey("ewf.etagEnable")) {
-      this.etagEnable = Boolean.parseBoolean(rawSettings.get("ewf.etagEnable"));
+    public String getHttpCacheMaxAge() {
+        return httpCacheMaxAge;
     }
 
-    if (rawSettings.containsKey("ewf.sessionSendOnlyIfChanged")) {
-      this.sessionSendOnlyIfChanged = Boolean
-          .parseBoolean(rawSettings.get("ewf.sessionSendOnlyIfChanged"));
+    public String getApplicationSecret() {
+        return applicationSecret;
     }
 
-    if (rawSettings.containsKey("ewf.sessionTransferredOverHttpsOnly")) {
-      this.sessionTransferredOverHttpsOnly = Boolean
-          .parseBoolean(rawSettings.get("ewf.sessionTransferredOverHttpsOnly"));
+    public Duration getSessionExpireTime() {
+        return sessionExpireTime;
     }
 
-    if (rawSettings.containsKey("ewf.sessionHttpOnly")) {
-      this.sessionHttpOnly = Boolean.parseBoolean(rawSettings.get("ewf.sessionHttpOnly"));
+    public boolean isSessionSendOnlyIfChanged() {
+        return sessionSendOnlyIfChanged;
     }
 
-    if (rawSettings.containsKey("ewf.cookieEncrypted")) {
-      this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get("ewf.cookieEncrypted"));
+    public boolean isSessionTransferredOverHttpsOnly() {
+        return sessionTransferredOverHttpsOnly;
     }
 
-    if (rawSettings.containsKey("ewf.cookiePrefix")) {
-      this.cookiePrefix = rawSettings.get("ewf.cookiePrefix");
+    public boolean isSessionHttpOnly() {
+        return sessionHttpOnly;
     }
 
-    if (rawSettings.containsKey("ewf.cookieDomain")) {
-      this.cookieDomain = rawSettings.get("ewf.cookieDomain");
+    public boolean isEtagEnable() {
+        return etagEnable;
     }
 
-    if (rawSettings.containsKey("ewf.supportedLangs")) {
-      this.applicationLangs = Splitter.on(",")
-          .omitEmptyStrings()
-          .trimResults()
-          .splitToList(rawSettings.get("ewf.supportedLangs"));
+    public Map<String, String> getMimetypes() {
+        return mimetypes;
     }
 
-    if (rawSettings.containsKey("ewf.secret")) {
-      this.applicationSecret = rawSettings.get("ewf.secret");
+    public String getUploadTempFolder() {
+        return uploadTempFolder;
     }
 
-    if (rawSettings.containsKey("ewf.cacheMaxAge")) {
-      this.httpCacheMaxAge = rawSettings.get("ewf.cacheMaxAge");
+    public String getJsonpCallbackParam() {
+        return jsonpCallbackParam;
     }
 
-    if (rawSettings.containsKey("ewf.tokenExpireTime")) {
-      this.tokenExpireTime = Duration.parse(rawSettings.get("ewf.tokenExpireTime"));
+    public boolean isDiagnosticsEnabled() {
+        return diagnosticsEnabled;
     }
 
-    if (rawSettings.containsKey("ewf.sessionExpireTime")) {
-      this.sessionExpireTime = Duration.parse(rawSettings.get("ewf.sessionExpireTime"));
+    public String getCookiePrefix() {
+        return cookiePrefix;
     }
 
-    for (Map.Entry<String, String> e : rawSettings.entrySet()) {
-      String key = e.getKey();
-      String v = e.getValue();
-
-      if (key.startsWith(PROPERTY_MIMETYPE_PREFIX)) {
-        String type = key.substring(key.indexOf('.') + 1).toLowerCase();
-        String value = rawSettings.get(key);
-        mimetypes.put(type, value);
-      }
+    public List<String> getApplicationLangs() {
+        return applicationLangs;
     }
 
-  }
+    public boolean isUsageOfXForwardedHeaderEnabled() {
+        return usageOfXForwardedHeaderEnabled;
+    }
 
-  public String getContextPath() {
-    return contextPath;
-  }
+    public boolean isProd() {
+        return Mode.prod == this.mode;
+    }
 
-  private static final String PROPERTY_MIMETYPE_PREFIX = "mimetype.";
+    public boolean isDev() {
+        return this.mode == Mode.dev;
+    }
 
-  public String getHandlerPath() {
-    return handlerPath;
-  }
+    public boolean isTest() {
+        return this.mode == Mode.test;
+    }
 
-  public String getCookieDomain() {
-    return cookieDomain;
-  }
+    public Mode getMode() {
+        return mode;
+    }
 
-  public boolean isCookieEncrypted() {
-    return cookieEncrypted;
-  }
+    public Duration getTokenExpireTime() {
+        return tokenExpireTime;
+    }
 
-  public String getHttpCacheMaxAge() {
-    return httpCacheMaxAge;
-  }
-
-  public String getApplicationSecret() {
-    return applicationSecret;
-  }
-
-  public Duration getSessionExpireTime() {
-    return sessionExpireTime;
-  }
-
-  public boolean isSessionSendOnlyIfChanged() {
-    return sessionSendOnlyIfChanged;
-  }
-
-  public boolean isSessionTransferredOverHttpsOnly() {
-    return sessionTransferredOverHttpsOnly;
-  }
-
-  public boolean isSessionHttpOnly() {
-    return sessionHttpOnly;
-  }
-
-  public boolean isEtagEnable() {
-    return etagEnable;
-  }
-
-  public Map<String, String> getMimetypes() {
-    return mimetypes;
-  }
-
-  public String getUploadTempFolder() {
-    return uploadTempFolder;
-  }
-
-  public String getJsonpCallbackParam() {
-    return jsonpCallbackParam;
-  }
-
-  public boolean isDiagnosticsEnabled() {
-    return diagnosticsEnabled;
-  }
-
-  public String getCookiePrefix() {
-    return cookiePrefix;
-  }
-
-  public List<String> getApplicationLangs() {
-    return applicationLangs;
-  }
-
-  public boolean isUsageOfXForwardedHeaderEnabled() {
-    return usageOfXForwardedHeaderEnabled;
-  }
-
-  public boolean isProd() {
-    return Mode.prod == this.mode;
-  }
-
-  public boolean isDev() {
-    return this.mode == Mode.dev;
-  }
-
-  public boolean isTest() {
-    return this.mode == Mode.test;
-  }
-
-  public Mode getMode() {
-    return mode;
-  }
-
-  public Duration getTokenExpireTime() {
-    return tokenExpireTime;
-  }
+    public String getResourcePkgs() {
+        return resourcePkgs;
+    }
 }

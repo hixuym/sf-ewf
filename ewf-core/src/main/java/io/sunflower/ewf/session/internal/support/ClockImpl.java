@@ -17,9 +17,9 @@ package io.sunflower.ewf.session.internal.support;
 
 public class ClockImpl implements Clock {
 
-  @Override
-  public long currentTimeMillis() {
-    return System.currentTimeMillis();
-  }
+    @Override
+    public long currentTimeMillis() {
+        return System.currentTimeMillis();
+    }
 
 }

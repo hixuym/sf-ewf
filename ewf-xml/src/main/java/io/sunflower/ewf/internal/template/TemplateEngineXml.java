@@ -15,55 +15,58 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import javax.inject.Singleton;
-
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.inject.Inject;
-import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.spi.TemplateEngine;
+import io.sunflower.ewf.support.ResponseStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.io.OutputStream;
+
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineXml implements TemplateEngine {
 
-  private static final Logger logger = LoggerFactory.getLogger(TemplateEngineXml.class);
+    private static final Logger logger = LoggerFactory.getLogger(TemplateEngineXml.class);
 
-  private final XmlMapper xmlMapper;
+    private final XmlMapper xmlMapper;
 
-  @Inject
-  public TemplateEngineXml(XmlMapper xmlMapper) {
+    @Inject
+    public TemplateEngineXml(XmlMapper xmlMapper) {
 
-    this.xmlMapper = xmlMapper;
-  }
-
-  @Override
-  public void invoke(Context context, Result result) {
-
-    ResponseStreams responseStreams = context.finalizeHeaders(result);
-
-    try (OutputStream outputStream = responseStreams.getOutputStream()) {
-
-      xmlMapper.writeValue(outputStream, result.getRenderable());
-
-    } catch (IOException e) {
-
-      logger.error("Error while rendering json", e);
+        this.xmlMapper = xmlMapper;
     }
-  }
 
-  @Override
-  public String getContentType() {
-    return Result.APPLICATION_XML;
-  }
+    @Override
+    public void invoke(Context context, Result result) {
 
-  @Override
-  public String getSuffixOfTemplatingEngine() {
-    // intentionally returns null...
-    return null;
-  }
+        ResponseStreams responseStreams = context.finalizeHeaders(result);
+
+        try (OutputStream outputStream = responseStreams.getOutputStream()) {
+
+            xmlMapper.writeValue(outputStream, result.getRenderable());
+
+        } catch (IOException e) {
+
+            logger.error("Error while rendering json", e);
+        }
+    }
+
+    @Override
+    public String getContentType() {
+        return Result.APPLICATION_XML;
+    }
+
+    @Override
+    public String getSuffixOfTemplatingEngine() {
+        // intentionally returns null...
+        return null;
+    }
 }

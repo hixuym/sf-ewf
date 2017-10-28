@@ -15,54 +15,54 @@
 
 package io.sunflower.ewf.session.internal.support;
 
-import java.nio.charset.StandardCharsets;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import com.google.common.io.BaseEncoding;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.support.Settings;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
 @Singleton
 public class Crypto {
 
-  private final String applicationSecret;
+    private final String applicationSecret;
 
-  /**
-   * Secret is a secret key. Usually something like: "Fxu6U5BTGIJZ06c8bD1xkhHc3Ct5JZXlst8tJ1K5uJJPaLdceDo6CUz0iWpjjQUY".
-   */
-  @Inject
-  public Crypto(Settings configuration) {
-    this.applicationSecret = configuration.getApplicationSecret();
-  }
-
-  public String signHmacSha1(String message) {
-
-    return signHmacSha1(message, applicationSecret);
-
-  }
-
-  private String signHmacSha1(String value, String key) {
-    try {
-
-      // Get an hmac_sha1 key from the raw key bytes
-      byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
-      SecretKeySpec signingKey = new SecretKeySpec(keyBytes, "HmacSHA1");
-
-      // Get an hmac_sha1 Mac instance and initialize with the signing key
-      Mac mac = Mac.getInstance("HmacSHA1");
-      mac.init(signingKey);
-
-      // Compute the hmac on input data bytes
-      byte[] rawHmac = mac.doFinal(value.getBytes(StandardCharsets.UTF_8));
-
-      // Convert raw bytes to Hex
-      // Convert array of Hex bytes to a String
-      return BaseEncoding.base16().lowerCase().encode(rawHmac);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    /**
+     * Secret is a secret key. Usually something like: "Fxu6U5BTGIJZ06c8bD1xkhHc3Ct5JZXlst8tJ1K5uJJPaLdceDo6CUz0iWpjjQUY".
+     */
+    @Inject
+    public Crypto(Settings configuration) {
+        this.applicationSecret = configuration.getApplicationSecret();
     }
-  }
+
+    public String signHmacSha1(String message) {
+
+        return signHmacSha1(message, applicationSecret);
+
+    }
+
+    private String signHmacSha1(String value, String key) {
+        try {
+
+            // Get an hmac_sha1 key from the raw key bytes
+            byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+            SecretKeySpec signingKey = new SecretKeySpec(keyBytes, "HmacSHA1");
+
+            // Get an hmac_sha1 Mac instance and initialize with the signing key
+            Mac mac = Mac.getInstance("HmacSHA1");
+            mac.init(signingKey);
+
+            // Compute the hmac on input data bytes
+            byte[] rawHmac = mac.doFinal(value.getBytes(StandardCharsets.UTF_8));
+
+            // Convert raw bytes to Hex
+            // Convert array of Hex bytes to a String
+            return BaseEncoding.base16().lowerCase().encode(rawHmac);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -21,32 +21,33 @@ import io.sunflower.ewf.params.ParamParser;
 
 /**
  * Argument extractor that parses the String argument into another type
+ *
  * @author michael
  */
 public class ParsingArgumentExtractor<T> implements ArgumentExtractor<T> {
 
-  private final ArgumentExtractor<? extends String> wrapped;
-  private final ParamParser<T> parser;
+    private final ArgumentExtractor<? extends String> wrapped;
+    private final ParamParser<T> parser;
 
-  public ParsingArgumentExtractor(ArgumentExtractor<? extends String> wrapped,
-      ParamParser<T> parser) {
-    this.wrapped = wrapped;
-    this.parser = parser;
-  }
+    public ParsingArgumentExtractor(ArgumentExtractor<? extends String> wrapped,
+                                    ParamParser<T> parser) {
+        this.wrapped = wrapped;
+        this.parser = parser;
+    }
 
-  @Override
-  public T extract(Context context) {
-    return parser.parseParameter(wrapped.getFieldName(), wrapped.extract(context),
-        context.getValidation());
-  }
+    @Override
+    public T extract(Context context) {
+        return parser.parseParameter(wrapped.getFieldName(), wrapped.extract(context),
+                context.getValidation());
+    }
 
-  @Override
-  public Class<T> getExtractedType() {
-    return parser.getParsedType();
-  }
+    @Override
+    public Class<T> getExtractedType() {
+        return parser.getParsedType();
+    }
 
-  @Override
-  public String getFieldName() {
-    return wrapped.getFieldName();
-  }
+    @Override
+    public String getFieldName() {
+        return wrapped.getFieldName();
+    }
 }

@@ -15,87 +15,88 @@
 
 package io.sunflower.ewf;
 
+import io.sunflower.ewf.internal.Route;
+
 import java.util.List;
 import java.util.Optional;
-
-import io.sunflower.ewf.internal.Route;
 
 /**
  * @author michael
  */
 public interface Router {
 
-  /**
-   * Get the route for the given method and URI
-   *
-   * @param httpMethod The method
-   * @param uri The URI
-   * @return The route
-   */
-  Route getRouteFor(String httpMethod, String uri);
+    /**
+     * Get the route for the given method and URI
+     *
+     * @param httpMethod The method
+     * @param uri        The URI
+     * @return The route
+     */
+    Route getRouteFor(String httpMethod, String uri);
 
-  /**
-   * Compile all the routes that have been registered with the router. This should be called once,
-   * during initialization, before the application starts serving requests.
-   */
-  void compileRoutes();
+    /**
+     * Compile all the routes that have been registered with the router. This should be called once,
+     * during initialization, before the application starts serving requests.
+     */
+    void compileRoutes();
 
-  /**
-   * Returns the list of compiled routes.
-   *
-   * @return application routes
-   */
-  List<Route> getRoutes();
+    /**
+     * Returns the list of compiled routes.
+     *
+     * @return application routes
+     */
+    List<Route> getRoutes();
 
-  /**
-   * get route by resource class and method name.
-   * @param resourceClass
-   * @param resourceMethodName
-   * @return optional route
-   */
-  Optional<Route> getRouteForResourceClassAndMethod(
-      Class<?> resourceClass, String resourceMethodName);
+    /**
+     * get route by resource class and method name.
+     *
+     * @param resourceClass
+     * @param resourceMethodName
+     * @return optional route
+     */
+    Optional<Route> getRouteForResourceClassAndMethod(
+            Class<?> resourceClass, String resourceMethodName);
 
-  /**
-   * convenience methods to use the route in a DSL like way router.GET().route("/index").with(.....)
-   */
-  RouteBuilder GET();
+    /**
+     * convenience methods to use the route in a DSL like way router.GET().route("/index").with(.....)
+     */
+    RouteBuilder GET();
 
-  /**
-   * return websocket route builder
-   */
-  RouteBuilder WS();
+    /**
+     * return websocket route builder
+     */
+    RouteBuilder WS();
 
-  /**
-   * return post method route builder
-   */
-  RouteBuilder POST();
+    /**
+     * return post method route builder
+     */
+    RouteBuilder POST();
 
-  /**
-   * get put method route builder
-   */
-  RouteBuilder PUT();
+    /**
+     * get put method route builder
+     */
+    RouteBuilder PUT();
 
-  /**
-   * get delete method route builder
-   */
-  RouteBuilder DELETE();
+    /**
+     * get delete method route builder
+     */
+    RouteBuilder DELETE();
 
-  /**
-   * get options method route builder
-   */
-  RouteBuilder OPTIONS();
+    /**
+     * get options method route builder
+     */
+    RouteBuilder OPTIONS();
 
-  /**
-   * get head method route builder
-   */
-  RouteBuilder HEAD();
+    /**
+     * get head method route builder
+     */
+    RouteBuilder HEAD();
 
-  /**
-   * To match any http method. E.g. METHOD("PROPFIND") would route PROPFIND methods.
-   *
-   * @param method The http method like "GET" or "PROPFIND"
-   * @return the routeBuilder for chaining.
-   */
-  RouteBuilder METHOD(String method);
+    /**
+     * To match any http method. E.g. METHOD("PROPFIND") would route PROPFIND methods.
+     *
+     * @param method The http method like "GET" or "PROPFIND"
+     * @return the routeBuilder for chaining.
+     */
+    RouteBuilder METHOD(String method);
 }

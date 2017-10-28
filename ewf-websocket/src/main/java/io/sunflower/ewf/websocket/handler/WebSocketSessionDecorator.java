@@ -15,12 +15,6 @@
 
 package io.sunflower.ewf.websocket.handler;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ListMultimap;
 import io.sunflower.ewf.websocket.CloseStatus;
@@ -28,9 +22,15 @@ import io.sunflower.ewf.websocket.WebSocketExtension;
 import io.sunflower.ewf.websocket.WebSocketMessage;
 import io.sunflower.ewf.websocket.WebSocketSession;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Wraps another {@link WebSocketSession} instance and delegates to it.
- *
+ * <p>
  * <p>Also provides a {@link #getDelegate()} method to return the decorated session as well as a
  * {@link #getLastSession()} method to go through all nested delegates and return the "last"
  * session.
@@ -40,122 +40,122 @@ import io.sunflower.ewf.websocket.WebSocketSession;
  */
 public class WebSocketSessionDecorator implements WebSocketSession {
 
-  private final WebSocketSession delegate;
+    private final WebSocketSession delegate;
 
-  public WebSocketSessionDecorator(WebSocketSession session) {
-    Preconditions.checkNotNull(session, "Delegate WebSocketSessionSession is required");
-    this.delegate = session;
-  }
-
-
-  public WebSocketSession getDelegate() {
-    return this.delegate;
-  }
-
-  public WebSocketSession getLastSession() {
-    WebSocketSession result = this.delegate;
-    while (result instanceof WebSocketSessionDecorator) {
-      result = ((WebSocketSessionDecorator) result).getDelegate();
+    public WebSocketSessionDecorator(WebSocketSession session) {
+        Preconditions.checkNotNull(session, "Delegate WebSocketSessionSession is required");
+        this.delegate = session;
     }
-    return result;
-  }
 
-  public static WebSocketSession unwrap(WebSocketSession session) {
-    if (session instanceof WebSocketSessionDecorator) {
-      return ((WebSocketSessionDecorator) session).getLastSession();
-    } else {
-      return session;
+
+    public WebSocketSession getDelegate() {
+        return this.delegate;
     }
-  }
 
-  @Override
-  public String getId() {
-    return this.delegate.getId();
-  }
+    public WebSocketSession getLastSession() {
+        WebSocketSession result = this.delegate;
+        while (result instanceof WebSocketSessionDecorator) {
+            result = ((WebSocketSessionDecorator) result).getDelegate();
+        }
+        return result;
+    }
 
-  @Override
-  public String getUri() {
-    return this.delegate.getUri();
-  }
+    public static WebSocketSession unwrap(WebSocketSession session) {
+        if (session instanceof WebSocketSessionDecorator) {
+            return ((WebSocketSessionDecorator) session).getLastSession();
+        } else {
+            return session;
+        }
+    }
 
-  @Override
-  public ListMultimap<String, String> getHandshakeHeaders() {
-    return delegate.getHandshakeHeaders();
-  }
+    @Override
+    public String getId() {
+        return this.delegate.getId();
+    }
 
-  @Override
-  public Map<String, Object> getAttributes() {
-    return this.delegate.getAttributes();
-  }
+    @Override
+    public String getUri() {
+        return this.delegate.getUri();
+    }
 
-  @Override
-  public Principal getPrincipal() {
-    return this.delegate.getPrincipal();
-  }
+    @Override
+    public ListMultimap<String, String> getHandshakeHeaders() {
+        return delegate.getHandshakeHeaders();
+    }
 
-  @Override
-  public InetSocketAddress getLocalAddress() {
-    return this.delegate.getLocalAddress();
-  }
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.delegate.getAttributes();
+    }
 
-  @Override
-  public InetSocketAddress getRemoteAddress() {
-    return this.delegate.getRemoteAddress();
-  }
+    @Override
+    public Principal getPrincipal() {
+        return this.delegate.getPrincipal();
+    }
 
-  @Override
-  public String getAcceptedProtocol() {
-    return this.delegate.getAcceptedProtocol();
-  }
+    @Override
+    public InetSocketAddress getLocalAddress() {
+        return this.delegate.getLocalAddress();
+    }
 
-  @Override
-  public void setTextMessageSizeLimit(int messageSizeLimit) {
-    this.delegate.setTextMessageSizeLimit(messageSizeLimit);
-  }
+    @Override
+    public InetSocketAddress getRemoteAddress() {
+        return this.delegate.getRemoteAddress();
+    }
 
-  @Override
-  public int getTextMessageSizeLimit() {
-    return this.delegate.getTextMessageSizeLimit();
-  }
+    @Override
+    public String getAcceptedProtocol() {
+        return this.delegate.getAcceptedProtocol();
+    }
 
-  @Override
-  public void setBinaryMessageSizeLimit(int messageSizeLimit) {
-    this.delegate.setBinaryMessageSizeLimit(messageSizeLimit);
-  }
+    @Override
+    public void setTextMessageSizeLimit(int messageSizeLimit) {
+        this.delegate.setTextMessageSizeLimit(messageSizeLimit);
+    }
 
-  @Override
-  public int getBinaryMessageSizeLimit() {
-    return this.delegate.getBinaryMessageSizeLimit();
-  }
+    @Override
+    public int getTextMessageSizeLimit() {
+        return this.delegate.getTextMessageSizeLimit();
+    }
 
-  @Override
-  public boolean isOpen() {
-    return this.delegate.isOpen();
-  }
+    @Override
+    public void setBinaryMessageSizeLimit(int messageSizeLimit) {
+        this.delegate.setBinaryMessageSizeLimit(messageSizeLimit);
+    }
 
-  @Override
-  public void sendMessage(WebSocketMessage<?> message) throws IOException {
-    this.delegate.sendMessage(message);
-  }
+    @Override
+    public int getBinaryMessageSizeLimit() {
+        return this.delegate.getBinaryMessageSizeLimit();
+    }
 
-  @Override
-  public List<WebSocketExtension> getServices() {
-    return this.delegate.getServices();
-  }
+    @Override
+    public boolean isOpen() {
+        return this.delegate.isOpen();
+    }
 
-  @Override
-  public void close() throws IOException {
-    this.delegate.close();
-  }
+    @Override
+    public void sendMessage(WebSocketMessage<?> message) throws IOException {
+        this.delegate.sendMessage(message);
+    }
 
-  @Override
-  public void close(CloseStatus status) throws IOException {
-    this.delegate.close(status);
-  }
+    @Override
+    public List<WebSocketExtension> getServices() {
+        return this.delegate.getServices();
+    }
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + " [delegate=" + this.delegate + "]";
-  }
+    @Override
+    public void close() throws IOException {
+        this.delegate.close();
+    }
+
+    @Override
+    public void close(CloseStatus status) throws IOException {
+        this.delegate.close(status);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [delegate=" + this.delegate + "]";
+    }
 
 }

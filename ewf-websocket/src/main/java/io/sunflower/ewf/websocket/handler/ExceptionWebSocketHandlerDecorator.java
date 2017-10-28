@@ -15,9 +15,9 @@
 
 package io.sunflower.ewf.websocket.handler;
 
-import io.sunflower.ewf.websocket.WebSocketMessage;
 import io.sunflower.ewf.websocket.CloseStatus;
 import io.sunflower.ewf.websocket.WebSocketHandler;
+import io.sunflower.ewf.websocket.WebSocketMessage;
 import io.sunflower.ewf.websocket.WebSocketSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,66 +33,66 @@ import org.slf4j.LoggerFactory;
  */
 public class ExceptionWebSocketHandlerDecorator extends WebSocketHandlerDecorator {
 
-  private static final Logger logger = LoggerFactory
-      .getLogger(ExceptionWebSocketHandlerDecorator.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(ExceptionWebSocketHandlerDecorator.class);
 
 
-  public ExceptionWebSocketHandlerDecorator(WebSocketHandler delegate) {
-    super(delegate);
-  }
-
-
-  @Override
-  public void afterConnectionEstablished(WebSocketSession session) {
-    try {
-      getDelegate().afterConnectionEstablished(session);
-    } catch (Throwable ex) {
-      tryCloseWithError(session, ex, logger);
+    public ExceptionWebSocketHandlerDecorator(WebSocketHandler delegate) {
+        super(delegate);
     }
-  }
-
-  @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) {
-    try {
-      getDelegate().handleMessage(session, message);
-    } catch (Throwable ex) {
-      tryCloseWithError(session, ex, logger);
-    }
-  }
-
-  @Override
-  public void handleTransportError(WebSocketSession session, Throwable exception) {
-    try {
-      getDelegate().handleTransportError(session, exception);
-    } catch (Throwable ex) {
-      tryCloseWithError(session, ex, logger);
-    }
-  }
-
-  @Override
-  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
-    try {
-      getDelegate().afterConnectionClosed(session, closeStatus);
-    } catch (Throwable ex) {
-      if (logger.isErrorEnabled()) {
-        logger.error("Unhandled error for " + this, ex);
-      }
-    }
-  }
 
 
-  public static void tryCloseWithError(WebSocketSession session, Throwable exception,
-      Logger logger) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Closing due to exception for " + session, exception);
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+        try {
+            getDelegate().afterConnectionEstablished(session);
+        } catch (Throwable ex) {
+            tryCloseWithError(session, ex, logger);
+        }
     }
-    if (session.isOpen()) {
-      try {
-        session.close(CloseStatus.SERVER_ERROR);
-      } catch (Throwable ex) {
-        // ignore
-      }
+
+    @Override
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) {
+        try {
+            getDelegate().handleMessage(session, message);
+        } catch (Throwable ex) {
+            tryCloseWithError(session, ex, logger);
+        }
     }
-  }
+
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) {
+        try {
+            getDelegate().handleTransportError(session, exception);
+        } catch (Throwable ex) {
+            tryCloseWithError(session, ex, logger);
+        }
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
+        try {
+            getDelegate().afterConnectionClosed(session, closeStatus);
+        } catch (Throwable ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Unhandled error for " + this, ex);
+            }
+        }
+    }
+
+
+    public static void tryCloseWithError(WebSocketSession session, Throwable exception,
+                                         Logger logger) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Closing due to exception for " + session, exception);
+        }
+        if (session.isOpen()) {
+            try {
+                session.close(CloseStatus.SERVER_ERROR);
+            } catch (Throwable ex) {
+                // ignore
+            }
+        }
+    }
 
 }

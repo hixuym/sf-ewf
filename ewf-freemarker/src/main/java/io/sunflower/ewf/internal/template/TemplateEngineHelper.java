@@ -25,43 +25,43 @@ import io.sunflower.ewf.internal.Route;
  */
 public class TemplateEngineHelper {
 
-  public String getTemplateForResult(Route route, Result result, String suffix) {
-    if (result.getTemplate() == null) {
-      Class resourceClass = route.getResourceClass();
+    public String getTemplateForResult(Route route, Result result, String suffix) {
+        if (result.getTemplate() == null) {
+            Class resourceClass = route.getResourceClass();
 
-      // Calculate the correct path of the template.
-      // We always assume the template in the subdir "views"
+            // Calculate the correct path of the template.
+            // We always assume the template in the subdir "views"
 
-      // 1) If we are in the main project =>
-      // /resources/ResourceName
-      // to
-      // /views/ResourceName/templateName.ftl.html
-      // 2) If we are in a plugin / subproject
-      // =>
-      // /resources/some/packages/submoduleName/ResourceName
-      // to
-      // views/some/packages/submoduleName/ResourceName/templateName.ftl.html
+            // 1) If we are in the main project =>
+            // /resources/ResourceName
+            // to
+            // /views/ResourceName/templateName.ftl.html
+            // 2) If we are in a plugin / subproject
+            // =>
+            // /resources/some/packages/submoduleName/ResourceName
+            // to
+            // views/some/packages/submoduleName/ResourceName/templateName.ftl.html
 
-      // So let's calculate the parent package of the resource:
-      String resourcePackageName = resourceClass.getPackage().getName();
-      // This results in something like resources or
-      // some.package.resources
+            // So let's calculate the parent package of the resource:
+            String resourcePackageName = resourceClass.getPackage().getName();
+            // This results in something like resources or
+            // some.package.resources
 
-      // Replace resource prefix with views prefix
-      String parentPackageOfResource = resourcePackageName
-          .replaceFirst("resources", "views");
+            // Replace resource prefix with views prefix
+            String parentPackageOfResource = resourcePackageName
+                    .replaceFirst("resources", "views");
 
-      // And now we rewrite everything from "." notation to directories /
-      String parentResourcePackageAsPath = parentPackageOfResource
-          .replaceAll("\\.", "/");
+            // And now we rewrite everything from "." notation to directories /
+            String parentResourcePackageAsPath = parentPackageOfResource
+                    .replaceAll("\\.", "/");
 
-      // and the final path of the controller will be something like:
-      // views/some/package/submoduleName/ResourceName/templateName.ftl.html
-      return String.format("/%s/%s/%s%s", parentResourcePackageAsPath,
-          resourceClass.getSimpleName(), route.getResourceMethod().getName(), suffix);
-    } else {
-      return result.getTemplate();
+            // and the final path of the controller will be something like:
+            // views/some/package/submoduleName/ResourceName/templateName.ftl.html
+            return String.format("/%s/%s/%s%s", parentResourcePackageAsPath,
+                    resourceClass.getSimpleName(), route.getResourceMethod().getName(), suffix);
+        } else {
+            return result.getTemplate();
+        }
     }
-  }
 
 }

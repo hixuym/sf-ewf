@@ -23,9 +23,10 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ClockImpl.class)
 public interface Clock {
 
-  /**
-   * current time millis
-   * @return
-   */
-  long currentTimeMillis();
+    /**
+     * current time millis
+     *
+     * @return
+     */
+    long currentTimeMillis();
 }

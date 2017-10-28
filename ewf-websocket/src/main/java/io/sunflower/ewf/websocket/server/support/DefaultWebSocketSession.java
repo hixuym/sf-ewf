@@ -15,23 +15,18 @@
 
 package io.sunflower.ewf.websocket.server.support;
 
+import com.google.common.collect.ArrayListMultimap;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.websocket.*;
+import io.sunflower.ewf.websocket.handler.AbstractWebSocketSession;
+import io.undertow.websockets.core.CloseMessage;
+import io.undertow.websockets.core.WebSocketChannel;
+import io.undertow.websockets.core.WebSockets;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.ArrayListMultimap;
-import io.sunflower.ewf.websocket.BinaryMessage;
-import io.sunflower.ewf.websocket.CloseStatus;
-import io.sunflower.ewf.websocket.PingMessage;
-import io.sunflower.ewf.websocket.PongMessage;
-import io.sunflower.ewf.websocket.TextMessage;
-import io.sunflower.ewf.websocket.WebSocketExtension;
-import io.sunflower.ewf.websocket.handler.AbstractWebSocketSession;
-import io.sunflower.ewf.Context;
-import io.undertow.websockets.core.CloseMessage;
-import io.undertow.websockets.core.WebSocketChannel;
-import io.undertow.websockets.core.WebSockets;
 
 /**
  * DefaultWebSocketSession
@@ -41,71 +36,71 @@ import io.undertow.websockets.core.WebSockets;
  */
 public class DefaultWebSocketSession extends AbstractWebSocketSession {
 
-  public DefaultWebSocketSession(Map<String, Object> attributes,
-      String acceptProtocol,
-      List<WebSocketExtension> extensions,
-      WebSocketChannel channel, Context context) {
-    super(attributes);
-    this.channel = channel;
-    this.context = context;
-    this.acceptedProtocol = acceptProtocol;
-    this.extensions = extensions;
-  }
-
-  private Context context;
-  private WebSocketChannel channel;
-
-  @Override
-  protected void init() {
-    this.id = channel.toString();
-
-    this.headers = ArrayListMultimap.create();
-
-    for (Map.Entry<String, List<String>> e : context.getHeaders().entrySet()) {
-      headers.putAll(e.getKey(), e.getValue());
+    public DefaultWebSocketSession(Map<String, Object> attributes,
+                                   String acceptProtocol,
+                                   List<WebSocketExtension> extensions,
+                                   WebSocketChannel channel, Context context) {
+        super(attributes);
+        this.channel = channel;
+        this.context = context;
+        this.acceptedProtocol = acceptProtocol;
+        this.extensions = extensions;
     }
 
-    this.uri = channel.getUrl();
-  }
+    private Context context;
+    private WebSocketChannel channel;
 
-  @Override
-  protected void sendTextMessage(TextMessage message) throws IOException {
-    WebSockets.sendText(message.getPayload(), channel, null);
-  }
+    @Override
+    protected void init() {
+        this.id = channel.toString();
 
-  @Override
-  protected void sendBinaryMessage(BinaryMessage message) throws IOException {
-    WebSockets.sendBinary(message.getPayload(), channel, null);
-  }
+        this.headers = ArrayListMultimap.create();
 
-  @Override
-  protected void sendPingMessage(PingMessage message) throws IOException {
-    WebSockets.sendPing(message.getPayload(), channel, null);
-  }
+        for (Map.Entry<String, List<String>> e : context.getHeaders().entrySet()) {
+            headers.putAll(e.getKey(), e.getValue());
+        }
 
-  @Override
-  protected void sendPongMessage(PongMessage message) throws IOException {
-    WebSockets.sendPong(message.getPayload(), channel, null);
-  }
+        this.uri = channel.getUrl();
+    }
 
-  @Override
-  protected void closeInternal(CloseStatus status) throws IOException {
-    CloseMessage closeMessage = new CloseMessage(status.getCode(), status.getReason());
-    WebSockets.sendClose(closeMessage, channel, null);
-  }
+    @Override
+    protected void sendTextMessage(TextMessage message) throws IOException {
+        WebSockets.sendText(message.getPayload(), channel, null);
+    }
 
-  @Override
-  public InetSocketAddress getLocalAddress() {
-    return channel.getLocalAddress(InetSocketAddress.class);
-  }
+    @Override
+    protected void sendBinaryMessage(BinaryMessage message) throws IOException {
+        WebSockets.sendBinary(message.getPayload(), channel, null);
+    }
 
-  @Override
-  public InetSocketAddress getRemoteAddress() {
-    return channel.getPeerAddress(InetSocketAddress.class);
-  }
+    @Override
+    protected void sendPingMessage(PingMessage message) throws IOException {
+        WebSockets.sendPing(message.getPayload(), channel, null);
+    }
 
-  @Override
-  public boolean isOpen() {
-    return channel.isOpen();
-  }
+    @Override
+    protected void sendPongMessage(PongMessage message) throws IOException {
+        WebSockets.sendPong(message.getPayload(), channel, null);
+    }
+
+    @Override
+    protected void closeInternal(CloseStatus status) throws IOException {
+        CloseMessage closeMessage = new CloseMessage(status.getCode(), status.getReason());
+        WebSockets.sendClose(closeMessage, channel, null);
+    }
+
+    @Override
+    public InetSocketAddress getLocalAddress() {
+        return channel.getLocalAddress(InetSocketAddress.class);
+    }
+
+    @Override
+    public InetSocketAddress getRemoteAddress() {
+        return channel.getPeerAddress(InetSocketAddress.class);
+    }
+
+    @Override
+    public boolean isOpen() {
+        return channel.isOpen();
+    }
 }

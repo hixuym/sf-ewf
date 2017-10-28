@@ -15,25 +15,16 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.inject.Binding;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import io.sunflower.ewf.spi.TemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * @author michael
@@ -41,89 +32,89 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class TemplateEngineManagerImpl implements TemplateEngineManager {
 
-  private final Logger logger = LoggerFactory.getLogger(TemplateEngineManagerImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(TemplateEngineManagerImpl.class);
 
-  /**
-   * Keep a reference of providers rather than instances, so template engines don't have to be
-   * singleton if they don't want
-   */
-  private final Map<String, Provider<? extends TemplateEngine>> contentTypeToTemplateEngineMap;
+    /**
+     * Keep a reference of providers rather than instances, so template engines don't have to be
+     * singleton if they don't want
+     */
+    private final Map<String, Provider<? extends TemplateEngine>> contentTypeToTemplateEngineMap;
 
-  @Inject
-  public TemplateEngineManagerImpl(Injector injector) {
+    @Inject
+    public TemplateEngineManagerImpl(Injector injector) {
 
-    Map<String, Provider<? extends TemplateEngine>> map = new HashMap<>();
+        Map<String, Provider<? extends TemplateEngine>> map = new HashMap<>();
 
-    // Now lookup all explicit bindings, and find the ones that implement
-    // TemplateEngine
-    for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
-      if (TemplateEngine.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType())) {
-        Provider<? extends TemplateEngine> provider = (Provider) binding.getValue().getProvider();
-        map.put(provider.get().getContentType(), provider);
-      }
+        // Now lookup all explicit bindings, and find the ones that implement
+        // TemplateEngine
+        for (Map.Entry<Key<?>, Binding<?>> binding : injector.getBindings().entrySet()) {
+            if (TemplateEngine.class.isAssignableFrom(binding.getKey().getTypeLiteral().getRawType())) {
+                Provider<? extends TemplateEngine> provider = (Provider) binding.getValue().getProvider();
+                map.put(provider.get().getContentType(), provider);
+            }
+        }
+
+        this.contentTypeToTemplateEngineMap = ImmutableMap.copyOf(map);
+
+        logTemplateEngines();
     }
 
-    this.contentTypeToTemplateEngineMap = ImmutableMap.copyOf(map);
-
-    logTemplateEngines();
-  }
-
-  @Override
-  public Set<String> getContentTypes() {
-    return ImmutableSet.copyOf(contentTypeToTemplateEngineMap.keySet());
-  }
-
-  @Override
-  public TemplateEngine getTemplateEngineForContentType(String contentType) {
-    Provider<? extends TemplateEngine> provider = contentTypeToTemplateEngineMap.get(contentType);
-
-    if (provider != null) {
-      return provider.get();
-    } else {
-      return null;
-    }
-  }
-
-  private void logTemplateEngines() {
-    List<String> outputTypes = Lists.newArrayList(getContentTypes());
-    Collections.sort(outputTypes);
-
-    if (outputTypes.isEmpty()) {
-
-      logger.error("No registered template engines?! Please install a template module!");
-      return;
-
+    @Override
+    public Set<String> getContentTypes() {
+        return ImmutableSet.copyOf(contentTypeToTemplateEngineMap.keySet());
     }
 
-    int maxContentTypeLen = 0;
-    int maxTemplateEngineLen = 0;
+    @Override
+    public TemplateEngine getTemplateEngineForContentType(String contentType) {
+        Provider<? extends TemplateEngine> provider = contentTypeToTemplateEngineMap.get(contentType);
 
-    for (String contentType : outputTypes) {
-
-      TemplateEngine templateEngine = getTemplateEngineForContentType(contentType);
-
-      maxContentTypeLen = Math.max(maxContentTypeLen,
-          contentType.length());
-      maxTemplateEngineLen = Math.max(maxTemplateEngineLen,
-          templateEngine.getClass().getName().length());
-
+        if (provider != null) {
+            return provider.get();
+        } else {
+            return null;
+        }
     }
 
-    int borderLen = 6 + maxContentTypeLen + maxTemplateEngineLen;
-    String border = Strings.padEnd("", borderLen, '-');
+    private void logTemplateEngines() {
+        List<String> outputTypes = Lists.newArrayList(getContentTypes());
+        Collections.sort(outputTypes);
 
-    logger.info(border);
-    logger.info("Registered response template engines");
-    logger.info(border);
+        if (outputTypes.isEmpty()) {
 
-    for (String contentType : outputTypes) {
+            logger.error("No registered template engines?! Please install a template module!");
+            return;
 
-      TemplateEngine templateEngine = getTemplateEngineForContentType(contentType);
-      logger.info("{}  =>  {}",
-          Strings.padEnd(contentType, maxContentTypeLen, ' '),
-          templateEngine.getClass().getName());
+        }
+
+        int maxContentTypeLen = 0;
+        int maxTemplateEngineLen = 0;
+
+        for (String contentType : outputTypes) {
+
+            TemplateEngine templateEngine = getTemplateEngineForContentType(contentType);
+
+            maxContentTypeLen = Math.max(maxContentTypeLen,
+                    contentType.length());
+            maxTemplateEngineLen = Math.max(maxTemplateEngineLen,
+                    templateEngine.getClass().getName().length());
+
+        }
+
+        int borderLen = 6 + maxContentTypeLen + maxTemplateEngineLen;
+        String border = Strings.padEnd("", borderLen, '-');
+
+        logger.info(border);
+        logger.info("Registered response template engines");
+        logger.info(border);
+
+        for (String contentType : outputTypes) {
+
+            TemplateEngine templateEngine = getTemplateEngineForContentType(contentType);
+            logger.info("{}  =>  {}",
+                    Strings.padEnd(contentType, maxContentTypeLen, ' '),
+                    templateEngine.getClass().getName());
+
+        }
 
     }
-
-  }
 }

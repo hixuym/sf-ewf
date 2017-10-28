@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.internal.diagnostics;
 
-import java.net.URI;
-import java.util.List;
-
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Renderable;
 import io.sunflower.ewf.Result;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * Represents an application error/exception that includes extra information in order to diagnose
@@ -31,73 +31,73 @@ import io.sunflower.ewf.Result;
  */
 public class DiagnosticError implements Renderable {
 
-  private final String title;
-  private final Throwable throwable;
-  /**
-   * can either be from jar, classpath, or file
-   */
-  private final URI sourceLocation;
-  private final List<String> sourceLines;
-  private final int lineNumberOfSourceLines;
-  private final int lineNumberOfError;
-  // underlying result
-  private final Result underlyingResult;
+    private final String title;
+    private final Throwable throwable;
+    /**
+     * can either be from jar, classpath, or file
+     */
+    private final URI sourceLocation;
+    private final List<String> sourceLines;
+    private final int lineNumberOfSourceLines;
+    private final int lineNumberOfError;
+    // underlying result
+    private final Result underlyingResult;
 
-  public DiagnosticError(String title,
-      Throwable throwable,
-      Result underlyingResult) {
-    // error with no source found
-    this(title, throwable, null, null, -1, -1, underlyingResult);
-  }
+    public DiagnosticError(String title,
+                           Throwable throwable,
+                           Result underlyingResult) {
+        // error with no source found
+        this(title, throwable, null, null, -1, -1, underlyingResult);
+    }
 
-  public DiagnosticError(String title,
-      Throwable throwable,
-      URI sourceLocation,
-      List<String> sourceLines,
-      int lineNumberOfSourceLines,
-      int lineNumberOfError,
-      Result underlyingResult) {
-    this.throwable = throwable;
-    this.title = title;
-    this.sourceLocation = sourceLocation;
-    this.sourceLines = sourceLines;
-    this.lineNumberOfSourceLines = lineNumberOfSourceLines;
-    this.lineNumberOfError = lineNumberOfError;
-    this.underlyingResult = underlyingResult;
-  }
+    public DiagnosticError(String title,
+                           Throwable throwable,
+                           URI sourceLocation,
+                           List<String> sourceLines,
+                           int lineNumberOfSourceLines,
+                           int lineNumberOfError,
+                           Result underlyingResult) {
+        this.throwable = throwable;
+        this.title = title;
+        this.sourceLocation = sourceLocation;
+        this.sourceLines = sourceLines;
+        this.lineNumberOfSourceLines = lineNumberOfSourceLines;
+        this.lineNumberOfError = lineNumberOfError;
+        this.underlyingResult = underlyingResult;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public Throwable getThrowable() {
-    return throwable;
-  }
+    public Throwable getThrowable() {
+        return throwable;
+    }
 
-  public URI getSourceLocation() {
-    return sourceLocation;
-  }
+    public URI getSourceLocation() {
+        return sourceLocation;
+    }
 
-  public List<String> getSourceLines() {
-    return sourceLines;
-  }
+    public List<String> getSourceLines() {
+        return sourceLines;
+    }
 
-  public int getLineNumberOfSourceLines() {
-    return lineNumberOfSourceLines;
-  }
+    public int getLineNumberOfSourceLines() {
+        return lineNumberOfSourceLines;
+    }
 
-  public int getLineNumberOfError() {
-    return lineNumberOfError;
-  }
+    public int getLineNumberOfError() {
+        return lineNumberOfError;
+    }
 
-  public Result getUnderlyingResult() {
-    return underlyingResult;
-  }
+    public Result getUnderlyingResult() {
+        return underlyingResult;
+    }
 
-  @Override
-  public void render(Context context, Result result) {
-    DiagnosticErrorRenderer
-        .tryToRender(context, result, this, true);
-  }
+    @Override
+    public void render(Context context, Result result) {
+        DiagnosticErrorRenderer
+                .tryToRender(context, result, this, true);
+    }
 
 }

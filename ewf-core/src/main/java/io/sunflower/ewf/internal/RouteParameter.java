@@ -25,85 +25,85 @@ import java.util.regex.Matcher;
  */
 public class RouteParameter {
 
-  /**
-   * eg. {id: [0-9]+} index of where token starts
-   */
-  private final int index;
-  /**
-   * "{id: [0-9]+}"
-   */
-  private final String token;
-  /**
-   * "id"
-   */
-  private final String name;
-  /**
-   * "[0-9]+"
-   */
-  private final String regex;
+    /**
+     * eg. {id: [0-9]+} index of where token starts
+     */
+    private final int index;
+    /**
+     * "{id: [0-9]+}"
+     */
+    private final String token;
+    /**
+     * "id"
+     */
+    private final String name;
+    /**
+     * "[0-9]+"
+     */
+    private final String regex;
 
-  public RouteParameter(int index, String token, String name, String regex) {
-    this.index = index;
-    this.token = token;
-    this.name = name;
-    this.regex = regex;
-  }
-
-  /**
-   * Gets the index of where the token starts in the original uri.
-   *
-   * @return An index of where the token is
-   */
-  public int getIndex() {
-    return index;
-  }
-
-  /**
-   * The exact string of the parameter such as "{id: [0-9]+}" in "{id: [0-9]+}"
-   *
-   * @return The parameter token
-   */
-  public String getToken() {
-    return token;
-  }
-
-  /**
-   * The name of the parameter such as "id" in "{id: [0-9]+}"
-   *
-   * @return The name of the parameter
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * The regex of the parameter such as "[0-9]+" in "{id: [0-9]+}"
-   *
-   * @return The regex of the parameter or null if no regex was included for the parameter.
-   */
-  public String getRegex() {
-    return regex;
-  }
-
-  /**
-   * Parse a path such as "/user/{id: [0-9]+}/email/{addr}" for the named parameters.
-   *
-   * @param path The path to parse
-   * @return A map containing the named parameters in the order they were parsed or null if no
-   * parameters were parsed.
-   */
-  static public Map<String, RouteParameter> parse(String path) {
-    Map<String, RouteParameter> params = new LinkedHashMap<>();
-
-    // extract any named parameters
-    Matcher matcher = Route.PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE.matcher(path);
-    while (matcher.find()) {
-      RouteParameter param = new RouteParameter(
-          matcher.start(0), matcher.group(0), matcher.group(1), matcher.group(3));
-      params.put(param.getName(), param);
+    public RouteParameter(int index, String token, String name, String regex) {
+        this.index = index;
+        this.token = token;
+        this.name = name;
+        this.regex = regex;
     }
 
-    return params;
-  }
+    /**
+     * Gets the index of where the token starts in the original uri.
+     *
+     * @return An index of where the token is
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * The exact string of the parameter such as "{id: [0-9]+}" in "{id: [0-9]+}"
+     *
+     * @return The parameter token
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * The name of the parameter such as "id" in "{id: [0-9]+}"
+     *
+     * @return The name of the parameter
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * The regex of the parameter such as "[0-9]+" in "{id: [0-9]+}"
+     *
+     * @return The regex of the parameter or null if no regex was included for the parameter.
+     */
+    public String getRegex() {
+        return regex;
+    }
+
+    /**
+     * Parse a path such as "/user/{id: [0-9]+}/email/{addr}" for the named parameters.
+     *
+     * @param path The path to parse
+     * @return A map containing the named parameters in the order they were parsed or null if no
+     * parameters were parsed.
+     */
+    static public Map<String, RouteParameter> parse(String path) {
+        Map<String, RouteParameter> params = new LinkedHashMap<>();
+
+        // extract any named parameters
+        Matcher matcher = Route.PATTERN_FOR_VARIABLE_PARTS_OF_ROUTE.matcher(path);
+        while (matcher.find()) {
+            RouteParameter param = new RouteParameter(
+                    matcher.start(0), matcher.group(0), matcher.group(1), matcher.group(3));
+            params.put(param.getName(), param);
+        }
+
+        return params;
+    }
 
 }

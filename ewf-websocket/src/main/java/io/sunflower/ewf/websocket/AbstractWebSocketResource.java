@@ -15,26 +15,22 @@
 
 package io.sunflower.ewf.websocket;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import io.sunflower.ewf.Context;
+import io.sunflower.ewf.Result;
+import io.sunflower.ewf.websocket.handler.AbstractWebSocketHandler;
+import io.sunflower.ewf.websocket.server.*;
+import io.sunflower.ewf.websocket.server.support.DefaultHandshakeHandler;
+import io.sunflower.ewf.websocket.server.support.DefaultRequestUpgradeStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import io.sunflower.ewf.websocket.server.HandshakeFailureException;
-import io.sunflower.ewf.websocket.server.HandshakeInterceptorChain;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.Result;
-import io.sunflower.ewf.websocket.handler.AbstractWebSocketHandler;
-import io.sunflower.ewf.websocket.server.HandshakeHandler;
-import io.sunflower.ewf.websocket.server.HandshakeInterceptor;
-import io.sunflower.ewf.websocket.server.RequestUpgradeStrategy;
-import io.sunflower.ewf.websocket.server.support.DefaultHandshakeHandler;
-import io.sunflower.ewf.websocket.server.support.DefaultRequestUpgradeStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -42,69 +38,69 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractWebSocketResource extends AbstractWebSocketHandler {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-  private Set<WebSocketSession> sessions =
-      Collections.newSetFromMap(new ConcurrentHashMap<WebSocketSession, Boolean>());
+    private Set<WebSocketSession> sessions =
+            Collections.newSetFromMap(new ConcurrentHashMap<WebSocketSession, Boolean>());
 
-  private final HandshakeHandler handshakeHandler;
+    private final HandshakeHandler handshakeHandler;
 
-  private final List<HandshakeInterceptor> interceptors = Lists.newArrayList();
+    private final List<HandshakeInterceptor> interceptors = Lists.newArrayList();
 
-  public AbstractWebSocketResource() {
-    RequestUpgradeStrategy requestUpgradeStrategy = new DefaultRequestUpgradeStrategy(sessions);
-    this.handshakeHandler = new DefaultHandshakeHandler(requestUpgradeStrategy);
-  }
-
-  public AbstractWebSocketResource(HandshakeHandler handshakeHandler) {
-    this.handshakeHandler = handshakeHandler;
-  }
-
-  protected void addHandshakeInterceptor(HandshakeInterceptor interceptor) {
-    interceptors.add(interceptor);
-  }
-
-  public Result handshake(Context context) {
-
-    WebSocketHandler handler = this;
-
-    HandshakeInterceptorChain chain = new HandshakeInterceptorChain(this.interceptors, handler);
-
-    HandshakeFailureException failure = null;
-
-    try {
-      if (logger.isDebugEnabled()) {
-        logger.debug(context.getMethod() + " " + context.getRequestPath());
-      }
-
-      Map<String, Object> attributes = Maps.newHashMap();
-
-      if (!chain.applyBeforeHandshake(context, attributes)) {
-        return null;
-      }
-
-      try {
-        return this.handshakeHandler.doHandshake(context, handler, attributes);
-      } finally {
-        chain.applyAfterHandshake(context, null);
-        context.cleanup();
-      }
-    } catch (HandshakeFailureException ex) {
-      failure = ex;
-    } catch (Throwable ex) {
-      failure = new HandshakeFailureException(
-          "Uncaught failure for request " + context.getRoute().getUri(), ex);
-    } finally {
-      if (failure != null) {
-        chain.applyAfterHandshake(context, failure);
-        throw failure;
-      }
+    public AbstractWebSocketResource() {
+        RequestUpgradeStrategy requestUpgradeStrategy = new DefaultRequestUpgradeStrategy(sessions);
+        this.handshakeHandler = new DefaultHandshakeHandler(requestUpgradeStrategy);
     }
 
-    return null;
-  }
+    public AbstractWebSocketResource(HandshakeHandler handshakeHandler) {
+        this.handshakeHandler = handshakeHandler;
+    }
 
-  protected Set<WebSocketSession> getSessions() {
-    return sessions;
-  }
+    protected void addHandshakeInterceptor(HandshakeInterceptor interceptor) {
+        interceptors.add(interceptor);
+    }
+
+    public Result handshake(Context context) {
+
+        WebSocketHandler handler = this;
+
+        HandshakeInterceptorChain chain = new HandshakeInterceptorChain(this.interceptors, handler);
+
+        HandshakeFailureException failure = null;
+
+        try {
+            if (logger.isDebugEnabled()) {
+                logger.debug(context.getMethod() + " " + context.getRequestPath());
+            }
+
+            Map<String, Object> attributes = Maps.newHashMap();
+
+            if (!chain.applyBeforeHandshake(context, attributes)) {
+                return null;
+            }
+
+            try {
+                return this.handshakeHandler.doHandshake(context, handler, attributes);
+            } finally {
+                chain.applyAfterHandshake(context, null);
+                context.cleanup();
+            }
+        } catch (HandshakeFailureException ex) {
+            failure = ex;
+        } catch (Throwable ex) {
+            failure = new HandshakeFailureException(
+                    "Uncaught failure for request " + context.getRoute().getUri(), ex);
+        } finally {
+            if (failure != null) {
+                chain.applyAfterHandshake(context, failure);
+                throw failure;
+            }
+        }
+
+        return null;
+    }
+
+    protected Set<WebSocketSession> getSessions() {
+        return sessions;
+    }
 }

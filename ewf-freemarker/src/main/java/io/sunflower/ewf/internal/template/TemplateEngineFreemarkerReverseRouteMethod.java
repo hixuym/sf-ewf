@@ -15,31 +15,31 @@
 
 package io.sunflower.ewf.internal.template;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
+import java.util.List;
+
 @Singleton
 public class TemplateEngineFreemarkerReverseRouteMethod implements
-    TemplateMethodModelEx {
+        TemplateMethodModelEx {
 
-  private final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
+    private final TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper;
 
-  @Inject
-  public TemplateEngineFreemarkerReverseRouteMethod(
-      TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper) {
+    @Inject
+    public TemplateEngineFreemarkerReverseRouteMethod(
+            TemplateEngineFreemarkerReverseRouteHelper templateEngineFreemarkerReverseRouteHelper) {
 
-    this.templateEngineFreemarkerReverseRouteHelper = templateEngineFreemarkerReverseRouteHelper;
+        this.templateEngineFreemarkerReverseRouteHelper = templateEngineFreemarkerReverseRouteHelper;
 
-  }
+    }
 
-  public TemplateModel exec(List args) throws TemplateModelException {
+    public TemplateModel exec(List args) throws TemplateModelException {
 
-    return templateEngineFreemarkerReverseRouteHelper.computeReverseRoute(args);
+        return templateEngineFreemarkerReverseRouteHelper.computeReverseRoute(args);
 
-  }
+    }
 }

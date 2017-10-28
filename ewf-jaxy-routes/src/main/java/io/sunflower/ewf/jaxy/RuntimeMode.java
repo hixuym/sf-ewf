@@ -12,17 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.sunflower.ewf.jaxy;
 
-package io.sunflower.ewf.auth;
+import io.sunflower.ewf.support.Mode;
 
-import javax.inject.Singleton;
+import java.lang.annotation.*;
 
 /**
- * TokenResource
- *
- * @author michael created on 17/10/27 16:16
+ * @author James Moger
  */
-@Singleton
-public class TokenResource {
+@Target(ElementType.ANNOTATION_TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface RuntimeMode {
 
+    /**
+     * Specifies the runtime mode for the route.
+     */
+    Mode value();
 }

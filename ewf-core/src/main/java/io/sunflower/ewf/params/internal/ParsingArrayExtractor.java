@@ -17,36 +17,36 @@ package io.sunflower.ewf.params.internal;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.params.ArgumentExtractor;
-import io.sunflower.ewf.params.internal.ParamParsers;
 
 /**
  * Argument extractor that parses the String[] argument into a X[]
+ *
  * @author michael
  */
 public class ParsingArrayExtractor<X> implements ArgumentExtractor<X> {
 
-  private final ArgumentExtractor<? extends String[]> wrapped;
-  private final ParamParsers.ArrayParamParser<?> parser;
+    private final ArgumentExtractor<? extends String[]> wrapped;
+    private final ParamParsers.ArrayParamParser<?> parser;
 
-  public ParsingArrayExtractor(ArgumentExtractor<? extends String[]> wrapped,
-      ParamParsers.ArrayParamParser<?> parser) {
-    this.wrapped = wrapped;
-    this.parser = parser;
-  }
+    public ParsingArrayExtractor(ArgumentExtractor<? extends String[]> wrapped,
+                                 ParamParsers.ArrayParamParser<?> parser) {
+        this.wrapped = wrapped;
+        this.parser = parser;
+    }
 
-  @Override
-  public X extract(Context context) {
-    return (X) parser.parseParameter(wrapped.getFieldName(), wrapped.extract(context),
-        context.getValidation());
-  }
+    @Override
+    public X extract(Context context) {
+        return (X) parser.parseParameter(wrapped.getFieldName(), wrapped.extract(context),
+                context.getValidation());
+    }
 
-  @Override
-  public Class<X> getExtractedType() {
-    return (Class<X>) parser.getArrayType();
-  }
+    @Override
+    public Class<X> getExtractedType() {
+        return (Class<X>) parser.getArrayType();
+    }
 
-  @Override
-  public String getFieldName() {
-    return wrapped.getFieldName();
-  }
+    @Override
+    public String getFieldName() {
+        return wrapped.getFieldName();
+    }
 }

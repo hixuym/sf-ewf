@@ -15,10 +15,6 @@
 
 package io.sunflower.ewf.undertow;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
 import com.google.inject.Injector;
 import io.sunflower.ewf.spi.RouteHandler;
 import io.sunflower.ewf.support.Settings;
@@ -28,6 +24,10 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.form.EagerFormParsingHandler;
 import io.undertow.server.handlers.form.FormParserFactory;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+
 /**
  * EwfHttpHandlerProvider
  *
@@ -36,28 +36,28 @@ import io.undertow.server.handlers.form.FormParserFactory;
 @Singleton
 public class EwfHttpHandlerProvider implements Provider<HttpHandler> {
 
-  private final Injector injector;
-  private final Settings settings;
-  private final RouteHandler routeHandler;
-  private final StandardThreadExecutor executor;
+    private final Injector injector;
+    private final Settings settings;
+    private final RouteHandler routeHandler;
+    private final StandardThreadExecutor executor;
 
-  @Inject
-  public EwfHttpHandlerProvider(Injector injector, Settings settings,
-      RouteHandler routeHandler, StandardThreadExecutor executor) {
-    this.injector = injector;
-    this.settings = settings;
-    this.routeHandler = routeHandler;
-    this.executor = executor;
-  }
+    @Inject
+    public EwfHttpHandlerProvider(Injector injector, Settings settings,
+                                  RouteHandler routeHandler, StandardThreadExecutor executor) {
+        this.injector = injector;
+        this.settings = settings;
+        this.routeHandler = routeHandler;
+        this.executor = executor;
+    }
 
-  @Override
-  public HttpHandler get() {
-    HttpHandler h = new EwfHttpHandler(injector, settings, routeHandler);
-    // then eagerly parse form data (which is then included as an attachment)
-    FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-    formParserFactoryBuilder.setDefaultCharset("utf-8");
-    h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
+    @Override
+    public HttpHandler get() {
+        HttpHandler h = new EwfHttpHandler(injector, settings, routeHandler);
+        // then eagerly parse form data (which is then included as an attachment)
+        FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
+        formParserFactoryBuilder.setDefaultCharset("utf-8");
+        h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
 
-    return new StandardThreadExecutorBlockingHandler(executor, h);
-  }
+        return new StandardThreadExecutorBlockingHandler(executor, h);
+    }
 }

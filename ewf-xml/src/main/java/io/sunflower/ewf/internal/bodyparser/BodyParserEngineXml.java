@@ -15,8 +15,6 @@
 
 package io.sunflower.ewf.internal.bodyparser;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -26,6 +24,8 @@ import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.spi.BodyParserEngine;
+
+import java.io.IOException;
 
 /**
  * Built in Xml body parser.
@@ -37,27 +37,27 @@ import io.sunflower.ewf.spi.BodyParserEngine;
 @Singleton
 public class BodyParserEngineXml implements BodyParserEngine {
 
-  private final XmlMapper xmlMapper;
+    private final XmlMapper xmlMapper;
 
-  @Inject
-  public BodyParserEngineXml(XmlMapper xmlMapper) {
-    this.xmlMapper = xmlMapper;
-  }
-
-  @Override
-  public <T> T invoke(Context context, Class<T> classOfT) {
-    try {
-      return xmlMapper.readValue(context.getInputStream(), classOfT);
-    } catch (JsonParseException | JsonMappingException e) {
-      throw new BadRequestException("Error parsing incoming Xml", e);
-    } catch (IOException e) {
-      throw new BadRequestException("Invalid Xml document", e);
+    @Inject
+    public BodyParserEngineXml(XmlMapper xmlMapper) {
+        this.xmlMapper = xmlMapper;
     }
-  }
 
-  @Override
-  public String getContentType() {
-    return Result.APPLICATION_XML;
-  }
+    @Override
+    public <T> T invoke(Context context, Class<T> classOfT) {
+        try {
+            return xmlMapper.readValue(context.getInputStream(), classOfT);
+        } catch (JsonParseException | JsonMappingException e) {
+            throw new BadRequestException("Error parsing incoming Xml", e);
+        } catch (IOException e) {
+            throw new BadRequestException("Invalid Xml document", e);
+        }
+    }
+
+    @Override
+    public String getContentType() {
+        return Result.APPLICATION_XML;
+    }
 
 }

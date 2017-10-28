@@ -17,10 +17,10 @@ package io.sunflower.ewf;
 
 /**
  * A simple filter that can be applied to controller methods or while classes.
- *
+ * <p>
  * usually you use <code>@FilterWith(MyFilter.class)</code> where MyFilter.class is implementing
  * this interface.
- *
+ * <p>
  * <code>@FilterWith</code> works also with multiple filter <code>@FilterWith({MyFirstFilter.class,
  * MySecondFilter.class})</code>
  *
@@ -28,13 +28,13 @@ package io.sunflower.ewf;
  */
 public interface Filter {
 
-  /**
-   * Filter the request. Filters should invoke the filterChain.nextFilter() method if they wish the
-   * request to proceed.
-   *
-   * @param filterChain The filter chain
-   * @param context The context
-   * @return Result filter result
-   */
-  Result filter(FilterChain filterChain, Context context);
+    /**
+     * Filter the request. Filters should invoke the filterChain.nextFilter() method if they wish the
+     * request to proceed.
+     *
+     * @param filterChain The filter chain
+     * @param context     The context
+     * @return Result filter result
+     */
+    Result filter(FilterChain filterChain, Context context);
 }

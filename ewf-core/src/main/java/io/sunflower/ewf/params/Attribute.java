@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.params;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.sunflower.ewf.params.internal.ArgumentExtractors;
 
 /**
  * Injects an attribute value into a controller method invocation.
@@ -32,5 +32,5 @@ import io.sunflower.ewf.params.internal.ArgumentExtractors;
 @Target({ElementType.PARAMETER})
 public @interface Attribute {
 
-  String value();
+    String value();
 }

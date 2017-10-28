@@ -15,9 +15,6 @@
 
 package io.sunflower.ewf.support;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,39 +22,42 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class MimeTypesTest {
 
-  @Mock
-  private Settings configuration;
+    @Mock
+    private Settings configuration;
 
-  @Before
-  public void setup() {
+    @Before
+    public void setup() {
 
-    // mock some mime types
-    when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("custom", "application/custom"));
-  }
+        // mock some mime types
+        when(configuration.getMimetypes()).thenReturn(ImmutableMap.of("custom", "application/custom"));
+    }
 
-  @Test
-  public void testLoadingWorks() {
+    @Test
+    public void testLoadingWorks() {
 
-    MimeTypes mimeTypes = new MimeTypes(configuration);
+        MimeTypes mimeTypes = new MimeTypes(configuration);
 
-    // some random tests that come from the built in mime types:
-    assertEquals("application/vnd.ms-cab-compressed",
-        mimeTypes.getMimeType("superfilename.cab"));
+        // some random tests that come from the built in mime types:
+        assertEquals("application/vnd.ms-cab-compressed",
+                mimeTypes.getMimeType("superfilename.cab"));
 
-    assertEquals("application/vndms-pkiseccat",
-        mimeTypes.getMimeType("superfilename.cat"));
+        assertEquals("application/vndms-pkiseccat",
+                mimeTypes.getMimeType("superfilename.cat"));
 
-    assertEquals("text/x-c", mimeTypes.getMimeType("superfilename.cc"));
+        assertEquals("text/x-c", mimeTypes.getMimeType("superfilename.cc"));
 
-    assertEquals("application/clariscad",
-        mimeTypes.getMimeType("superfilename.ccad"));
+        assertEquals("application/clariscad",
+                mimeTypes.getMimeType("superfilename.ccad"));
 
-    assertEquals("application/custom",
-        mimeTypes.getMimeType("superfilename.custom"));
+        assertEquals("application/custom",
+                mimeTypes.getMimeType("superfilename.custom"));
 
-  }
+    }
 
 }

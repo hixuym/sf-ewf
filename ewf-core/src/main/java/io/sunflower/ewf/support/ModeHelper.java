@@ -15,76 +15,76 @@
 
 package io.sunflower.ewf.support;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 public class ModeHelper {
 
-  static Logger logger = LoggerFactory.getLogger(ModeHelper.class);
+    static Logger logger = LoggerFactory.getLogger(ModeHelper.class);
 
-  /**
-   * returns an empty Optional<Mode> if no mode is set. Or the valid mode set via a System Property
-   * called "ninja.mode".
-   *
-   * E.g. under mvn you can use mvn ... -Dninja.mode=prod or so. ValidBean values for ninja.mode are
-   * "prod", "dev", "test".
-   *
-   * @return The valid mode set via a System Property called "ninja.mode" or Optional absent if we
-   * cannot get one.
-   */
-  public static Optional<Mode> determineModeFromSystemProperties() {
+    /**
+     * returns an empty Optional<Mode> if no mode is set. Or the valid mode set via a System Property
+     * called "ninja.mode".
+     * <p>
+     * E.g. under mvn you can use mvn ... -Dninja.mode=prod or so. ValidBean values for ninja.mode are
+     * "prod", "dev", "test".
+     *
+     * @return The valid mode set via a System Property called "ninja.mode" or Optional absent if we
+     * cannot get one.
+     */
+    public static Optional<Mode> determineModeFromSystemProperties() {
 
-    Mode mode = null;
+        Mode mode = null;
 
-    // Get mode possibly set via a system property
-    String modeFromGetSystemProperty = System.getProperty("ewf.mode");
+        // Get mode possibly set via a system property
+        String modeFromGetSystemProperty = System.getProperty("ewf.mode");
 
-    // If the user specified a mode we set the mode accordingly:
-    if (modeFromGetSystemProperty != null) {
+        // If the user specified a mode we set the mode accordingly:
+        if (modeFromGetSystemProperty != null) {
 
-      if (modeFromGetSystemProperty.equals("test")) {
+            if (modeFromGetSystemProperty.equals("test")) {
 
-        mode = Mode.test;
+                mode = Mode.test;
 
-      } else if (modeFromGetSystemProperty.equals("dev")) {
+            } else if (modeFromGetSystemProperty.equals("dev")) {
 
-        mode = Mode.dev;
+                mode = Mode.dev;
 
-      } else if (modeFromGetSystemProperty.equals("prod")) {
+            } else if (modeFromGetSystemProperty.equals("prod")) {
 
-        mode = Mode.prod;
+                mode = Mode.prod;
 
-      }
+            }
+
+        }
+
+        return Optional.ofNullable(mode);
 
     }
 
-    return Optional.ofNullable(mode);
+    /**
+     * returns Mode.dev if no mode is set. Or the valid mode set via a System Property called
+     * "ninja.mode".
+     * <p>
+     * E.g. under mvn you can use mvn ... -Dewf.mode=prod or so. ValidBean values for ninja.mode are
+     * "prod", "dev", "test".
+     *
+     * @return The valid mode set via a System Property called "ninja.mode" or Mode.dev if it is not
+     * set.
+     */
+    public static Mode determineModeFromSystemPropertiesOrProdIfNotSet() {
 
-  }
+        Optional<Mode> modeOptional = determineModeFromSystemProperties();
+        Mode mode;
 
-  /**
-   * returns Mode.dev if no mode is set. Or the valid mode set via a System Property called
-   * "ninja.mode".
-   *
-   * E.g. under mvn you can use mvn ... -Dewf.mode=prod or so. ValidBean values for ninja.mode are
-   * "prod", "dev", "test".
-   *
-   * @return The valid mode set via a System Property called "ninja.mode" or Mode.dev if it is not
-   * set.
-   */
-  public static Mode determineModeFromSystemPropertiesOrProdIfNotSet() {
+        mode = modeOptional.orElse(Mode.prod);
 
-    Optional<Mode> modeOptional = determineModeFromSystemProperties();
-    Mode mode;
+        logger.info("ewf is running in mode {}", mode.toString());
 
-    mode = modeOptional.orElse(Mode.prod);
+        return mode;
 
-    logger.info("ewf is running in mode {}", mode.toString());
-
-    return mode;
-
-  }
+    }
 
 }

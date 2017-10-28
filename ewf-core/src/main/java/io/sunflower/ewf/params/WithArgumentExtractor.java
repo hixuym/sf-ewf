@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WithArgumentExtractor {
 
-  /**
-   * The argument extractor that should be used with this annotation
-   */
-  Class<? extends ArgumentExtractor<?>> value();
+    /**
+     * The argument extractor that should be used with this annotation
+     */
+    Class<? extends ArgumentExtractor<?>> value();
 }

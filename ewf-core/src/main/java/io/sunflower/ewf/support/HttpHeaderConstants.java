@@ -20,14 +20,14 @@ package io.sunflower.ewf.support;
  */
 public interface HttpHeaderConstants {
 
-  String IF_NONE_MATCH = "If-None-Match";
+    String IF_NONE_MATCH = "If-None-Match";
 
-  String IF_MODIFIED_SINCE = "If-Modified-Since";
+    String IF_MODIFIED_SINCE = "If-Modified-Since";
 
-  String CACHE_CONTROL = "Cache-Control";
+    String CACHE_CONTROL = "Cache-Control";
 
-  String ETAG = "ETag";
+    String ETAG = "ETag";
 
-  String LAST_MODIFIED = "Last-Modified";
+    String LAST_MODIFIED = "Last-Modified";
 
 }

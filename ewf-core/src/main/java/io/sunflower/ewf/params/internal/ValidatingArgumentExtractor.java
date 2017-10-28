@@ -15,11 +15,11 @@
 
 package io.sunflower.ewf.params.internal;
 
-import java.util.List;
-
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.params.ArgumentExtractor;
 import io.sunflower.ewf.validation.Validator;
+
+import java.util.List;
 
 /**
  * Argument extractor that wraps another argument extractor and validates its argument
@@ -28,42 +28,42 @@ import io.sunflower.ewf.validation.Validator;
  */
 public class ValidatingArgumentExtractor<T> implements ArgumentExtractor<T> {
 
-  private final ArgumentExtractor<T> wrapped;
-  private final List<Validator<T>> validators;
+    private final ArgumentExtractor<T> wrapped;
+    private final List<Validator<T>> validators;
 
-  public ValidatingArgumentExtractor(ArgumentExtractor<T> wrapped, List<Validator<T>> validators) {
-    this.wrapped = wrapped;
-    this.validators = validators;
-  }
-
-  @Override
-  public T extract(Context context) {
-    final T value = this.wrapped.extract(context);
-    // Check if we already have a validation error from a previous stage
-    if (context.getValidation().hasViolation(this.wrapped.getFieldName())) {
-      return value;
+    public ValidatingArgumentExtractor(ArgumentExtractor<T> wrapped, List<Validator<T>> validators) {
+        this.wrapped = wrapped;
+        this.validators = validators;
     }
-    // Apply validators
-    for (Validator<T> validator : this.validators) {
-      validator.validate(value, this.wrapped.getFieldName(), context);
-      if (context.getValidation().hasViolation(this.wrapped.getFieldName())) {
-        // Break if validation failed
-        break;
-      }
+
+    @Override
+    public T extract(Context context) {
+        final T value = this.wrapped.extract(context);
+        // Check if we already have a validation error from a previous stage
+        if (context.getValidation().hasViolation(this.wrapped.getFieldName())) {
+            return value;
+        }
+        // Apply validators
+        for (Validator<T> validator : this.validators) {
+            validator.validate(value, this.wrapped.getFieldName(), context);
+            if (context.getValidation().hasViolation(this.wrapped.getFieldName())) {
+                // Break if validation failed
+                break;
+            }
+        }
+        // Note that it is important that we return the value regardless of the outcome
+        // of validation, because in the case of primitive types, if we return null,
+        // the method won't be executed.
+        return value;
     }
-    // Note that it is important that we return the value regardless of the outcome
-    // of validation, because in the case of primitive types, if we return null,
-    // the method won't be executed.
-    return value;
-  }
 
-  @Override
-  public Class<T> getExtractedType() {
-    return this.wrapped.getExtractedType();
-  }
+    @Override
+    public Class<T> getExtractedType() {
+        return this.wrapped.getExtractedType();
+    }
 
-  @Override
-  public String getFieldName() {
-    return this.wrapped.getFieldName();
-  }
+    @Override
+    public String getFieldName() {
+        return this.wrapped.getFieldName();
+    }
 }

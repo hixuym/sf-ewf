@@ -15,29 +15,29 @@
 
 package io.sunflower.ewf.params;
 
+import io.sunflower.ewf.params.internal.ArgumentExtractors;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.sunflower.ewf.params.internal.ArgumentExtractors;
-
 /**
  * Injects a multi-valued parameter right into the methods...
- *
+ * <p>
  * This equals context.getParameterValues(...)
  *
  * @author James Moger
  */
 @WithArgumentExtractor(ArgumentExtractors.ParamsExtractor.class)
 @WithArgumentExtractors({
-    ArgumentExtractors.FileItemParamsExtractor.class,
-    ArgumentExtractors.FileParamsExtractor.class,
-    ArgumentExtractors.InputStreamParamsExtractor.class
+        ArgumentExtractors.FileItemParamsExtractor.class,
+        ArgumentExtractors.FileParamsExtractor.class,
+        ArgumentExtractors.InputStreamParamsExtractor.class
 })
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
 public @interface Params {
 
-  String value();
+    String value();
 }

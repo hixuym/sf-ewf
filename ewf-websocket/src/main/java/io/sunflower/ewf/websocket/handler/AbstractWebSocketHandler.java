@@ -15,15 +15,9 @@
 
 package io.sunflower.ewf.websocket.handler;
 
-import java.io.IOException;
+import io.sunflower.ewf.websocket.*;
 
-import io.sunflower.ewf.websocket.BinaryMessage;
-import io.sunflower.ewf.websocket.PongMessage;
-import io.sunflower.ewf.websocket.TextMessage;
-import io.sunflower.ewf.websocket.WebSocketMessage;
-import io.sunflower.ewf.websocket.WebSocketSession;
-import io.sunflower.ewf.websocket.CloseStatus;
-import io.sunflower.ewf.websocket.WebSocketHandler;
+import java.io.IOException;
 
 /**
  * A convenient base class for {@link WebSocketHandler} implementation with empty methods.
@@ -34,44 +28,44 @@ import io.sunflower.ewf.websocket.WebSocketHandler;
  */
 public abstract class AbstractWebSocketHandler implements WebSocketHandler {
 
-  @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
-    if (message instanceof TextMessage) {
-      handleTextMessage(session, (TextMessage) message);
-    } else if (message instanceof BinaryMessage) {
-      handleBinaryMessage(session, (BinaryMessage) message);
-    } else if (message instanceof PongMessage) {
-      handlePongMessage(session, (PongMessage) message);
-    } else {
-      throw new IllegalStateException("Unexpected WebSocket message type: " + message);
+    @Override
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws IOException {
+        if (message instanceof TextMessage) {
+            handleTextMessage(session, (TextMessage) message);
+        } else if (message instanceof BinaryMessage) {
+            handleBinaryMessage(session, (BinaryMessage) message);
+        } else if (message instanceof PongMessage) {
+            handlePongMessage(session, (PongMessage) message);
+        } else {
+            throw new IllegalStateException("Unexpected WebSocket message type: " + message);
+        }
     }
-  }
 
-  protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-  }
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+    }
 
-  protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws IOException {
-  }
+    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws IOException {
+    }
 
-  protected void handlePongMessage(WebSocketSession session, PongMessage message) throws IOException {
-  }
+    protected void handlePongMessage(WebSocketSession session, PongMessage message) throws IOException {
+    }
 
-  @Override
-  public void handleTransportError(WebSocketSession session, Throwable exception) {
-  }
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) {
+    }
 
-  @Override
-  public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-  }
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+    }
 
-  @Override
-  public void afterConnectionEstablished(WebSocketSession session) {
-  }
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+    }
 
-  @Override
-  public boolean supportsPartialMessages() {
-    return false;
-  }
+    @Override
+    public boolean supportsPartialMessages() {
+        return false;
+    }
 
 
 }

@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.validation;
 
+import io.sunflower.ewf.internal.Validators.BeanValidator;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import io.sunflower.ewf.internal.Validators.BeanValidator;
 
 /**
  * Validates that the annotated element is conform to its JSR303-Annotations
@@ -32,20 +32,20 @@ import io.sunflower.ewf.internal.Validators.BeanValidator;
 @Target(ElementType.PARAMETER)
 public @interface ValidBean {
 
-  String KEY = "validation.is.JSR303.violation";
-  String MESSAGE = "{0} cannot be validated with JSR303 annotations";
+    String KEY = "validation.is.JSR303.violation";
+    String MESSAGE = "{0} cannot be validated with JSR303 annotations";
 
-  /**
-   * The key for the violation message
-   *
-   * @return The key of the violation message
-   */
-  String key() default KEY;
+    /**
+     * The key for the violation message
+     *
+     * @return The key of the violation message
+     */
+    String key() default KEY;
 
-  /**
-   * Default message if the field isn't found
-   *
-   * @return The default message
-   */
-  String message() default MESSAGE;
+    /**
+     * Default message if the field isn't found
+     *
+     * @return The default message
+     */
+    String message() default MESSAGE;
 }

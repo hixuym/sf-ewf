@@ -22,9 +22,9 @@ import java.lang.annotation.Target;
 
 /**
  * A simple annotation that let's you put a filter on a resource method or class.
- *
+ * <p>
  * The filter will then be executed before the controller method is executed.
- *
+ * <p>
  * Please check out also {@link Filter}.
  *
  * @author michael
@@ -33,5 +33,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface FilterWith {
 
-  Class<? extends Filter>[] value();
+    Class<? extends Filter>[] value();
 }

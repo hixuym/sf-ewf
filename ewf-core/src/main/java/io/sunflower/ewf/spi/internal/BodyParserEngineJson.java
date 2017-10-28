@@ -15,9 +15,6 @@
 
 package io.sunflower.ewf.spi.internal;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +24,9 @@ import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
 import io.sunflower.ewf.spi.BodyParserEngine;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Built in Json body parser.
@@ -38,27 +38,27 @@ import io.sunflower.ewf.spi.BodyParserEngine;
 @Singleton
 public class BodyParserEngineJson implements BodyParserEngine {
 
-  private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-  @Inject
-  public BodyParserEngineJson(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
-  }
-
-  @Override
-  public <T> T invoke(Context context, Class<T> classOfT) {
-    try (InputStream inputStream = context.getInputStream()) {
-      return objectMapper.readValue(inputStream, classOfT);
-    } catch (JsonParseException | JsonMappingException ex) {
-      throw new BadRequestException("Error parsing incoming Json", ex);
-    } catch (IOException e) {
-      throw new BadRequestException("Invalid Json document", e);
+    @Inject
+    public BodyParserEngineJson(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
-  }
 
-  @Override
-  public String getContentType() {
-    return Result.APPLICATION_JSON;
-  }
+    @Override
+    public <T> T invoke(Context context, Class<T> classOfT) {
+        try (InputStream inputStream = context.getInputStream()) {
+            return objectMapper.readValue(inputStream, classOfT);
+        } catch (JsonParseException | JsonMappingException ex) {
+            throw new BadRequestException("Error parsing incoming Json", ex);
+        } catch (IOException e) {
+            throw new BadRequestException("Invalid Json document", e);
+        }
+    }
+
+    @Override
+    public String getContentType() {
+        return Result.APPLICATION_JSON;
+    }
 
 }

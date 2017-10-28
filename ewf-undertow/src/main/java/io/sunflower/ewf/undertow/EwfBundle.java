@@ -15,10 +15,6 @@
 
 package io.sunflower.ewf.undertow;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.sunflower.Configuration;
@@ -33,58 +29,62 @@ import io.sunflower.setup.Environment;
 import io.sunflower.undertow.UndertowBundle;
 import io.sunflower.undertow.UndertowModule;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author michael
  */
 public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
-  @Override
-  public void initialize(Bootstrap<?> bootstrap) {
-  }
+    @Override
+    public void initialize(Bootstrap<?> bootstrap) {
+    }
 
-  @Override
-  protected void configure(T configuration, Environment environment,
-      UndertowModule undertowModule) {
+    @Override
+    protected void configure(T configuration, Environment environment,
+                             UndertowModule undertowModule) {
 
-    environment.addServerLifecycleListener(server -> {
-      Injector injector = server.getInjector();
+        environment.addServerLifecycleListener(server -> {
+            Injector injector = server.getInjector();
 
-      Set<ApplicationRoutes> routesSet =
-          Injectors.instanceOf(injector, ApplicationRoutes.class);
+            Set<ApplicationRoutes> routesSet =
+                    Injectors.instanceOf(injector, ApplicationRoutes.class);
 
-      List<ApplicationRoutes> routesList = Lists.newArrayList(routesSet);
+            List<ApplicationRoutes> routesList = Lists.newArrayList(routesSet);
 
-      Collections.sort(routesList);
+            Collections.sort(routesList);
 
-      Router router = injector.getInstance(Router.class);
+            Router router = injector.getInstance(Router.class);
 
-      for (ApplicationRoutes routes : routesList) {
-        routes.init(router);
-      }
+            for (ApplicationRoutes routes : routesList) {
+                routes.init(router);
+            }
 
-      router.compileRoutes();
-    });
+            router.compileRoutes();
+        });
 
-    Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
-    environment.guice().register(settings);
+        Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
+        environment.guice().register(settings);
 
-    undertowModule
-        .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
+        undertowModule
+                .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
 
-    WebApplicationModule webApplicationModule = new WebApplicationModule() {
+        WebApplicationModule webApplicationModule = new WebApplicationModule() {
 
-      @Override
-      protected Class<? extends Context> getRequestContextImpl() {
-        return UndertowContext.class;
-      }
-    };
+            @Override
+            protected Class<? extends Context> getRequestContextImpl() {
+                return UndertowContext.class;
+            }
+        };
 
-    configure(webApplicationModule);
-    environment.guice().register(webApplicationModule);
+        configure(webApplicationModule);
+        environment.guice().register(webApplicationModule);
 
-  }
+    }
 
-  protected void configure(WebApplicationModule webApplicationModule) {
+    protected void configure(WebApplicationModule webApplicationModule) {
 
-  }
+    }
 }

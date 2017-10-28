@@ -25,34 +25,35 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Handles a request from Undertow and then delegates to ewf.
+ *
  * @author michael
  */
 public class EwfHttpHandler implements HttpHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(EwfHttpHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(EwfHttpHandler.class);
 
-  private final Injector injector;
-  private final Settings settings;
-  private final RouteHandler routeHandler;
+    private final Injector injector;
+    private final Settings settings;
+    private final RouteHandler routeHandler;
 
-  public EwfHttpHandler(Injector injector, Settings settings,
-      RouteHandler routeHandler) {
-    this.injector = injector;
-    this.settings = settings;
-    this.routeHandler = routeHandler;
-  }
+    public EwfHttpHandler(Injector injector, Settings settings,
+                          RouteHandler routeHandler) {
+        this.injector = injector;
+        this.settings = settings;
+        this.routeHandler = routeHandler;
+    }
 
-  @Override
-  public void handleRequest(HttpServerExchange exchange) throws Exception {
-    // create Ninja compatible context element
-    UndertowContext undertowContext
-        = (UndertowContext) injector.getProvider(Context.class).get();
+    @Override
+    public void handleRequest(HttpServerExchange exchange) throws Exception {
+        // create Ninja compatible context element
+        UndertowContext undertowContext
+                = (UndertowContext) injector.getProvider(Context.class).get();
 
-    // initialize it
-    undertowContext.init(exchange, settings.getContextPath());
+        // initialize it
+        undertowContext.init(exchange, settings.getContextPath());
 
-    // invoke routeHandler on it
-    routeHandler.handleRequest(undertowContext);
-  }
+        // invoke routeHandler on it
+        routeHandler.handleRequest(undertowContext);
+    }
 
 }

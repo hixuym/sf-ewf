@@ -15,64 +15,64 @@
 
 package io.sunflower.ewf.spi.internal;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.spi.TemplateEngine;
+import io.sunflower.ewf.support.ResponseStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Singleton
 public class TemplateEngineJson implements TemplateEngine {
 
-  private final Logger logger = LoggerFactory.getLogger(TemplateEngineJson.class);
+    private final Logger logger = LoggerFactory.getLogger(TemplateEngineJson.class);
 
-  private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-  @Inject
-  public TemplateEngineJson(ObjectMapper objectMapper) {
+    @Inject
+    public TemplateEngineJson(ObjectMapper objectMapper) {
 
-    this.objectMapper = objectMapper;
+        this.objectMapper = objectMapper;
 
-  }
-
-  @Override
-  public void invoke(Context context, Result result) {
-
-    ResponseStreams responseStreams = context.finalizeHeaders(result);
-
-    try (OutputStream outputStream = responseStreams.getOutputStream()) {
-
-      Class<?> jsonView = result.getJsonView();
-      if (jsonView != null) {
-        objectMapper.writerWithView(jsonView).writeValue(outputStream, result.getRenderable());
-      } else {
-        objectMapper.writeValue(outputStream, result.getRenderable());
-      }
-
-
-    } catch (IOException e) {
-
-      logger.error("Error while rendering json", e);
     }
 
+    @Override
+    public void invoke(Context context, Result result) {
 
-  }
+        ResponseStreams responseStreams = context.finalizeHeaders(result);
 
-  @Override
-  public String getContentType() {
-    return Result.APPLICATION_JSON;
-  }
+        try (OutputStream outputStream = responseStreams.getOutputStream()) {
 
-  @Override
-  public String getSuffixOfTemplatingEngine() {
-    // intentionally returns null...
-    return null;
-  }
+            Class<?> jsonView = result.getJsonView();
+            if (jsonView != null) {
+                objectMapper.writerWithView(jsonView).writeValue(outputStream, result.getRenderable());
+            } else {
+                objectMapper.writeValue(outputStream, result.getRenderable());
+            }
+
+
+        } catch (IOException e) {
+
+            logger.error("Error while rendering json", e);
+        }
+
+
+    }
+
+    @Override
+    public String getContentType() {
+        return Result.APPLICATION_JSON;
+    }
+
+    @Override
+    public String getSuffixOfTemplatingEngine() {
+        // intentionally returns null...
+        return null;
+    }
 }

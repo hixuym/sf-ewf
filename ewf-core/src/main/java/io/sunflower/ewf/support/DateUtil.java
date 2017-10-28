@@ -15,6 +15,8 @@
 
 package io.sunflower.ewf.support;
 
+import io.sunflower.util.Dates;
+
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -22,53 +24,51 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import io.sunflower.util.Dates;
-
 public class DateUtil {
 
-  /**
-   * Can be used to format a date into http header compatible strings.
-   *
-   * It can be used to generate something like: Date: Wed, 05 Sep 2012 09:16:19 GMT Expires: Thu, 01
-   * Jan 1970 00:00:00 GMT
-   *
-   * @param date The date to format
-   * @return a http header compatible string like "Thu, 01 Jan 1970 00:00:00 GMT"
-   */
-  public static String formatForHttpHeader(Date date) {
-    Instant instant = Dates.asInstant(date);
-    return DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.of("GMT")).format(instant);
-  }
+    /**
+     * Can be used to format a date into http header compatible strings.
+     * <p>
+     * It can be used to generate something like: Date: Wed, 05 Sep 2012 09:16:19 GMT Expires: Thu, 01
+     * Jan 1970 00:00:00 GMT
+     *
+     * @param date The date to format
+     * @return a http header compatible string like "Thu, 01 Jan 1970 00:00:00 GMT"
+     */
+    public static String formatForHttpHeader(Date date) {
+        Instant instant = Dates.asInstant(date);
+        return DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.of("GMT")).format(instant);
+    }
 
-  /**
-   * Can be used to format a unix timestamp into http header compatible strings.
-   *
-   * It can be used to generate something like: Date: Wed, 05 Sep 2012 09:16:19 GMT Expires: Thu, 01
-   * Jan 1970 00:00:00 GMT
-   *
-   * @param unixTime The long (unixtime) to format
-   * @return a http header compatible string like "Thu, 01 Jan 1970 00:00:00 GMT"
-   */
-  public static String formatForHttpHeader(Long unixTime) {
+    /**
+     * Can be used to format a unix timestamp into http header compatible strings.
+     * <p>
+     * It can be used to generate something like: Date: Wed, 05 Sep 2012 09:16:19 GMT Expires: Thu, 01
+     * Jan 1970 00:00:00 GMT
+     *
+     * @param unixTime The long (unixtime) to format
+     * @return a http header compatible string like "Thu, 01 Jan 1970 00:00:00 GMT"
+     */
+    public static String formatForHttpHeader(Long unixTime) {
 
-    return DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.of("GMT"))
-        .format(Instant.ofEpochMilli(unixTime));
-  }
+        return DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.of("GMT"))
+                .format(Instant.ofEpochMilli(unixTime));
+    }
 
 
-  /**
-   * Can be used to parse http times. For instance something like a http header Date: Tue, 26 Mar
-   * 2013 13:47:13 GMT
-   *
-   * INFO: consider the JodaTime based DateUtil.parseHttpDateFormatToDateTime(...) version
-   *
-   * @param httpDateFormat in http format: Date: Tue, 26 Mar 2013 13:47:13 GMT
-   * @return A nice "Date" object containing that http timestamp.
-   * @throws ParseException If something goes wrong.
-   */
-  public static Date parseHttpDateFormat(String httpDateFormat) throws IllegalArgumentException {
-    return Dates
-        .asUtilDate(LocalDateTime.parse(httpDateFormat, DateTimeFormatter.RFC_1123_DATE_TIME),
-            ZoneId.of("GMT"));
-  }
+    /**
+     * Can be used to parse http times. For instance something like a http header Date: Tue, 26 Mar
+     * 2013 13:47:13 GMT
+     * <p>
+     * INFO: consider the JodaTime based DateUtil.parseHttpDateFormatToDateTime(...) version
+     *
+     * @param httpDateFormat in http format: Date: Tue, 26 Mar 2013 13:47:13 GMT
+     * @return A nice "Date" object containing that http timestamp.
+     * @throws ParseException If something goes wrong.
+     */
+    public static Date parseHttpDateFormat(String httpDateFormat) throws IllegalArgumentException {
+        return Dates
+                .asUtilDate(LocalDateTime.parse(httpDateFormat, DateTimeFormatter.RFC_1123_DATE_TIME),
+                        ZoneId.of("GMT"));
+    }
 }
