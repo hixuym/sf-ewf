@@ -17,6 +17,7 @@ package io.sunflower.ewf.internal.template;
 
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.internal.Route;
+import io.sunflower.ewf.support.Constants;
 
 /**
  * Helper methods for template engines
@@ -27,29 +28,29 @@ public class TemplateEngineHelper {
 
     public String getTemplateForResult(Route route, Result result, String suffix) {
         if (result.getTemplate() == null) {
-            Class resourceClass = route.getControllerClass();
+            Class controllerClass = route.getControllerClass();
 
             // Calculate the correct path of the template.
             // We always assume the template in the subdir "views"
 
             // 1) If we are in the main project =>
-            // /resources/ResourceName
+            // /controllers/ControllerName
             // to
-            // /views/ResourceName/templateName.ftl.html
+            // /views/ControllerName/templateName.ftl.html
             // 2) If we are in a plugin / subproject
             // =>
-            // /resources/some/packages/submoduleName/ResourceName
+            // /controllers/some/packages/submoduleName/ControllerName
             // to
-            // views/some/packages/submoduleName/ResourceName/templateName.ftl.html
+            // views/some/packages/submoduleName/ControllerName/templateName.ftl.html
 
             // So let's calculate the parent package of the resource:
-            String resourcePackageName = resourceClass.getPackage().getName();
+            String controllerPackageName = controllerClass.getPackage().getName();
             // This results in something like resources or
             // some.package.resources
 
             // Replace resource prefix with views prefix
-            String parentPackageOfResource = resourcePackageName
-                    .replaceFirst("resources", "views");
+            String parentPackageOfResource = controllerPackageName
+                    .replaceFirst(Constants.CONTROLLERS_DIR, Constants.VIEWS_DIR);
 
             // And now we rewrite everything from "." notation to directories /
             String parentResourcePackageAsPath = parentPackageOfResource
@@ -58,7 +59,7 @@ public class TemplateEngineHelper {
             // and the final path of the controller will be something like:
             // views/some/package/submoduleName/ResourceName/templateName.ftl.html
             return String.format("/%s/%s/%s%s", parentResourcePackageAsPath,
-                    resourceClass.getSimpleName(), route.getControllerMethod().getName(), suffix);
+                    controllerClass.getSimpleName(), route.getControllerMethod().getName(), suffix);
         } else {
             return result.getTemplate();
         }

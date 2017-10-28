@@ -60,6 +60,35 @@ public interface Constants {
      */
     String UNI_CODE_NULL_ENTITY = "\u0000";
 
+    String CONTROLLERS_DIR = "controllers";
+    String VIEWS_DIR = "views";
+
+    /**
+     * settings configuration keys
+     */
+
+    String HANDLER_PATH_KEY = "ewf.handlerPath";
+    String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
+    String MODE_KEY = "ewf.mode";
+    String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
+    String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
+    String JAXY_ROUTES_ENABLED = "ewf.jaxyRoutesEnabled";
+    String CONTROLLERS_SCAN_PKGS = "ewf.scanPkgs";
+    String DIAGNOSTICS_ENABLED = "ewf.diagnosticsEnabled";
+    String USAGE_OF_X_FORWARDED_HEADER_ENABLED = "ewf.usageOfXForwardedHeaderEnabled";
+    String ETAG_ENABLE = "ewf.etagEnabled";
+    String SESSION_SEND_ONLY_IF_CHANGED = "ewf.sessionSendOnlyIfChanged";
+    String SESSION_TRANSFERRED_OVER_HTTPS_ONLY = "ewf.sessionTransferredOverHttpsOnly";
+    String SESSION_HTTP_ONLY = "ewf.sessionHttpOnly";
+    String COOKIE_ENCRYPTED = "ewf.cookieEncrypted";
+    String COOKIE_PREFIX = "ewf.cookiePrefix";
+    String COOKIE_DOMAIN = "ewf.cookieDomain";
+    String SUPPORTED_LANGS = "ewf.supported_langs";
+    String SECRET = "ewf.secret";
+    String CACHE_MAX_AGE = "ewf.cacheMaxAge";
+    String TOKEN_EXPIRE_TIME = "ewf.tokenExpireTime";
+    String SESSION_EXPIRE_TIME = "ewf.sessionExpireTime";
+
     /**
      * yea. utf-8
      */

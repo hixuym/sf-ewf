@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.sunflower.ewf.support.Constants.*;
+
 /**
  * ewf framework settings
  *
@@ -76,12 +78,6 @@ public class Settings {
         loadSettings(rawSettings);
     }
 
-    private static final String HANDLER_PATH_KEY = "ewf.handlerPath";
-    private static final String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
-    private static final String MODE_KEY = "ewf.mode";
-    private static final String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
-    private static final String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
-
     private void loadSettings(Map<String, String> rawSettings) {
         if (rawSettings.containsKey(HANDLER_PATH_KEY)) {
             this.handlerPath = rawSettings.get(HANDLER_PATH_KEY);
@@ -108,74 +104,74 @@ public class Settings {
             this.jsonpCallbackParam = rawSettings.get(JSONP_CALLBACK_PARAM_KEY);
         }
 
-        if (rawSettings.containsKey("ewf.controllerPkgs")) {
-            this.scanPkgs = rawSettings.get("ewf.controllerPkgs");
+        if (rawSettings.containsKey(CONTROLLERS_SCAN_PKGS)) {
+            this.scanPkgs = rawSettings.get(CONTROLLERS_SCAN_PKGS);
         }
 
-        if (rawSettings.containsKey("ewf.jaxyRouteEnabled")) {
-            this.jaxyRouteEnabled = Boolean.parseBoolean(rawSettings.get("ewf.jaxyRouteEnabled"));
+        if (rawSettings.containsKey(JAXY_ROUTES_ENABLED)) {
+            this.jaxyRouteEnabled = Boolean.parseBoolean(rawSettings.get(JAXY_ROUTES_ENABLED));
         }
 
-        if (rawSettings.containsKey("ewf.diagnosticsEnabled")) {
-            this.diagnosticsEnabled = Boolean.parseBoolean(rawSettings.get("ewf.diagnosticsEnabled"));
+        if (rawSettings.containsKey(DIAGNOSTICS_ENABLED)) {
+            this.diagnosticsEnabled = Boolean.parseBoolean(rawSettings.get(DIAGNOSTICS_ENABLED));
         }
 
-        if (rawSettings.containsKey("ewf.usageOfXForwardedHeaderEnabled")) {
+        if (rawSettings.containsKey(Constants.USAGE_OF_X_FORWARDED_HEADER_ENABLED)) {
             this.usageOfXForwardedHeaderEnabled = Boolean
-                    .parseBoolean(rawSettings.get("ewf.usageOfXForwardedHeaderEnabled"));
+                    .parseBoolean(rawSettings.get(Constants.USAGE_OF_X_FORWARDED_HEADER_ENABLED));
         }
 
-        if (rawSettings.containsKey("ewf.etagEnable")) {
-            this.etagEnable = Boolean.parseBoolean(rawSettings.get("ewf.etagEnable"));
+        if (rawSettings.containsKey(Constants.ETAG_ENABLE)) {
+            this.etagEnable = Boolean.parseBoolean(rawSettings.get(Constants.ETAG_ENABLE));
         }
 
-        if (rawSettings.containsKey("ewf.sessionSendOnlyIfChanged")) {
+        if (rawSettings.containsKey(Constants.SESSION_SEND_ONLY_IF_CHANGED)) {
             this.sessionSendOnlyIfChanged = Boolean
-                    .parseBoolean(rawSettings.get("ewf.sessionSendOnlyIfChanged"));
+                    .parseBoolean(rawSettings.get(Constants.SESSION_SEND_ONLY_IF_CHANGED));
         }
 
-        if (rawSettings.containsKey("ewf.sessionTransferredOverHttpsOnly")) {
+        if (rawSettings.containsKey(Constants.SESSION_TRANSFERRED_OVER_HTTPS_ONLY)) {
             this.sessionTransferredOverHttpsOnly = Boolean
-                    .parseBoolean(rawSettings.get("ewf.sessionTransferredOverHttpsOnly"));
+                    .parseBoolean(rawSettings.get(Constants.SESSION_TRANSFERRED_OVER_HTTPS_ONLY));
         }
 
-        if (rawSettings.containsKey("ewf.sessionHttpOnly")) {
-            this.sessionHttpOnly = Boolean.parseBoolean(rawSettings.get("ewf.sessionHttpOnly"));
+        if (rawSettings.containsKey(Constants.SESSION_HTTP_ONLY)) {
+            this.sessionHttpOnly = Boolean.parseBoolean(rawSettings.get(Constants.SESSION_HTTP_ONLY));
         }
 
-        if (rawSettings.containsKey("ewf.cookieEncrypted")) {
-            this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get("ewf.cookieEncrypted"));
+        if (rawSettings.containsKey(Constants.SESSION_HTTP_ONLY)) {
+            this.cookieEncrypted = Boolean.parseBoolean(rawSettings.get(Constants.SESSION_HTTP_ONLY));
         }
 
-        if (rawSettings.containsKey("ewf.cookiePrefix")) {
-            this.cookiePrefix = rawSettings.get("ewf.cookiePrefix");
+        if (rawSettings.containsKey(Constants.COOKIE_PREFIX)) {
+            this.cookiePrefix = rawSettings.get(Constants.COOKIE_PREFIX);
         }
 
-        if (rawSettings.containsKey("ewf.cookieDomain")) {
-            this.cookieDomain = rawSettings.get("ewf.cookieDomain");
+        if (rawSettings.containsKey(Constants.COOKIE_DOMAIN)) {
+            this.cookieDomain = rawSettings.get(Constants.COOKIE_DOMAIN);
         }
 
-        if (rawSettings.containsKey("ewf.supportedLangs")) {
+        if (rawSettings.containsKey(Constants.SUPPORTED_LANGS)) {
             this.applicationLangs = Splitter.on(",")
                     .omitEmptyStrings()
                     .trimResults()
-                    .splitToList(rawSettings.get("ewf.supportedLangs"));
+                    .splitToList(rawSettings.get(Constants.SUPPORTED_LANGS));
         }
 
-        if (rawSettings.containsKey("ewf.secret")) {
-            this.applicationSecret = rawSettings.get("ewf.secret");
+        if (rawSettings.containsKey(Constants.SECRET)) {
+            this.applicationSecret = rawSettings.get(Constants.SECRET);
         }
 
-        if (rawSettings.containsKey("ewf.cacheMaxAge")) {
-            this.httpCacheMaxAge = rawSettings.get("ewf.cacheMaxAge");
+        if (rawSettings.containsKey(Constants.CACHE_MAX_AGE)) {
+            this.httpCacheMaxAge = rawSettings.get(Constants.CACHE_MAX_AGE);
         }
 
-        if (rawSettings.containsKey("ewf.tokenExpireTime")) {
-            this.tokenExpireTime = Duration.parse(rawSettings.get("ewf.tokenExpireTime"));
+        if (rawSettings.containsKey(Constants.TOKEN_EXPIRE_TIME)) {
+            this.tokenExpireTime = Duration.parse(rawSettings.get(Constants.TOKEN_EXPIRE_TIME));
         }
 
-        if (rawSettings.containsKey("ewf.sessionExpireTime")) {
-            this.sessionExpireTime = Duration.parse(rawSettings.get("ewf.sessionExpireTime"));
+        if (rawSettings.containsKey(Constants.SESSION_EXPIRE_TIME)) {
+            this.sessionExpireTime = Duration.parse(rawSettings.get(Constants.SESSION_EXPIRE_TIME));
         }
 
         for (Map.Entry<String, String> e : rawSettings.entrySet()) {
