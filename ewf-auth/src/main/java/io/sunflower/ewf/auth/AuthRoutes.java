@@ -17,7 +17,7 @@ package io.sunflower.ewf.auth;
 
 import io.sunflower.ewf.ApplicationRoutes;
 import io.sunflower.ewf.Router;
-import io.sunflower.ewf.auth.token.TokenResource;
+import io.sunflower.ewf.auth.token.TokenAuthController;
 
 /**
  * AuthRoutes
@@ -30,10 +30,10 @@ public class AuthRoutes implements ApplicationRoutes {
     public void init(Router router) {
 
         router.POST().route("/api/auth/get_token")
-                .noGlobalFilters().with(TokenResource::auth);
+                .noGlobalFilters().with(TokenAuthController::auth);
 
         router.POST().route("/api/auth/refresh_token")
-                .with(TokenResource::refresh);
+                .with(TokenAuthController::refresh);
 
     }
 }

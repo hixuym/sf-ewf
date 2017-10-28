@@ -27,7 +27,7 @@ public class TemplateEngineHelper {
 
     public String getTemplateForResult(Route route, Result result, String suffix) {
         if (result.getTemplate() == null) {
-            Class resourceClass = route.getResourceClass();
+            Class resourceClass = route.getControllerClass();
 
             // Calculate the correct path of the template.
             // We always assume the template in the subdir "views"
@@ -58,7 +58,7 @@ public class TemplateEngineHelper {
             // and the final path of the controller will be something like:
             // views/some/package/submoduleName/ResourceName/templateName.ftl.html
             return String.format("/%s/%s/%s%s", parentResourcePackageAsPath,
-                    resourceClass.getSimpleName(), route.getResourceMethod().getName(), suffix);
+                    resourceClass.getSimpleName(), route.getControllerMethod().getName(), suffix);
         } else {
             return result.getTemplate();
         }

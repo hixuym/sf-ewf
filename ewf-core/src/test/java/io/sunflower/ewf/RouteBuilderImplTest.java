@@ -20,7 +20,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import io.sunflower.ewf.internal.Route;
 import io.sunflower.ewf.internal.RouteBuilderImpl;
-import io.sunflower.ewf.support.ResourceMethods;
+import io.sunflower.ewf.support.ControllerMethods;
 import io.sunflower.ewf.support.Settings;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -378,8 +378,8 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getResourceClass(), is(MockController.class));
-        assertThat(route.getResourceMethod().getName(), is("execute"));
+        assertThat(route.getControllerClass(), is(MockController.class));
+        assertThat(route.getControllerMethod().getName(), is("execute"));
     }
 
     @Test
@@ -390,9 +390,9 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getResourceClass().getCanonicalName(),
+        assertThat(route.getControllerClass().getCanonicalName(),
                 startsWith(this.getClass().getCanonicalName()));
-        assertThat(route.getResourceMethod().getName(), is("apply"));
+        assertThat(route.getControllerMethod().getName(), is("apply"));
     }
 
     @Test
@@ -401,15 +401,15 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getResourceClass(), is(MockController.class));
-        assertThat(route.getResourceMethod().getName(), is("execute3"));
+        assertThat(route.getControllerClass(), is(MockController.class));
+        assertThat(route.getControllerMethod().getName(), is("execute3"));
     }
 
     @Test
     @SuppressWarnings("Convert2Lambda")
     public void routeToAnonymousClassReference() throws Exception {
 
-        routeBuilder.GET().route("/execute").with(new ResourceMethods.ResourceMethod0() {
+        routeBuilder.GET().route("/execute").with(new ControllerMethods.ControllerMethod0() {
             @Override
             public Result apply() {
                 return Results.redirect("/");
@@ -419,8 +419,8 @@ public class RouteBuilderImplTest {
         Route route = routeBuilder.buildRoute(injector);
 
         assertTrue(route.matches("GET", "/execute"));
-        assertThat(route.getResourceClass().isAnonymousClass(), is(true));
-        assertThat(route.getResourceMethod().getName(), is("apply"));
+        assertThat(route.getControllerClass().isAnonymousClass(), is(true));
+        assertThat(route.getControllerMethod().getName(), is("apply"));
     }
 
     @Test
@@ -430,9 +430,9 @@ public class RouteBuilderImplTest {
 
         assertTrue(route.matches("GET", "/execute"));
         // should be a class within this test class as a real lambda
-        assertThat(route.getResourceClass().getCanonicalName(),
+        assertThat(route.getControllerClass().getCanonicalName(),
                 startsWith(this.getClass().getCanonicalName()));
-        assertThat(route.getResourceMethod().getName(), is("apply"));
+        assertThat(route.getControllerMethod().getName(), is("apply"));
     }
 
 

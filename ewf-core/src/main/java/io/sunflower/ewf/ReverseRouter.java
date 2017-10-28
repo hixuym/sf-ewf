@@ -35,7 +35,7 @@ import java.util.Optional;
  *
  * @author Joe Lauer (jjlauer)
  */
-public class ReverseRouter implements WithResourceMethod<Builder> {
+public class ReverseRouter implements WithControllerMethod<Builder> {
 
     static private final Logger log = LoggerFactory.getLogger(ReverseRouter.class);
 
@@ -329,13 +329,13 @@ public class ReverseRouter implements WithResourceMethod<Builder> {
      * Retrieves a the reverse route for a method referenced with Java-8 lambdas (functional method
      * references).
      *
-     * @param resourceMethod The Java-8 style method reference such as <code>ApplicationResource::index</code>.
+     * @param controllerMethod The Java-8 style method reference such as <code>ApplicationResource::index</code>.
      * @return A <code>Builder</code> allowing setting path placeholders and queryParam string
      * parameters.
      */
     @Override
-    public Builder with(ResourceMethods.ResourceMethod resourceMethod) {
-        LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
+    public Builder with(ControllerMethods.ControllerMethod controllerMethod) {
+        LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
 
         // only need the functional method for the reverse lookup
         Method method = lambdaRoute.getFunctionalMethod();

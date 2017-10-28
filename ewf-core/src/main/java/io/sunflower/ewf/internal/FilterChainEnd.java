@@ -19,7 +19,7 @@ import com.google.inject.Provider;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.FilterChain;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.params.internal.ResourceMethodInvoker;
+import io.sunflower.ewf.params.internal.ControllerMethodInvoker;
 
 /**
  * The end of the filter chain
@@ -29,16 +29,16 @@ import io.sunflower.ewf.params.internal.ResourceMethodInvoker;
 class FilterChainEnd implements FilterChain {
 
     private final Provider<?> targetObjectProvider;
-    private final ResourceMethodInvoker resourceMethodInvoker;
+    private final ControllerMethodInvoker controllerMethodInvoker;
 
     FilterChainEnd(Provider<?> targetObjectProvider,
-                   ResourceMethodInvoker resourceMethodInvoker) {
+                   ControllerMethodInvoker controllerMethodInvoker) {
         this.targetObjectProvider = targetObjectProvider;
-        this.resourceMethodInvoker = resourceMethodInvoker;
+        this.controllerMethodInvoker = controllerMethodInvoker;
     }
 
     @Override
     public Result next(Context context) {
-        return (Result) resourceMethodInvoker.invoke(targetObjectProvider.get(), context);
+        return (Result) controllerMethodInvoker.invoke(targetObjectProvider.get(), context);
     }
 }

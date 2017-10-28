@@ -191,8 +191,8 @@ public class DefaultExceptionHandler implements ExceptionHandler {
         logger.error(
                 "Emitting bad request 500. Something really wrong when calling route: {} (class: {} method: {})",
                 context.getRequestPath(),
-                context.getRoute().getResourceClass(),
-                context.getRoute().getResourceMethod(),
+                context.getRoute().getControllerClass(),
+                context.getRoute().getControllerMethod(),
                 exception);
 
         String messageI18n

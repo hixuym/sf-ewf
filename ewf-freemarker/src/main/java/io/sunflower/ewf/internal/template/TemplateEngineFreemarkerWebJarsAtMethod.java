@@ -20,7 +20,7 @@ import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import io.sunflower.ewf.assets.AssetsResource;
+import io.sunflower.ewf.assets.AssetsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class TemplateEngineFreemarkerWebJarsAtMethod implements
 
         List<Object> argsWithControllerAndMethod = new ArrayList<>();
 
-        argsWithControllerAndMethod.add(AssetsResource.class.getName());
+        argsWithControllerAndMethod.add(AssetsController.class.getName());
         argsWithControllerAndMethod.add("serveWebJars");
         argsWithControllerAndMethod.add("fileName");
         argsWithControllerAndMethod.addAll(args);

@@ -161,8 +161,8 @@ public class DiagnosticErrorRenderer {
             // append info about the route itself
             if (context.getRoute() != null) {
                 Route route = context.getRoute();
-                s.append("<br />In controller method '").append(route.getResourceClass().getCanonicalName())
-                        .append(".").append(route.getResourceMethod().getName()).append("'\n");
+                s.append("<br />In controller method '").append(route.getControllerClass().getCanonicalName())
+                        .append(".").append(route.getControllerMethod().getName()).append("'\n");
             }
 
             s.append("    </p>\n");
@@ -236,10 +236,10 @@ public class DiagnosticErrorRenderer {
             Route route = context.getRoute();
             appendNameValue(s, "Http method", route.getHttpMethod());
             appendNameValue(s, "Controller method",
-                    route.getResourceClass().getCanonicalName() + "." + route.getResourceMethod().getName()
+                    route.getControllerClass().getCanonicalName() + "." + route.getControllerMethod().getName()
                             + "()");
             StringBuilder params = new StringBuilder();
-            for (Class type : route.getResourceMethod().getParameterTypes()) {
+            for (Class type : route.getControllerMethod().getParameterTypes()) {
                 if (params.length() > 0) {
                     params.append(", ");
                 }

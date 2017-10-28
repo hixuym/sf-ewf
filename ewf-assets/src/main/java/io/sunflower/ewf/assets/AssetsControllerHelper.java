@@ -27,9 +27,9 @@ import java.nio.file.Paths;
 /**
  * @author michael
  */
-public class AssetsResourceHelper {
+public class AssetsControllerHelper {
 
-    private final static Logger logger = LoggerFactory.getLogger(AssetsResourceHelper.class);
+    private final static Logger logger = LoggerFactory.getLogger(AssetsControllerHelper.class);
 
     /**
      * If we get - for whatever reason - a relative URL like assets/../conf/application.conf we expand
@@ -58,7 +58,7 @@ public class AssetsResourceHelper {
     }
 
     /**
-     * Check the URL is a directory. With war style deployment, AssetsResource exposes the file list
+     * Check the URL is a directory. With war style deployment, AssetsController exposes the file list
      * of assets directories. For example, a request to http://localhost:8080/assets/css/ displays the
      * file list of css directory. So this method checks the URL is a directory.
      *

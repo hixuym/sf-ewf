@@ -53,18 +53,18 @@ public class Route {
 
     private final String httpMethod;
     private final String uri;
-    private final Method resourceMethod;
+    private final Method controllerMethod;
     private final FilterChain filterChain;
     private final Map<String, RouteParameter> parameters;
     private final Pattern regex;
 
     public Route(String httpMethod,
                  String uri,
-                 Method resourceMethod,
+                 Method controllerMethod,
                  FilterChain filterChain) {
         this.httpMethod = httpMethod;
         this.uri = uri;
-        this.resourceMethod = resourceMethod;
+        this.controllerMethod = controllerMethod;
         this.filterChain = filterChain;
         this.parameters = RouteParameter.parse(uri);
         this.regex = Pattern.compile(convertRawUriToRegex(uri));
@@ -106,12 +106,12 @@ public class Route {
         return uri;
     }
 
-    public Class<?> getResourceClass() {
-        return resourceMethod != null ? resourceMethod.getDeclaringClass() : null;
+    public Class<?> getControllerClass() {
+        return controllerMethod != null ? controllerMethod.getDeclaringClass() : null;
     }
 
-    public Method getResourceMethod() {
-        return resourceMethod;
+    public Method getControllerMethod() {
+        return controllerMethod;
     }
 
     public FilterChain getFilterChain() {

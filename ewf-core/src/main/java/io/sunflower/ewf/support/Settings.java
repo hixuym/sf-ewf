@@ -65,7 +65,9 @@ public class Settings {
 
     private String contextPath = "";
 
-    private String resourcePkgs = "resources";
+    private String scanPkgs = "controllers";
+
+    private boolean jaxyRouteEnabled = true;
 
     public Settings() {
     }
@@ -106,8 +108,12 @@ public class Settings {
             this.jsonpCallbackParam = rawSettings.get(JSONP_CALLBACK_PARAM_KEY);
         }
 
-        if (rawSettings.containsKey("ewf.resourcePkgs")) {
-            this.resourcePkgs = rawSettings.get("ewf.resourcePkgs");
+        if (rawSettings.containsKey("ewf.controllerPkgs")) {
+            this.scanPkgs = rawSettings.get("ewf.controllerPkgs");
+        }
+
+        if (rawSettings.containsKey("ewf.jaxyRouteEnabled")) {
+            this.jaxyRouteEnabled = Boolean.parseBoolean(rawSettings.get("ewf.jaxyRouteEnabled"));
         }
 
         if (rawSettings.containsKey("ewf.diagnosticsEnabled")) {
@@ -279,7 +285,11 @@ public class Settings {
         return tokenExpireTime;
     }
 
-    public String getResourcePkgs() {
-        return resourcePkgs;
+    public String getControllerPkgs() {
+        return this.scanPkgs;
+    }
+
+    public boolean isJaxyRouteEnabled() {
+        return jaxyRouteEnabled;
     }
 }

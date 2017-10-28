@@ -18,7 +18,6 @@ package io.sunflower.ewf.support;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.support.ResourceMethods.ResourceMethod1;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -120,7 +119,7 @@ public class LambdasTest {
 
     @Test
     public void anyInstanceMethodReference() throws Exception {
-        ResourceMethod1<LambdasTest> lambda = LambdasTest::home;
+        ControllerMethods.ControllerMethod1<LambdasTest> lambda = LambdasTest::home;
 
         Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);
 
@@ -139,7 +138,7 @@ public class LambdasTest {
     @Test
     public void anonymousClassReference() throws Exception {
         @SuppressWarnings("Convert2Lambda")
-        ResourceMethod1<Context> lambda = new ResourceMethod1<Context>() {
+        ControllerMethods.ControllerMethod1<Context> lambda = new ControllerMethods.ControllerMethod1<Context>() {
             @Override
             public Result apply(Context a) {
                 return Results.html().renderRaw("".getBytes(StandardCharsets.UTF_8));
@@ -156,7 +155,7 @@ public class LambdasTest {
 
     @Test
     public void anonymousMethodReference() throws Exception {
-        ResourceMethod1<Context> lambda = (Context context) -> Results.html()
+        ControllerMethods.ControllerMethod1<Context> lambda = (Context context) -> Results.html()
                 .renderRaw("".getBytes(StandardCharsets.UTF_8));
 
         Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(lambda);

@@ -22,6 +22,7 @@ import io.sunflower.ewf.ApplicationRoutes;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.WebApplicationModule;
+import io.sunflower.ewf.jaxy.JaxyRoutes;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.guice.Injectors;
 import io.sunflower.setup.Bootstrap;
@@ -66,7 +67,12 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
         });
 
         Settings settings = new Settings(configuration.getServerFactory().getServerProperties());
+
         environment.guice().register(settings);
+
+        if (settings.isJaxyRouteEnabled()) {
+            environment.guice().register(JaxyRoutes.class);
+        }
 
         undertowModule
                 .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);

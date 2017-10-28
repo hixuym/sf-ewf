@@ -15,14 +15,14 @@
 
 package io.sunflower.ewf;
 
-import io.sunflower.ewf.support.WithResourceMethod;
+import io.sunflower.ewf.support.WithControllerMethod;
 
 import java.util.List;
 
 /**
  * @author michael
  */
-public interface RouteBuilder extends WithResourceMethod<Void> {
+public interface RouteBuilder extends WithControllerMethod<Void> {
 
     /**
      * setting route uri

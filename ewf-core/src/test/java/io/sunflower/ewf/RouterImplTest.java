@@ -23,7 +23,7 @@ import io.sunflower.ewf.internal.RouterImpl;
 import io.sunflower.ewf.internal.ValidationImpl;
 import io.sunflower.ewf.params.Param;
 import io.sunflower.ewf.params.internal.ParamParsers;
-import io.sunflower.ewf.support.ResourceMethods;
+import io.sunflower.ewf.support.ControllerMethods;
 import io.sunflower.ewf.support.Settings;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +87,7 @@ public class RouterImplTest {
         TestResource testResource1 = new TestResource("Hi!");
         router.GET().route("/any_instance_method_ref").with(TestResource::home);
         router.GET().route("/any_instance_method_ref_exception").with(TestResource::exception);
-        router.GET().route("/any_instance_method_ref2").with(ResourceMethods.of(TestResource::home));
+        router.GET().route("/any_instance_method_ref2").with(ControllerMethods.of(TestResource::home));
         router.GET().route("/specific_instance_method_ref").with(testResource1::message);
         router.GET().route("/specific_instance_method_ref_annotations").with(testResource1::status);
         router.GET().route("/anonymous_method_ref").with(() -> Results.status(202));
@@ -95,14 +95,14 @@ public class RouterImplTest {
         router.GET().route("/anonymous_method_ref_captured").with(() -> staticResult);
         router.GET().route("/anonymous_method_ref_context")
                 .with((Context context) -> Results.status(context.getParameterAsInteger("status")));
-        router.GET().route("/anonymous_class").with(new ResourceMethods.ResourceMethod0() {
+        router.GET().route("/anonymous_class").with(new ControllerMethods.ControllerMethod0() {
             @Override
             public Result apply() {
                 return Results.status(203);
             }
         });
         router.GET().route("/anonymous_class_annotations")
-                .with(new ResourceMethods.ResourceMethod1<Integer>() {
+                .with(new ControllerMethods.ControllerMethod1<Integer>() {
                     @Override
                     public Result apply(@Param("status") Integer status) {
                         return Results.status(status);

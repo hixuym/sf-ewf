@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf.jaxy;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -63,7 +64,7 @@ public class JaxyRoutes implements ApplicationRoutes {
         } else {
             runtimeMode = Mode.prod;
         }
-        this.scanPkgs = settings.getResourcePkgs();
+        this.scanPkgs = settings.getControllerPkgs();
     }
 
     /**
@@ -83,6 +84,12 @@ public class JaxyRoutes implements ApplicationRoutes {
         registerMethods();
     }
 
+    private void registerMethod(Class<?> resourceClass, Method method, String path) {
+        final String httpMethod = getHttpMethod(method);
+        final String methodName = method.getName();
+        router.METHOD(httpMethod).route(path).with(resourceClass, methodName);
+    }
+
     /**
      * Takes all methods and registers them at the controller using the path: Class:@Path +
      * Method:@Path. If no @Path Annotation is present at the method just the Class:@Path is used.
@@ -99,20 +106,23 @@ public class JaxyRoutes implements ApplicationRoutes {
             if (methodPath != null) {
                 paths = methodPath.value();
             }
-            for (String controllerPath : resourcePaths) {
 
+            if (resourcePaths.isEmpty()) {
                 for (String methodPathSpec : paths) {
+                    registerMethod(resourceClass, method, methodPathSpec);
+                }
+            } else {
+                for (String resourcePath : resourcePaths) {
 
-                    final String httpMethod = getHttpMethod(method);
-                    final String fullPath = controllerPath + methodPathSpec;
-                    final String methodName = method.getName();
+                    for (String methodPathSpec : paths) {
 
-                    router.METHOD(httpMethod).route(fullPath).with(resourceClass, methodName);
+                        final String fullPath = resourcePath + methodPathSpec;
+
+                        registerMethod(resourceClass, method, fullPath);
+                    }
 
                 }
-
             }
-
         }
     }
 
@@ -189,8 +199,7 @@ public class JaxyRoutes implements ApplicationRoutes {
                 new SubTypesScanner());
         for (Class<?> httpMethod : annotationReflections.getTypesAnnotatedWith(HttpMethod.class)) {
             if (httpMethod.isAnnotation()) {
-                methods
-                        .addAll(reflections.getMethodsAnnotatedWith((Class<? extends Annotation>) httpMethod));
+                methods.addAll(reflections.getMethodsAnnotatedWith((Class<? extends Annotation>) httpMethod));
             }
         }
 
@@ -219,23 +228,23 @@ public class JaxyRoutes implements ApplicationRoutes {
         }
 
         Set<String> paths = Sets.newLinkedHashSet();
-        Path controllerPath = resourceClass.getAnnotation(Path.class);
+        Path resourcePath = resourceClass.getAnnotation(Path.class);
 
-        if (controllerPath == null) {
+        if (resourcePath == null) {
             return parentPaths;
         }
 
         if (parentPaths.isEmpty()) {
 
-            // add all controller paths
-            paths.addAll(Arrays.asList(controllerPath.value()));
+            // add all resource paths
+            paths.addAll(Arrays.asList(resourcePath.value()));
 
         } else {
 
-            // create controller paths based on the parent paths
+            // create resource paths based on the parent paths
             for (String parentPath : parentPaths) {
 
-                for (String path : controllerPath.value()) {
+                for (String path : resourcePath.value()) {
                     paths.add(parentPath + path);
                 }
 
@@ -255,8 +264,11 @@ public class JaxyRoutes implements ApplicationRoutes {
 
         Set<URL> packagesToScanForRoutes = Sets.newHashSet();
 
-        packagesToScanForRoutes.addAll(ClasspathHelper
-                .forPackage(scanPkgs));
+        Splitter.on(",")
+                .trimResults()
+                .omitEmptyStrings()
+                .split(scanPkgs)
+                .forEach(it -> packagesToScanForRoutes.addAll(ClasspathHelper.forPackage(scanPkgs)));
 
         return packagesToScanForRoutes;
 
@@ -283,8 +295,7 @@ public class JaxyRoutes implements ApplicationRoutes {
         Set<Mode> modes = Sets.newTreeSet();
         for (Annotation annotation : method.getAnnotations()) {
 
-            Class<? extends Annotation> annotationClass = annotation
-                    .annotationType();
+            Class<? extends Annotation> annotationClass = annotation.annotationType();
 
             if (annotationClass.isAnnotationPresent(RuntimeMode.class)) {
 
@@ -322,4 +333,9 @@ public class JaxyRoutes implements ApplicationRoutes {
         return HttpMethod.GET;
     }
 
+    @Override
+    public int order() {
+        // apply first, other routes can override.
+        return 0;
+    }
 }

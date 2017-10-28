@@ -20,7 +20,7 @@ import com.google.inject.Singleton;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import io.sunflower.ewf.assets.AssetsResource;
+import io.sunflower.ewf.assets.AssetsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class TemplateEngineFreemarkerAssetsAtMethod implements
     public TemplateModel exec(List args) throws TemplateModelException {
 
         List<Object> argsWithResourceAndMethod = new ArrayList<>(args.size() + 2);
-        argsWithResourceAndMethod.add(AssetsResource.class.getName());
+        argsWithResourceAndMethod.add(AssetsController.class.getName());
         argsWithResourceAndMethod.add("serveStatic");
         argsWithResourceAndMethod.add("fileName");
         argsWithResourceAndMethod.addAll(args);

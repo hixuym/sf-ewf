@@ -26,50 +26,50 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class AssetsResourceHelperTest {
+public class AssetsControllerHelperTest {
 
-    AssetsResourceHelper assetsResourceHelper;
+    AssetsControllerHelper assetsControllerHelper;
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Before
     public void setup() {
-        assetsResourceHelper = new AssetsResourceHelper();
+        assetsControllerHelper = new AssetsControllerHelper();
     }
 
     @Test
     public void testNormalizePathWithoutLeadingSlash() {
         assertEquals("dir1/test.test",
-                assetsResourceHelper.normalizePathWithoutLeadingSlash("/dir1/test.test", true));
+                assetsControllerHelper.normalizePathWithoutLeadingSlash("/dir1/test.test", true));
         assertEquals("dir1/test.test",
-                assetsResourceHelper.normalizePathWithoutLeadingSlash("dir1/test.test", true));
+                assetsControllerHelper.normalizePathWithoutLeadingSlash("dir1/test.test", true));
         //TODO
-//        assertEquals(null, assetsResourceHelper.normalizePathWithoutLeadingSlash("/../test.test", true));
-//        assertEquals(null, assetsResourceHelper.normalizePathWithoutLeadingSlash("../test.test", true));
+//        assertEquals(null, assetsControllerHelper.normalizePathWithoutLeadingSlash("/../test.test", true));
+//        assertEquals(null, assetsControllerHelper.normalizePathWithoutLeadingSlash("../test.test", true));
         assertEquals("dir2/file.test",
-                assetsResourceHelper.normalizePathWithoutLeadingSlash("/dir1/../dir2/file.test", true));
-        assertEquals(null, assetsResourceHelper.normalizePathWithoutLeadingSlash(null, true));
-        assertEquals("", assetsResourceHelper.normalizePathWithoutLeadingSlash("", true));
+                assetsControllerHelper.normalizePathWithoutLeadingSlash("/dir1/../dir2/file.test", true));
+        assertEquals(null, assetsControllerHelper.normalizePathWithoutLeadingSlash(null, true));
+        assertEquals("", assetsControllerHelper.normalizePathWithoutLeadingSlash("", true));
     }
 
     @Test
     public void testIsDirectoryURLWithJarProtocol() throws Exception {
-        boolean result = assetsResourceHelper
+        boolean result = assetsControllerHelper
                 .isDirectoryURL(new URL("jar:file:/home/ninja/ninja.jar!/"));
         assertThat(result, is(false));
     }
 
     @Test
     public void testIsDirectoryURLWithFile() throws Exception {
-        boolean result = assetsResourceHelper
+        boolean result = assetsControllerHelper
                 .isDirectoryURL(this.getClass().getResource("/assets/testasset.txt"));
         assertThat(result, is(false));
     }
 
     @Test
     public void testIsDirectoryURLWithDirectory() throws Exception {
-        boolean result = assetsResourceHelper
+        boolean result = assetsControllerHelper
                 .isDirectoryURL(this.getClass().getResource("/assets/assets/"));
         assertThat(result, is(true));
     }
@@ -77,7 +77,7 @@ public class AssetsResourceHelperTest {
     @Test
     public void testIsDirectoryURLWithDirectoryContainsSpecialCharacters() throws Exception {
         File dir = tempFolder.newFolder("a#b");
-        boolean result = assetsResourceHelper.isDirectoryURL(dir.toURI().toURL());
+        boolean result = assetsControllerHelper.isDirectoryURL(dir.toURI().toURL());
         assertThat(result, is(true));
     }
 

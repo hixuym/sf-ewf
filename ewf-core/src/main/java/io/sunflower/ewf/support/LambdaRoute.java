@@ -14,11 +14,12 @@
  */
 package io.sunflower.ewf.support;
 
-import io.sunflower.ewf.support.ResourceMethods.ResourceMethod;
-
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 public class LambdaRoute {
 
     private final Method functionalMethod;
@@ -43,9 +44,9 @@ public class LambdaRoute {
         return targetObject;
     }
 
-    static public LambdaRoute resolve(ResourceMethod resourceMethod) {
+    static public LambdaRoute resolve(ControllerMethods.ControllerMethod controllerMethod) {
         try {
-            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(resourceMethod);
+            Lambdas.LambdaInfo lambdaInfo = Lambdas.reflect(controllerMethod);
 
             switch (lambdaInfo.getKind()) {
                 case ANY_INSTANCE_METHOD_REFERENCE:
@@ -60,7 +61,7 @@ public class LambdaRoute {
                         return new LambdaRoute(
                                 lambdaInfo.getFunctionalMethod(),
                                 lambdaInfo.getImplementationMethod(),
-                                resourceMethod);
+                                controllerMethod);
                     }
             }
         } catch (IllegalArgumentException e) {
@@ -69,9 +70,9 @@ public class LambdaRoute {
 
         // fallback to simple call the "apply" method on the supplied method instance
         try {
-            Method functionalMethod = Lambdas.getMethod(resourceMethod.getClass(), "apply");
+            Method functionalMethod = Lambdas.getMethod(controllerMethod.getClass(), "apply");
             functionalMethod.setAccessible(true);
-            return new LambdaRoute(functionalMethod, null, resourceMethod);
+            return new LambdaRoute(functionalMethod, null, controllerMethod);
         } catch (NoSuchMethodException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

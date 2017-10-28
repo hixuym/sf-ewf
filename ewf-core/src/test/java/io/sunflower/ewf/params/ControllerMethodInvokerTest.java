@@ -26,7 +26,7 @@ import io.sunflower.ewf.errors.RoutingException;
 import io.sunflower.ewf.i18n.Lang;
 import io.sunflower.ewf.i18n.internal.LangImpl;
 import io.sunflower.ewf.internal.ValidationImpl;
-import io.sunflower.ewf.params.internal.ResourceMethodInvoker;
+import io.sunflower.ewf.params.internal.ControllerMethodInvoker;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.support.Settings;
@@ -70,10 +70,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * ResourceMethodInvokerTest.
+ * ControllerMethodInvokerTest.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ResourceMethodInvokerTest {
+public class ControllerMethodInvokerTest {
 
     @Mock
     private MockController mockController;
@@ -1245,7 +1245,7 @@ public class ResourceMethodInvokerTest {
         return dto;
     }
 
-    private ResourceMethodInvoker create(String methodName, final Object... toBind) {
+    private ControllerMethodInvoker create(String methodName, final Object... toBind) {
         Method method = null;
         for (Method m : MockController.class.getMethods()) {
             if (m.getName().equals(methodName)) {
@@ -1253,7 +1253,7 @@ public class ResourceMethodInvokerTest {
                 break;
             }
         }
-        return ResourceMethodInvoker.build(method, method, Guice.createInjector(new AbstractModule() {
+        return ControllerMethodInvoker.build(method, method, Guice.createInjector(new AbstractModule() {
             @SuppressWarnings({
                     "rawtypes", "unchecked"
             })

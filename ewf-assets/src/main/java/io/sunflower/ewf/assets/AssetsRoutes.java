@@ -30,8 +30,8 @@ public class AssetsRoutes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)
         ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsResource::serveWebJars);
-        router.GET().route("/assets/{fileName: .*}").with(AssetsResource::serveStatic);
+        router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsController::serveWebJars);
+        router.GET().route("/assets/{fileName: .*}").with(AssetsController::serveStatic);
     }
 
     @Override

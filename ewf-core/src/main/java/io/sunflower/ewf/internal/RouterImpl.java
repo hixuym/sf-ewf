@@ -23,7 +23,6 @@ import com.google.inject.Provider;
 import io.sunflower.ewf.RouteBuilder;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.support.MethodReference;
-import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,6 @@ public class RouterImpl implements Router {
 
     static private final Logger logger = LoggerFactory.getLogger(RouterImpl.class);
 
-    private final Settings configuration;
     private final List<RouteBuilderImpl> allRouteBuilders = new ArrayList<>();
     private final Injector injector;
     private List<Route> routes;
@@ -52,10 +50,8 @@ public class RouterImpl implements Router {
 
     @Inject
     public RouterImpl(Injector injector,
-                      Settings configuration,
                       Provider<RouteBuilderImpl> routeBuilderImplProvider) {
         this.injector = injector;
-        this.configuration = configuration;
         this.routeBuilderImplProvider = routeBuilderImplProvider;
     }
 
@@ -94,11 +90,11 @@ public class RouterImpl implements Router {
 
         for (Route route : this.routes) {
             // its possible this route is a Result instead of a resource method
-            if (route.getResourceClass() != null) {
+            if (route.getControllerClass() != null) {
                 MethodReference resourceMethodRef
                         = new MethodReference(
-                        route.getResourceClass(),
-                        route.getResourceMethod().getName());
+                        route.getControllerClass(),
+                        route.getControllerMethod().getName());
 
                 if (this.reverseRoutes.containsKey(resourceMethodRef)) {
                     // the first one wins with reverse routing so we ignore this route
@@ -216,10 +212,10 @@ public class RouterImpl implements Router {
             maxMethodLen = Math.max(maxMethodLen, route.getHttpMethod().length());
             maxPathLen = Math.max(maxPathLen, route.getUri().length());
 
-            if (route.getResourceClass() != null) {
+            if (route.getControllerClass() != null) {
 
-                int resourceLen = route.getResourceClass().getName().length()
-                        + route.getResourceMethod().getName().length();
+                int resourceLen = route.getControllerClass().getName().length()
+                        + route.getControllerMethod().getName().length();
                 maxResourceLen = Math.max(maxResourceLen, resourceLen);
 
             }
@@ -236,13 +232,13 @@ public class RouterImpl implements Router {
 
         for (Route route : getRoutes()) {
 
-            if (route.getResourceClass() != null) {
+            if (route.getControllerClass() != null) {
 
                 logger.info("{} {}  =>  {}.{}()",
                         Strings.padEnd(route.getHttpMethod(), maxMethodLen, ' '),
                         Strings.padEnd(route.getUri(), maxPathLen, ' '),
-                        route.getResourceClass().getName(),
-                        route.getResourceMethod().getName());
+                        route.getControllerClass().getName(),
+                        route.getControllerMethod().getName());
 
             } else {
 

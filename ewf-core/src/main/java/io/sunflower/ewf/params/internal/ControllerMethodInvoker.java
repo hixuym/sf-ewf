@@ -37,21 +37,21 @@ import java.util.Optional;
  *
  * @author michael
  */
-public class ResourceMethodInvoker {
+public class ControllerMethodInvoker {
 
-    private final static Logger logger = LoggerFactory.getLogger(ResourceMethodInvoker.class);
+    private final static Logger logger = LoggerFactory.getLogger(ControllerMethodInvoker.class);
 
     private final Method method;
     private final ArgumentExtractor<?>[] argumentExtractors;
 
-    private ResourceMethodInvoker(
+    private ControllerMethodInvoker(
             Method method,
             ArgumentExtractor<?>[] argumentExtractors) {
         this.method = method;
         this.argumentExtractors = argumentExtractors;
     }
 
-    public Object invoke(Object resource, Context context) {
+    public Object invoke(Object controller, Context context) {
         // Extract arguments
         Object[] arguments = new Object[argumentExtractors.length];
         for (int i = 0; i < argumentExtractors.length; i++) {
@@ -62,7 +62,7 @@ public class ResourceMethodInvoker {
         checkNullArgumentsAndThrowBadRequestException(arguments);
 
         try {
-            return method.invoke(resource, arguments);
+            return method.invoke(controller, arguments);
         } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -93,7 +93,7 @@ public class ResourceMethodInvoker {
      * @param injector             The guice getInjector
      * @return An invoker
      */
-    public static ResourceMethodInvoker build(
+    public static ControllerMethodInvoker build(
             Method functionalMethod,
             Method implementationMethod,
             Injector injector) {
@@ -148,7 +148,7 @@ public class ResourceMethodInvoker {
                             argumentExtractors[i]);
         }
 
-        return new ResourceMethodInvoker(functionalMethod, argumentExtractors);
+        return new ControllerMethodInvoker(functionalMethod, argumentExtractors);
     }
 
     private static ArgumentExtractor<?> getArgumentExtractor(

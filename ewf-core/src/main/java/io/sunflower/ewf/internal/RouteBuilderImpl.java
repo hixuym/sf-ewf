@@ -20,9 +20,9 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.util.Providers;
 import io.sunflower.ewf.*;
-import io.sunflower.ewf.params.internal.ResourceMethodInvoker;
+import io.sunflower.ewf.params.internal.ControllerMethodInvoker;
+import io.sunflower.ewf.support.ControllerMethods;
 import io.sunflower.ewf.support.LambdaRoute;
-import io.sunflower.ewf.support.ResourceMethods.ResourceMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,14 +108,14 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     @Override
-    public void with(Class resourceClass, String resourceMethod) {
+    public void with(Class controllerClass, String controllerMethod) {
         this.functionalMethod
-                = verifyControllerMethod(resourceClass, resourceMethod);
+                = verifyControllerMethod(controllerClass, controllerMethod);
     }
 
     @Override
-    public Void with(ResourceMethod resourceMethod) {
-        LambdaRoute lambdaRoute = LambdaRoute.resolve(resourceMethod);
+    public Void with(ControllerMethods.ControllerMethod controllerMethod) {
+        LambdaRoute lambdaRoute = LambdaRoute.resolve(controllerMethod);
         this.functionalMethod = lambdaRoute.getFunctionalMethod();
         this.implementationMethod = lambdaRoute.getImplementationMethod();
         this.targetObject = lambdaRoute.getTargetObject();
@@ -169,20 +169,20 @@ public class RouteBuilderImpl implements RouteBuilder {
      * <p>
      * We are reloading when there are changes. So this is almost as good as compile time checking.
      *
-     * @param resourceClass  The controller class
-     * @param resourceMethod The method
+     * @param controllerClass  The controller class
+     * @param controllerMethod The method
      * @return The actual method
      */
-    private Method verifyControllerMethod(Class<?> resourceClass,
-                                          String resourceMethod) {
+    private Method verifyControllerMethod(Class<?> controllerClass,
+                                          String controllerMethod) {
         try {
             Method methodFromQueryingClass = null;
 
             // 1. Make sure method is in class
             // 2. Make sure only one method is there. Otherwise we cannot really
             // know what to do with the parameters.
-            for (Method method : resourceClass.getMethods()) {
-                if (method.getName().equals(resourceMethod)) {
+            for (Method method : controllerClass.getMethods()) {
+                if (method.getName().equals(controllerMethod)) {
                     if (methodFromQueryingClass == null) {
                         methodFromQueryingClass = method;
                     } else {
@@ -204,10 +204,10 @@ public class RouteBuilderImpl implements RouteBuilder {
             }
 
         } catch (SecurityException e) {
-            log.error("Error while checking for valid Resource / resourceMethod combination", e);
+            log.error("Error while checking for valid Resource / controllerMethod combination", e);
         } catch (NoSuchMethodException e) {
             log.error("Error in route configuration!!!");
-            log.error("Can not find Resource " + resourceClass.getName() + " and method " + resourceMethod);
+            log.error("Can not find Resource " + controllerClass.getName() + " and method " + controllerMethod);
             log.error("Hint: make sure the resource method returns a Result!");
             log.error("Hint: RouteHandler does not allow more than one method with the same name!");
         }
@@ -273,8 +273,8 @@ public class RouteBuilderImpl implements RouteBuilder {
                     : injector.getProvider(functionalMethod.getDeclaringClass()));
 
             // invoke functional method with optionally using impl for argument extraction
-            ResourceMethodInvoker methodInvoker
-                    = ResourceMethodInvoker.build(
+            ControllerMethodInvoker methodInvoker
+                    = ControllerMethodInvoker.build(
                     functionalMethod, implementationMethod.orElse(functionalMethod), injector);
 
             return new FilterChainEnd(targetProvider, methodInvoker);
@@ -290,7 +290,7 @@ public class RouteBuilderImpl implements RouteBuilder {
         }
     }
 
-    private Set<Class<? extends Filter>> calculateFiltersForClass(Class resourceClass) {
+    private Set<Class<? extends Filter>> calculateFiltersForClass(Class controllerClass) {
 
         LinkedHashSet<Class<? extends Filter>> filters = new LinkedHashSet<>();
 
@@ -299,19 +299,19 @@ public class RouteBuilderImpl implements RouteBuilder {
         //
 
         // Superclass
-        if (resourceClass.getSuperclass() != null) {
-            filters.addAll(calculateFiltersForClass(resourceClass.getSuperclass()));
+        if (controllerClass.getSuperclass() != null) {
+            filters.addAll(calculateFiltersForClass(controllerClass.getSuperclass()));
         }
 
         // Interfaces
-        if (resourceClass.getInterfaces() != null) {
-            for (Class clazz : resourceClass.getInterfaces()) {
+        if (controllerClass.getInterfaces() != null) {
+            for (Class clazz : controllerClass.getInterfaces()) {
                 filters.addAll(calculateFiltersForClass(clazz));
             }
         }
 
         // Now add from here
-        FilterWith filterWith = (FilterWith) resourceClass.getAnnotation(FilterWith.class);
+        FilterWith filterWith = (FilterWith) controllerClass.getAnnotation(FilterWith.class);
         if (filterWith != null) {
             filters.addAll(Arrays.asList(filterWith.value()));
         }

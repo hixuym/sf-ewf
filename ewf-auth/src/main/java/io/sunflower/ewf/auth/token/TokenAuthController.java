@@ -28,12 +28,12 @@ import javax.inject.Singleton;
 import static io.sunflower.ewf.Results.json;
 
 /**
- * TokenResource
+ * TokenAuthController
  *
  * @author michael created on 17/10/27 16:16
  */
 @Singleton
-public class TokenResource {
+public class TokenAuthController {
 
     @Inject
     private TokenManager tokenManager;

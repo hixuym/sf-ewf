@@ -44,10 +44,10 @@ import java.net.URLConnection;
  * @author michael
  */
 @Singleton
-public class AssetsResource {
+public class AssetsController {
 
     private final static Logger logger = LoggerFactory
-            .getLogger(AssetsResource.class);
+            .getLogger(AssetsController.class);
 
     public final static String ASSETS_DIR = "assets";
 
@@ -59,14 +59,14 @@ public class AssetsResource {
 
     private final Settings configuration;
 
-    private final AssetsResourceHelper assetsResourceHelper;
+    private final AssetsControllerHelper assetsControllerHelper;
 
     @Inject
-    public AssetsResource(AssetsResourceHelper assetsResourceHelper,
-                          HttpCacheToolkit httpCacheToolkit,
-                          MimeTypes mimeTypes,
-                          Settings configuration) {
-        this.assetsResourceHelper = assetsResourceHelper;
+    public AssetsController(AssetsControllerHelper assetsControllerHelper,
+                            HttpCacheToolkit httpCacheToolkit,
+                            MimeTypes mimeTypes,
+                            Settings configuration) {
+        this.assetsControllerHelper = assetsControllerHelper;
         this.httpCacheToolkit = httpCacheToolkit;
         this.mimeTypes = mimeTypes;
         this.configuration = configuration;
@@ -114,7 +114,7 @@ public class AssetsResource {
         // check if stream exists. if not print a notfound exception
         if (url == null) {
             context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
-        } else if (assetsResourceHelper.isDirectoryURL(url)) {
+        } else if (assetsControllerHelper.isDirectoryURL(url)) {
             // Disable listing of directory contents
             context.finalizeHeadersWithoutFlashAndSessionCookie(Results.notFound());
         } else {
@@ -169,7 +169,7 @@ public class AssetsResource {
                 // via System.getPropery("user.dir").
                 // In that case we fall back to trying to load from classpath
                 && new File(assetsDirInDevModeWithoutTrailingSlash()).exists()) {
-            String finalNameWithoutLeadingSlash = assetsResourceHelper
+            String finalNameWithoutLeadingSlash = assetsControllerHelper
                     .normalizePathWithoutLeadingSlash(fileName, false);
             File possibleFile = new File(
                     assetsDirInDevModeWithoutTrailingSlash()
@@ -177,7 +177,7 @@ public class AssetsResource {
                             + finalNameWithoutLeadingSlash);
             url = getUrlForFile(possibleFile);
         } else {
-            String finalNameWithoutLeadingSlash = assetsResourceHelper
+            String finalNameWithoutLeadingSlash = assetsControllerHelper
                     .normalizePathWithoutLeadingSlash(fileName, true);
             url = this.getClass().getClassLoader()
                     .getResource(ASSETS_DIR + "/" + finalNameWithoutLeadingSlash);
@@ -204,7 +204,7 @@ public class AssetsResource {
      */
     private URL getStaticFileFromMetaInfResourcesDir(String fileName) {
         String finalNameWithoutLeadingSlash
-                = assetsResourceHelper.normalizePathWithoutLeadingSlash(fileName, true);
+                = assetsControllerHelper.normalizePathWithoutLeadingSlash(fileName, true);
         return this.getClass().getClassLoader()
                 .getResource("META-INF/resources/webjars/" + finalNameWithoutLeadingSlash);
     }
