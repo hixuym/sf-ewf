@@ -131,7 +131,7 @@ public class JaxyRoutes implements ApplicationRoutes {
      * classes for these methods are generated
      */
     private void processFoundMethods() {
-        for (Method method : findResourceMethods()) {
+        for (Method method : findControllerMethods()) {
             if (allowMethod(method)) {
 
                 // add the method to our todo list
@@ -191,7 +191,7 @@ public class JaxyRoutes implements ApplicationRoutes {
      * Searches for Methods that have either a Path Annotation or a HTTP-Method Annotation
      */
     @SuppressWarnings("unchecked")
-    private Set<Method> findResourceMethods() {
+    private Set<Method> findControllerMethods() {
         Set<Method> methods = Sets.newLinkedHashSet();
 
         methods.addAll(reflections.getMethodsAnnotatedWith(Path.class));
@@ -221,30 +221,30 @@ public class JaxyRoutes implements ApplicationRoutes {
      *
      * @return the paths for the controller
      */
-    private Set<String> collectPaths(Class<?> resourceClass) {
+    private Set<String> collectPaths(Class<?> controllerClass) {
         Set<String> parentPaths = Collections.emptySet();
-        if (resourceClass.getSuperclass() != null) {
-            parentPaths = collectPaths(resourceClass.getSuperclass());
+        if (controllerClass.getSuperclass() != null) {
+            parentPaths = collectPaths(controllerClass.getSuperclass());
         }
 
         Set<String> paths = Sets.newLinkedHashSet();
-        Path resourcePath = resourceClass.getAnnotation(Path.class);
+        Path controllerPath = controllerClass.getAnnotation(Path.class);
 
-        if (resourcePath == null) {
+        if (controllerPath == null) {
             return parentPaths;
         }
 
         if (parentPaths.isEmpty()) {
 
             // add all resource paths
-            paths.addAll(Arrays.asList(resourcePath.value()));
+            paths.addAll(Arrays.asList(controllerPath.value()));
 
         } else {
 
             // create resource paths based on the parent paths
             for (String parentPath : parentPaths) {
 
-                for (String path : resourcePath.value()) {
+                for (String path : controllerPath.value()) {
                     paths.add(parentPath + path);
                 }
 
