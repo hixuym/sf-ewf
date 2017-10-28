@@ -14,7 +14,7 @@
  */
 package io.sunflower.ewf.jaxy;
 
-import io.sunflower.ewf.support.Mode;
+import io.sunflower.guice.Mode;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

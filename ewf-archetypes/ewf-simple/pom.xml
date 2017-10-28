@@ -13,7 +13,7 @@
     <artifactId>ewf-simple</artifactId>
     <packaging>maven-archetype</packaging>
 
-    <name>sunflower archetype for simple sf-ewf application</name>
+    <name>sunflower ewf archetype for simple application</name>
 
     <dependencyManagement>
         <dependencies>

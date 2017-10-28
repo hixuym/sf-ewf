@@ -19,12 +19,11 @@ import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
-import io.sunflower.ewf.spi.internal.DefaultExceptionHandler;
 
 /**
  * @author michael
  */
-@ImplementedBy(DefaultExceptionHandler.class)
+@ImplementedBy(ExceptionHandlerImpl.class)
 public interface ExceptionHandler {
 
     /**

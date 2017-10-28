@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.spi.internal;
+package io.sunflower.ewf.spi;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
@@ -23,7 +23,6 @@ import io.sunflower.ewf.errors.ErrorMessage;
 import io.sunflower.ewf.i18n.Messages;
 import io.sunflower.ewf.internal.diagnostics.DiagnosticError;
 import io.sunflower.ewf.internal.diagnostics.DiagnosticErrorBuilder;
-import io.sunflower.ewf.spi.ExceptionHandler;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.Settings;
 import org.slf4j.Logger;
@@ -35,15 +34,15 @@ import java.util.Optional;
 /**
  * @author michael
  */
-public class DefaultExceptionHandler implements ExceptionHandler {
+public class ExceptionHandlerImpl implements ExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerImpl.class);
 
     private final Messages messages;
     private final Settings configuration;
 
     @Inject
-    public DefaultExceptionHandler(Messages messages, Settings configuration) {
+    public ExceptionHandlerImpl(Messages messages, Settings configuration) {
         this.messages = messages;
         this.configuration = configuration;
     }

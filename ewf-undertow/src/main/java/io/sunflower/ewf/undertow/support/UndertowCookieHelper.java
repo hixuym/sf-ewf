@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.undertow;
+package io.sunflower.ewf.undertow.support;
 
 import io.undertow.server.handlers.Cookie;
 import io.undertow.server.handlers.CookieImpl;

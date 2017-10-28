@@ -1,5 +1,8 @@
 server:
   type: undertow
+  properties:
+#    ewf.secret: 123
+#    ewf.scanPkgs:
 
 logging:
   level: INFO

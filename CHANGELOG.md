@@ -1,14 +1,14 @@
 Sunflower Web Application Framework
 ======================================
-1.2.0 
+1.2.0 - 2017-10-28
 
   - add ewf archetypes
-  - add ewf auth module
-  - add ewf assets module
-  - session disabled by default, enabled by add ewf.sessionEnabled property
-  - assets disabled by default, enabled by registry AssetsRoutes
-  - content type of HTML disabled by default, enabled by registry TemplateFreemarker
-  - content type of XML disabled by default, enabled by registry XmlModule
+  - add ewf auth module, include basic and token auth
+  - add ewf assets module, disabled by default, enabled by register AssetsRoutes
+  - add ewf jaxy routes, just like jax-rs style, set ewf.scanPkgs property
+  - content type of HTML disabled by default, enabled by register TemplateFreemarker
+  - content type of XML disabled by default, enabled by register XmlModule
+  - upgrade sf-framework to 1.4.0
   
 1.1.0 - 2017-10-18
 

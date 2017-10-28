@@ -72,7 +72,7 @@ public class RouterImplTest {
         Provider<RouteBuilderImpl> routeBuilderImplProvider = mock(Provider.class);
         when(routeBuilderImplProvider.get()).thenAnswer(
                 (invocation) -> new RouteBuilderImpl());
-        router = new RouterImpl(injector, configuration, routeBuilderImplProvider);
+        router = new RouterImpl(injector, routeBuilderImplProvider);
 
         // add route:
         router.GET().route("/testroute").with(TestResource.class, "index");

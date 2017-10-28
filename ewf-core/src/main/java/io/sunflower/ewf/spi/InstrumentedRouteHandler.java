@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.spi.internal;
+package io.sunflower.ewf.spi;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Meter;

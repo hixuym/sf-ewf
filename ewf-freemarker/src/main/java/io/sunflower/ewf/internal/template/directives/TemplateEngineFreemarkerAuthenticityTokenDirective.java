@@ -27,7 +27,7 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * @author svenkubiak
+ * @author michael
  */
 @SuppressWarnings("rawtypes")
 public class TemplateEngineFreemarkerAuthenticityTokenDirective implements TemplateDirectiveModel {

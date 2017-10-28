@@ -69,7 +69,6 @@ public interface Constants {
 
     String HANDLER_PATH_KEY = "ewf.handlerPath";
     String SF_UNDERTOW_CTX_PATH_KEY = "sf.undertowContextPath";
-    String MODE_KEY = "ewf.mode";
     String UPLOAD_FOLDER_KEY = "ewf.uploadTempFolder";
     String JSONP_CALLBACK_PARAM_KEY = "ewf.jsonpCallbackParam";
     String JAXY_ROUTES_ENABLED = "ewf.jaxyRoutesEnabled";

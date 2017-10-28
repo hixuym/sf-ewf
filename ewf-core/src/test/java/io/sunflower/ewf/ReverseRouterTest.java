@@ -56,7 +56,7 @@ public class ReverseRouterTest {
                 .thenReturn(new ParamParsers(Collections.emptySet()));
         Provider<RouteBuilderImpl> routeBuilderImplProvider = mock(Provider.class);
         when(routeBuilderImplProvider.get()).thenAnswer((invocation) -> new RouteBuilderImpl());
-        router = new RouterImpl(injector, configuration, routeBuilderImplProvider);
+        router = new RouterImpl(injector, routeBuilderImplProvider);
         reverseRouter = new ReverseRouter(configuration, router);
 
         router.GET().route("/home").with(TestController::home);

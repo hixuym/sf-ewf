@@ -13,11 +13,12 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.undertow;
+package io.sunflower.ewf.undertow.support;
 
 import com.google.inject.Injector;
 import io.sunflower.ewf.spi.RouteHandler;
 import io.sunflower.ewf.support.Settings;
+import io.sunflower.ewf.undertow.EwfHttpHandler;
 import io.sunflower.lifecycle.setup.StandardThreadExecutor;
 import io.sunflower.undertow.handler.StandardThreadExecutorBlockingHandler;
 import io.undertow.server.HttpHandler;

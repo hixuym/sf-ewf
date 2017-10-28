@@ -16,6 +16,7 @@
 package io.sunflower.ewf.support;
 
 import com.google.common.base.Splitter;
+import io.sunflower.guice.Mode;
 import io.sunflower.util.Duration;
 import org.apache.commons.lang3.StringUtils;
 
@@ -61,7 +62,7 @@ public class Settings {
     private boolean diagnosticsEnabled = false;
     private boolean usageOfXForwardedHeaderEnabled = false;
 
-    private Mode mode = ModeHelper.determineModeFromSystemPropertiesOrProdIfNotSet();
+    private Mode mode = Mode.dev;
 
     private String handlerPath = "/";
 
@@ -78,6 +79,11 @@ public class Settings {
         loadSettings(rawSettings);
     }
 
+    public Settings(Map<String, String> rawSettings, Mode mode) {
+        this.mode = mode;
+        loadSettings(rawSettings);
+    }
+
     private void loadSettings(Map<String, String> rawSettings) {
         if (rawSettings.containsKey(HANDLER_PATH_KEY)) {
             this.handlerPath = rawSettings.get(HANDLER_PATH_KEY);
@@ -90,10 +96,6 @@ public class Settings {
             String handlerPath = StringUtils.removeEnd(this.handlerPath, "/");
 
             this.contextPath = contextPath + handlerPath;
-        }
-
-        if (rawSettings.containsKey(MODE_KEY)) {
-            this.mode = Mode.valueOf(rawSettings.get(MODE_KEY));
         }
 
         if (rawSettings.containsKey(UPLOAD_FOLDER_KEY)) {

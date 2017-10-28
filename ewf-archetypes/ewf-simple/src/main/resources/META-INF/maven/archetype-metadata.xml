@@ -52,14 +52,9 @@
             <directory>src/main/java/__packageInPathFormat__/health</directory>
         </fileSet>
 
-        <!-- resources (empty) -->
+        <!-- controllers (empty) -->
         <fileSet filtered="true" packaged="false">
-            <directory>src/main/java/__packageInPathFormat__/resources</directory>
-        </fileSet>
-
-        <!--- assets -->
-        <fileSet filtered="true" packaged="false">
-            <directory>src/main/resources/assets</directory>
+            <directory>src/main/java/__packageInPathFormat__/controllers</directory>
         </fileSet>
 
         <!-- banner! -->
@@ -92,7 +87,7 @@
 
         <!-- resource tests -->
         <fileSet filtered="true" packaged="false">
-            <directory>src/test/java/__packageInPathFormat__/resources</directory>
+            <directory>src/test/java/__packageInPathFormat__/controllers</directory>
         </fileSet>
 
         <!-- test fixtures -->

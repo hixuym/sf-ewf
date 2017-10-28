@@ -13,22 +13,20 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.support;
+package io.sunflower.ewf;
 
-public enum Mode {
+import com.google.inject.AbstractModule;
+import io.sunflower.ewf.internal.template.TemplateEngineFreemarker;
 
-    prod("prod"),
-    dev("dev"),
-    test("test");
-
-    private String mode;
-
-    Mode(String mode) {
-        this.mode = mode;
+/**
+ * FreemarkerModule
+ *
+ * @author michael
+ * created on 17/10/28 22:24
+ */
+public class FreemarkerModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(TemplateEngineFreemarker.class);
     }
-
-    public String toString() {
-        return mode;
-    }
-
 }
