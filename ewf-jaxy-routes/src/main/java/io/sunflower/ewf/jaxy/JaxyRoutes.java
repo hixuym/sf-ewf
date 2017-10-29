@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf.jaxy;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -30,6 +31,7 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,13 +197,15 @@ public class JaxyRoutes implements ApplicationRoutes {
         Set<Method> methods = Sets.newLinkedHashSet();
 
         methods.addAll(reflections.getMethodsAnnotatedWith(Path.class));
-        Reflections annotationReflections = new Reflections("", new TypeAnnotationsScanner(),
-                new SubTypesScanner());
-        for (Class<?> httpMethod : annotationReflections.getTypesAnnotatedWith(HttpMethod.class)) {
-            if (httpMethod.isAnnotation()) {
-                methods.addAll(reflections.getMethodsAnnotatedWith((Class<? extends Annotation>) httpMethod));
-            }
-        }
+
+        methods.addAll(reflections.getMethodsAnnotatedWith(GET.class));
+        methods.addAll(reflections.getMethodsAnnotatedWith(POST.class));
+        methods.addAll(reflections.getMethodsAnnotatedWith(PUT.class));
+        methods.addAll(reflections.getMethodsAnnotatedWith(DELETE.class));
+
+        methods.addAll(reflections.getMethodsAnnotatedWith(HEAD.class));
+        methods.addAll(reflections.getMethodsAnnotatedWith(PATCH.class));
+        methods.addAll(reflections.getMethodsAnnotatedWith(OPTIONS.class));
 
         return methods;
     }
@@ -209,11 +213,17 @@ public class JaxyRoutes implements ApplicationRoutes {
     private void configureReflections() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
-        Set<URL> packagesToScan = getPackagesToScanForRoutes();
+        FilterBuilder filter = new FilterBuilder();
+
+        Set<URL> packagesToScan = getPackagesToScanForRoutes(filter);
+
         builder.addUrls(packagesToScan);
 
+        builder.filterInputsBy(filter);
+
         builder.addScanners(new MethodAnnotationsScanner());
-        reflections = new Reflections(builder);
+
+        this.reflections = new Reflections(builder);
     }
 
     /**
@@ -260,7 +270,7 @@ public class JaxyRoutes implements ApplicationRoutes {
      *
      * @return the set of packages to scan
      */
-    public Set<URL> getPackagesToScanForRoutes() {
+    public Set<URL> getPackagesToScanForRoutes(FilterBuilder filterBuilder) {
 
         Set<URL> packagesToScanForRoutes = Sets.newHashSet();
 
@@ -268,7 +278,10 @@ public class JaxyRoutes implements ApplicationRoutes {
                 .trimResults()
                 .omitEmptyStrings()
                 .split(scanPkgs)
-                .forEach(it -> packagesToScanForRoutes.addAll(ClasspathHelper.forPackage(scanPkgs)));
+                .forEach(it -> {
+                    filterBuilder.includePackage(it);
+                    packagesToScanForRoutes.addAll(ClasspathHelper.forPackage(scanPkgs));
+                });
 
         return packagesToScanForRoutes;
 
