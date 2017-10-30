@@ -31,7 +31,7 @@ import io.sunflower.ewf.Result;
  */
 public class BadRequestException extends WebApplicationException {
 
-    final static String DEFAULT_MESSAGE = "That's a bad request and all we know.";
+    private final static String DEFAULT_MESSAGE = "That's a bad request and all we know.";
 
     public BadRequestException() {
         super(Result.SC_400_BAD_REQUEST, DEFAULT_MESSAGE);

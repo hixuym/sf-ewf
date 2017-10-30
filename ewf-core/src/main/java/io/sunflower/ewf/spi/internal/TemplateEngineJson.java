@@ -28,6 +28,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class TemplateEngineJson implements TemplateEngine {
 

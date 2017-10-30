@@ -59,13 +59,12 @@ public class BodyParserEnginePost implements BodyParserEngine {
     /**
      * Allows to instantiate inner objects with a prefix for each parameter key
      */
-    private <T> T invoke(Context context, Map<String, String[]> parameters, Class<T> classOfT,
-                         String paramPrefix) {
+    private <T> T invoke(Context context, Map<String, String[]> parameters, Class<T> classOfT, String paramPrefix) {
 
-        T t = null;
+        T result;
 
         try {
-            t = classOfT.newInstance();
+            result = classOfT.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error("Can't create new instance of class {}", classOfT.getName(), e);
             return null;
@@ -83,36 +82,31 @@ public class BodyParserEnginePost implements BodyParserEngine {
 
                     String[] values = parameters.get(paramPrefix + declaredField);
 
-                    if (Collection.class.isAssignableFrom(fieldType) || List.class
-                            .isAssignableFrom(fieldType)) {
+                    if (Collection.class.isAssignableFrom(fieldType) || List.class.isAssignableFrom(fieldType)) {
 
-                        ParamParsers.ListParamParser<?> parser = (ParamParsers.ListParamParser<?>) paramParsers
-                                .getListParser(getGenericType(field));
+                        ParamParsers.ListParamParser<?> parser = paramParsers.getListParser(getGenericType(field));
                         if (parser == null) {
-                            logger.warn("No parser defined for a collection of type {}",
-                                    getGenericType(field).getCanonicalName());
+                            logger.warn("No parser defined for a collection of type {}", getGenericType(field).getCanonicalName());
                         } else {
-                            field.set(t, parser.parseParameter(field.getName(), values, context.getValidation()));
+                            field.set(result, parser.parseParameter(field.getName(), values, context.getValidation()));
                         }
 
                     } else if (fieldType.isArray()) {
 
                         ParamParsers.ArrayParamParser<?> parser = paramParsers.getArrayParser(fieldType);
                         if (parser == null) {
-                            logger.warn("No parser defined for an array of type {}",
-                                    fieldType.getComponentType().getCanonicalName());
+                            logger.warn("No parser defined for an array of type {}", fieldType.getComponentType().getCanonicalName());
                         } else {
-                            field.set(t, parser.parseParameter(field.getName(), values, context.getValidation()));
+                            field.set(result, parser.parseParameter(field.getName(), values, context.getValidation()));
                         }
 
                     } else {
 
-                        ParamParser<?> parser = (ParamParser<?>) paramParsers.getParamParser(fieldType);
+                        ParamParser<?> parser = paramParsers.getParamParser(fieldType);
                         if (parser == null) {
                             logger.warn("No parser defined for type {}", fieldType.getCanonicalName());
                         } else {
-                            field.set(t,
-                                    parser.parseParameter(field.getName(), values[0], context.getValidation()));
+                            field.set(result, parser.parseParameter(field.getName(), values[0], context.getValidation()));
                         }
 
                     }
@@ -123,8 +117,7 @@ public class BodyParserEnginePost implements BodyParserEngine {
                     for (String parameter : parameters.keySet()) {
                         if (parameter.startsWith(paramPrefix + declaredField + ".")) {
                             if (isEmptyParameter(parameters.get(parameter))) {
-                                field.set(t,
-                                        invoke(context, parameters, fieldType, paramPrefix + declaredField + "."));
+                                field.set(result, invoke(context, parameters, fieldType, paramPrefix + declaredField + "."));
                                 break;
                             }
                         }
@@ -137,14 +130,12 @@ public class BodyParserEnginePost implements BodyParserEngine {
                     | IllegalArgumentException
                     | IllegalAccessException e) {
 
-                logger.warn(
-                        "Error parsing incoming Post request into class {}. Key {} and value {}.",
-                        classOfT.getName(), paramPrefix + declaredField,
-                        parameters.get(paramPrefix + declaredField), e);
+                logger.warn("Error parsing incoming Post request into class {}. Key {} and value {}.",
+                        classOfT.getName(), paramPrefix + declaredField, parameters.get(paramPrefix + declaredField), e);
             }
 
         }
-        return t;
+        return result;
     }
 
     private boolean isEmptyParameter(String[] parameterValues) {

@@ -60,7 +60,7 @@ public abstract class WebApplicationModule extends AbstractModule {
     }
 
     @SafeVarargs
-    public final void registryParamParser(Class<? extends ParamParser>... parser) {
+    public final void registerParamParser(Class<? extends ParamParser>... parser) {
         this.paramParsers.addAll(Arrays.asList(parser));
     }
 
