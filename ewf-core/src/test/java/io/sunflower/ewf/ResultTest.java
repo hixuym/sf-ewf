@@ -26,6 +26,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static com.google.common.net.HttpHeaders.LOCATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -151,7 +152,7 @@ public class ResultTest {
 
         // assert that headers are set:
         assertEquals(1, result.getHeaders().size());
-        assertEquals("http://example.com", result.getHeaders().get(Result.LOCATION));
+        assertEquals("http://example.com", result.getHeaders().get(LOCATION));
         assertEquals(Result.SC_303_SEE_OTHER, result.getStatusCode());
     }
 
@@ -163,7 +164,7 @@ public class ResultTest {
 
         // assert that headers are set:
         assertEquals(1, result.getHeaders().size());
-        assertEquals("http://example.com", result.getHeaders().get(Result.LOCATION));
+        assertEquals("http://example.com", result.getHeaders().get(LOCATION));
         assertEquals(Result.SC_307_TEMPORARY_REDIRECT, result.getStatusCode());
 
     }

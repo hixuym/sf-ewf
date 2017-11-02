@@ -18,6 +18,7 @@ package io.sunflower.ewf;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.net.HttpHeaders;
 import io.sunflower.ewf.errors.InternalServerErrorException;
 import io.sunflower.ewf.support.DateUtil;
 import io.sunflower.ewf.support.NoHttpBody;
@@ -30,6 +31,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.Map.Entry;
+
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
+import static com.google.common.net.HttpHeaders.DATE;
+import static com.google.common.net.HttpHeaders.EXPIRES;
 
 /**
  * @author michael
@@ -87,14 +92,7 @@ public class Result {
     /**
      * Used as redirection header
      */
-    public static final String LOCATION = "Location";
-    public static final String CACHE_CONTROL = "Cache-Control";
     public static final String CACHE_CONTROL_DEFAULT_NOCACHE_VALUE = "no-cache, no-store, max-age=0, must-revalidate";
-
-    public static final String DATE = "Date";
-    public static final String EXPIRES = "Expires";
-
-    public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
     private int statusCode;
 
@@ -548,7 +546,7 @@ public class Result {
     public Result redirect(String url) {
 
         status(Result.SC_303_SEE_OTHER);
-        addHeader(Result.LOCATION, url);
+        addHeader(HttpHeaders.LOCATION, url);
 
         return this;
     }
@@ -562,7 +560,7 @@ public class Result {
     public Result redirectTemporary(String url) {
 
         status(Result.SC_307_TEMPORARY_REDIRECT);
-        addHeader(Result.LOCATION, url);
+        addHeader(HttpHeaders.LOCATION, url);
 
         return this;
     }

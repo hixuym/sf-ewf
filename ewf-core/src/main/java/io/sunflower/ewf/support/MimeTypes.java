@@ -40,11 +40,11 @@ public class MimeTypes {
     private final Properties mimetypes;
     private final Pattern extPattern;
 
-    private final Settings configuration;
+    private final Settings settings;
 
     @Inject
-    public MimeTypes(Settings configuration) {
-        this.configuration = configuration;
+    public MimeTypes(Settings settings) {
+        this.settings = settings;
         this.extPattern = Pattern.compile("^.*\\.([^.]+)$");
 
         mimetypes = new Properties();
@@ -134,10 +134,11 @@ public class MimeTypes {
         }
     }
 
+    private static String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/ewf/support/mime-types.properties";
+
     private void initMimetypes() {
 
         // Load default mimetypes from the framework
-        String DEFAULT_MIMET_TYPE_LOCATIONS = "io/sunflower/ewf/support/mime-types.properties";
         try (InputStream is = this.getClass().getClassLoader()
                 .getResourceAsStream(DEFAULT_MIMET_TYPE_LOCATIONS)) {
             mimetypes.load(is);
@@ -145,7 +146,7 @@ public class MimeTypes {
             logger.error("Failed to load mimetypes", e);
         }
 
-        for (Map.Entry<String, String> e : configuration.getMimetypes().entrySet()) {
+        for (Map.Entry<String, String> e : settings.getMimetypes().entrySet()) {
             mimetypes.setProperty(e.getKey(), e.getValue());
         }
     }

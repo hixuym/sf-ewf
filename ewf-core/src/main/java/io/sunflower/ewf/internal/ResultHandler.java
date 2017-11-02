@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf.internal;
 
+import com.google.common.net.HttpHeaders;
 import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Renderable;
@@ -59,7 +60,7 @@ public class ResultHandler {
 
             // If result does not contain a Cache-control: ... header
             // we disable caching of this response by calling doNotCacheContent().
-            if (!result.getHeaders().containsKey(Result.CACHE_CONTROL)) {
+            if (!result.getHeaders().containsKey(HttpHeaders.CACHE_CONTROL)) {
                 result.doNotCacheContent();
             }
 

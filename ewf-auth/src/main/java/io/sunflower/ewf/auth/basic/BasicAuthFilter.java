@@ -28,6 +28,7 @@ import org.apache.commons.codec.binary.Base64;
 import javax.inject.Inject;
 import java.nio.charset.Charset;
 
+import static com.google.common.net.HttpHeaders.WWW_AUTHENTICATE;
 import static io.sunflower.ewf.auth.Constant.*;
 
 /**
@@ -83,7 +84,7 @@ public class BasicAuthFilter implements Filter {
             }
 
             return exceptionHandler.getUnauthorizedResult(context).addHeader(
-                    Result.WWW_AUTHENTICATE, challenge);
+                    WWW_AUTHENTICATE, challenge);
 
         } else {
             return chain.next(context);

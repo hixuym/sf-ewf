@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf;
 
+import com.google.common.net.HttpHeaders;
 import io.sunflower.ewf.support.NoHttpBody;
 
 import java.util.Optional;
@@ -43,9 +44,8 @@ public class Results {
 
     public static Result created(Optional<String> url) {
         Result result = status(Result.SC_201_CREATED);
-        if (url.isPresent()) {
-            result.addHeader(Result.LOCATION, url.get());
-        }
+
+        url.ifPresent(s -> result.addHeader(HttpHeaders.LOCATION, s));
 
         return result;
     }
@@ -90,7 +90,7 @@ public class Results {
     public static Result redirect(String url) {
 
         Result result = status(Result.SC_303_SEE_OTHER);
-        result.addHeader(Result.LOCATION, url);
+        result.addHeader(HttpHeaders.LOCATION, url);
         result.render(Result.NO_HTTP_BODY);
 
         return result;
@@ -111,7 +111,7 @@ public class Results {
     public static Result redirectTemporary(String url) {
 
         Result result = status(Result.SC_307_TEMPORARY_REDIRECT);
-        result.addHeader(Result.LOCATION, url);
+        result.addHeader(HttpHeaders.LOCATION, url);
         result.render(Result.NO_HTTP_BODY);
 
         return result;
@@ -139,21 +139,17 @@ public class Results {
     }
 
     public static Result json() {
-        Result result = status(Result.SC_200_OK).json();
-
-        return result;
+        return status(Result.SC_200_OK).json();
     }
 
     public static Result jsonp() {
-        Result result = status(Result.SC_200_OK).jsonp();
 
-        return result;
+        return status(Result.SC_200_OK).jsonp();
     }
 
     public static Result xml() {
-        Result result = status(Result.SC_200_OK).xml();
 
-        return result;
+        return status(Result.SC_200_OK).xml();
     }
 
     public static Result TODO() {

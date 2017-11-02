@@ -24,6 +24,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.google.common.net.HttpHeaders.*;
+
+/**
+ * @author michael
+ */
 public class HttpCacheToolkitImpl implements HttpCacheToolkit {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpCacheToolkitImpl.class);
@@ -36,9 +41,10 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
 
     }
 
+    @Override
     public boolean isModified(Optional<String> etag, Optional<Long> lastModified, Context context) {
 
-        final String browserEtag = context.getHeader(HttpHeaderConstants.IF_NONE_MATCH);
+        final String browserEtag = context.getHeader(IF_NONE_MATCH);
 
         if (browserEtag != null && etag.isPresent()) {
             if (browserEtag.equals(etag.get())) {
@@ -48,7 +54,7 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
             }
         }
 
-        final String ifModifiedSince = context.getHeader(HttpHeaderConstants.IF_MODIFIED_SINCE);
+        final String ifModifiedSince = context.getHeader(IF_MODIFIED_SINCE);
 
         if (ifModifiedSince != null && lastModified.isPresent()) {
 
@@ -68,17 +74,18 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
         return true;
     }
 
+    @Override
     public void addEtag(Context context, Result result, Long lastModified) {
 
         if (!configuration.isProd()) {
-            result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
+            result.addHeader(CACHE_CONTROL, "no-cache");
         } else {
             String maxAge = configuration.getHttpCacheMaxAge();
 
-            if (maxAge.equals("0")) {
-                result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "no-cache");
+            if ("0".equals(maxAge)) {
+                result.addHeader(CACHE_CONTROL, "no-cache");
             } else {
-                result.addHeader(HttpHeaderConstants.CACHE_CONTROL, "max-age=" + maxAge);
+                result.addHeader(CACHE_CONTROL, "max-age=" + maxAge);
             }
         }
 
@@ -90,18 +97,18 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
             // maybe we change that in the future.
             etag = "\""
                     + lastModified.toString() + "\"";
-            result.addHeader(HttpHeaderConstants.ETAG, etag);
+            result.addHeader(ETAG, etag);
 
         }
 
         if (!isModified(Optional.ofNullable(etag), Optional.ofNullable(lastModified), context)) {
 
-            if (context.getMethod().toLowerCase().equals("get")) {
+            if ("get".equals(context.getMethod().toLowerCase())) {
                 result.status(Result.SC_304_NOT_MODIFIED);
             }
 
         } else {
-            result.addHeader(HttpHeaderConstants.LAST_MODIFIED,
+            result.addHeader(LAST_MODIFIED,
                     DateUtil.formatForHttpHeader(lastModified));
 
         }

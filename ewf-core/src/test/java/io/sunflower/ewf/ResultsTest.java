@@ -18,6 +18,7 @@ package io.sunflower.ewf;
 import io.sunflower.ewf.support.NoHttpBody;
 import org.junit.Test;
 
+import static com.google.common.net.HttpHeaders.LOCATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -87,7 +88,7 @@ public class ResultsTest {
         Result result = Results.redirect("http://example.com");
         assertEquals(Result.SC_303_SEE_OTHER, result.getStatusCode());
         assertEquals("http://example.com",
-                result.getHeaders().get(Result.LOCATION));
+                result.getHeaders().get(LOCATION));
         assertTrue(result.getRenderable() instanceof NoHttpBody);
 
     }
@@ -98,7 +99,7 @@ public class ResultsTest {
         Result result = Results.redirectTemporary("http://example.com");
         assertEquals(Result.SC_307_TEMPORARY_REDIRECT, result.getStatusCode());
         assertEquals("http://example.com",
-                result.getHeaders().get(Result.LOCATION));
+                result.getHeaders().get(LOCATION));
         assertTrue(result.getRenderable() instanceof NoHttpBody);
     }
 

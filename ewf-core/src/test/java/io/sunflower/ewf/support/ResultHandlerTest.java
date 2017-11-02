@@ -31,6 +31,9 @@ import org.slf4j.Logger;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
+import static com.google.common.net.HttpHeaders.DATE;
+import static com.google.common.net.HttpHeaders.EXPIRES;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -96,19 +99,19 @@ public class ResultHandlerTest {
 
         // make sure the stuff is not set by default json method (just in
         // case...)
-        assertNull(result.getHeaders().get(Result.CACHE_CONTROL));
-        assertNull(result.getHeaders().get(Result.DATE));
-        assertNull(result.getHeaders().get(Result.EXPIRES));
+        assertNull(result.getHeaders().get(CACHE_CONTROL));
+        assertNull(result.getHeaders().get(DATE));
+        assertNull(result.getHeaders().get(EXPIRES));
 
         // handle result
         resultHandler.handleResult(result, context);
 
         // make sure stuff is there:
         assertEquals(Result.CACHE_CONTROL_DEFAULT_NOCACHE_VALUE, result
-                .getHeaders().get(Result.CACHE_CONTROL));
-        assertNotNull(result.getHeaders().get(Result.DATE));
+                .getHeaders().get(CACHE_CONTROL));
+        assertNotNull(result.getHeaders().get(DATE));
         assertEquals(DateUtil.formatForHttpHeader(0L),
-                result.getHeaders().get(Result.EXPIRES));
+                result.getHeaders().get(EXPIRES));
 
     }
 
@@ -117,7 +120,7 @@ public class ResultHandlerTest {
 
         Result result = Results.json();
         // just a simple cache control header:
-        result.addHeader(Result.CACHE_CONTROL, "must-revalidate");
+        result.addHeader(CACHE_CONTROL, "must-revalidate");
         // just a new object as dummy...
         result.render(new Object());
 
@@ -126,9 +129,9 @@ public class ResultHandlerTest {
 
         // make sure stuff is there:
         assertEquals("must-revalidate",
-                result.getHeaders().get(Result.CACHE_CONTROL));
-        assertNull(result.getHeaders().get(Result.DATE));
-        assertNull(result.getHeaders().get(Result.EXPIRES));
+                result.getHeaders().get(CACHE_CONTROL));
+        assertNull(result.getHeaders().get(DATE));
+        assertNull(result.getHeaders().get(EXPIRES));
     }
 
     @Test

@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf.spi;
 
+import com.google.common.net.HttpHeaders;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
@@ -126,7 +127,7 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
 
         return Results
                 .unauthorized()
-                .addHeader(Result.WWW_AUTHENTICATE, "None")
+                .addHeader(HttpHeaders.WWW_AUTHENTICATE, "None")
                 .json()
                 .render(message);
 
