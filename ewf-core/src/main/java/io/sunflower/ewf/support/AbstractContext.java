@@ -14,6 +14,9 @@
  */
 package io.sunflower.ewf.support;
 
+import com.google.common.base.Strings;
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.sunflower.ewf.Context.Impl;
@@ -33,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 /**
  * Abstract Context.Impl that implements features that are not reliant on the concrete Context
@@ -54,9 +59,8 @@ abstract public class AbstractContext implements Impl {
      * subclasses need to access these
      */
     final protected BodyParserEngineManager bodyParserEngineManager;
-    final protected Settings configuration;
+    final protected Settings settings;
     final protected Validation validation;
-    final protected Injector injector;
     final protected ParamParsers paramParsers;
 
     final protected FlashScope flashScope;
@@ -74,16 +78,14 @@ abstract public class AbstractContext implements Impl {
     @Inject
     public AbstractContext(
             BodyParserEngineManager bodyParserEngineManager,
-            Settings configuration,
+            Settings settings,
             Validation validation,
-            Injector injector,
             ParamParsers paramParsers,
             FlashScope flashScope,
             Session session) {
         this.bodyParserEngineManager = bodyParserEngineManager;
-        this.configuration = configuration;
+        this.settings = settings;
         this.validation = validation;
-        this.injector = injector;
         this.paramParsers = paramParsers;
         this.flashScope = flashScope;
         this.session = session;
@@ -143,9 +145,9 @@ abstract public class AbstractContext implements Impl {
 
     @Override
     public String getRemoteAddr() {
-        if (configuration.isUsageOfXForwardedHeaderEnabled()) {
+        if (settings.isUsageOfXForwardedHeaderEnabled()) {
 
-            String forwardHeader = getHeader(X_FORWARD_HEADER);
+            String forwardHeader = getHeader(HttpHeaders.X_FORWARDED_FOR);
 
             if (forwardHeader != null) {
                 if (forwardHeader.contains(",")) {
@@ -247,22 +249,19 @@ abstract public class AbstractContext implements Impl {
         // If the Content-type: xxx header is not set we return null.
         // we cannot parse that request.
         if (rawContentType == null) {
-            logger.debug("Not able to parse body because request did not send content type header at: {}",
-                    getRequestPath());
+            logger.debug("Not able to parse body because request did not send content type header at: {}", getRequestPath());
             return null;
         }
 
         // If Content-type is application/json; charset=utf-8 we split away the charset
         // application/json
-        String contentTypeOnly = HttpHeaderUtils.getContentTypeFromContentTypeAndCharacterSetting(
-                rawContentType);
+        String contentTypeOnly = MediaType.parse(rawContentType).withoutParameters().toString();
 
         BodyParserEngine bodyParserEngine = bodyParserEngineManager
                 .getBodyParserEngineForContentType(contentTypeOnly);
 
         if (bodyParserEngine == null) {
-            logger.debug("No BodyParserEngine found for Content-Type {} at route {}", CONTENT_TYPE,
-                    getRequestPath());
+            logger.debug("No BodyParserEngine found for Content-Type {} at route {}", CONTENT_TYPE, getRequestPath());
             return null;
         }
 
@@ -314,15 +313,19 @@ abstract public class AbstractContext implements Impl {
 
     @Override
     public String getAcceptContentType() {
-        String contentType = getHeader("accept");
+        String contentType = getHeader(HttpHeaders.ACCEPT);
 
-        if (contentType == null) {
-            return Result.TEXT_HTML;
+        if (Strings.isNullOrEmpty(contentType)) {
+            return Result.APPLICATION_JSON;
+        }
+
+        if (contentType.contains("application/json")
+                || contentType.contains("text/javascript")) {
+            return Result.APPLICATION_JSON;
         }
 
         if (contentType.contains("application/xhtml")
-                || contentType.contains("text/html")
-                || contentType.startsWith("*/*")) {
+                || contentType.contains("text/html")) {
             return Result.TEXT_HTML;
         }
 
@@ -331,39 +334,35 @@ abstract public class AbstractContext implements Impl {
             return Result.APPLICATION_XML;
         }
 
-        if (contentType.contains("application/json")
-                || contentType.contains("text/javascript")) {
-            return Result.APPLICATION_JSON;
+        if (contentType.contains("application/octet-stream")) {
+            return Result.APPLICATION_OCTET_STREAM;
         }
 
         if (contentType.contains("text/plain")) {
             return Result.TEXT_PLAIN;
         }
 
-        if (contentType.contains("application/octet-stream")) {
-            return Result.APPLICATION_OCTET_STREAM;
-        }
+        return Result.APPLICATION_JSON;
+    }
 
-        if (contentType.endsWith("*/*")) {
-            return Result.TEXT_HTML;
-        }
-
-        return Result.TEXT_HTML;
+    @Override
+    public void asyncRequestComplete() {
+        returnResultAsync(null);
     }
 
     @Override
     public String getAcceptEncoding() {
-        return getHeader("accept-encoding");
+        return getHeader(HttpHeaders.ACCEPT_ENCODING);
     }
 
     @Override
     public String getAcceptLanguage() {
-        return getHeader("accept-language");
+        return getHeader(HttpHeaders.ACCEPT_LANGUAGE);
     }
 
     @Override
     public String getAcceptCharset() {
-        return getHeader("accept-charset");
+        return getHeader(HttpHeaders.ACCEPT_CHARSET);
     }
 
     @Override
@@ -386,4 +385,24 @@ abstract public class AbstractContext implements Impl {
         return contentType.startsWith(Result.APPLICATION_XML);
     }
 
+
+    @Override
+    public boolean isAsync() {
+        return false;
+    }
+
+    @Override
+    public void handleAsync() {
+
+    }
+
+    @Override
+    public void returnResultAsync(Result result) {
+
+    }
+
+    @Override
+    public Result controllerReturned() {
+        return null;
+    }
 }

@@ -15,8 +15,8 @@
 
 package io.sunflower.ewf.support;
 
-import com.google.inject.Injector;
 import io.sunflower.ewf.Cookie;
+import io.sunflower.ewf.Result;
 import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.params.internal.ParamParsers;
 import io.sunflower.ewf.session.FlashScope;
@@ -36,10 +36,9 @@ import java.util.Map;
 public class AbstractContextImpl extends AbstractContext {
 
     public AbstractContextImpl(BodyParserEngineManager bodyParserEngineManager,
-                               Settings configuration, Validation validation, Injector injector,
+                               Settings settings, Validation validation,
                                ParamParsers paramParsers, FlashScope flashScope, Session session) {
-        super(bodyParserEngineManager, configuration, validation, injector,
-                paramParsers, flashScope, session);
+        super(bodyParserEngineManager, settings, validation, paramParsers, flashScope, session);
     }
 
     @Override
@@ -160,6 +159,31 @@ public class AbstractContextImpl extends AbstractContext {
     @Override
     public Map<String, List<FileItem>> getParameterFileItems() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isAsync() {
+        return false;
+    }
+
+    @Override
+    public void handleAsync() {
+
+    }
+
+    @Override
+    public void returnResultAsync(Result result) {
+
+    }
+
+    @Override
+    public void asyncRequestComplete() {
+
+    }
+
+    @Override
+    public Result controllerReturned() {
+        return null;
     }
 
     @Override

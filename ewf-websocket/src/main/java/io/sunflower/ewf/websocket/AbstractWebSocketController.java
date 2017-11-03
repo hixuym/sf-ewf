@@ -34,7 +34,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * Created by michael on 16/12/7.
+ *
+ * @author michael
+ * created on 16/12/7
  */
 public abstract class AbstractWebSocketController extends AbstractWebSocketHandler {
 

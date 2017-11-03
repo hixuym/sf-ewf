@@ -60,7 +60,7 @@ public class Settings {
     private String uploadTempFolder;
     private String jsonpCallbackParam = "jsonpCallback";
     private boolean diagnosticsEnabled = false;
-    private boolean usageOfXForwardedHeaderEnabled = false;
+    private boolean usageOfXForwardedHeaderEnabled = true;
 
     private Mode mode = Mode.dev;
 
@@ -69,8 +69,6 @@ public class Settings {
     private String contextPath = "";
 
     private String scanPkgs = CONTROLLERS_DIR;
-
-    private boolean jaxyRouteEnabled = true;
 
     public Settings() {
     }
@@ -108,10 +106,6 @@ public class Settings {
 
         if (rawSettings.containsKey(CONTROLLERS_SCAN_PKGS)) {
             this.scanPkgs = rawSettings.get(CONTROLLERS_SCAN_PKGS);
-        }
-
-        if (rawSettings.containsKey(JAXY_ROUTES_ENABLED)) {
-            this.jaxyRouteEnabled = Boolean.parseBoolean(rawSettings.get(JAXY_ROUTES_ENABLED));
         }
 
         if (rawSettings.containsKey(DIAGNOSTICS_ENABLED)) {
@@ -287,7 +281,4 @@ public class Settings {
         return this.scanPkgs;
     }
 
-    public boolean isJaxyRouteEnabled() {
-        return jaxyRouteEnabled;
-    }
 }

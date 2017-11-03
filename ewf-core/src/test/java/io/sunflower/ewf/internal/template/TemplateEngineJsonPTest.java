@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.spi.internal.TemplateEngineJsonP;
+import io.sunflower.ewf.spi.support.TemplateEngineJsonP;
 import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.support.Settings;
 import org.junit.Before;

@@ -26,15 +26,9 @@ import java.util.Map;
 /**
  * Validation object
  *
- * @author James Roper
- * @author Philip Sommer
- * @author Jonathan Lannoy
+ * @author michael
  */
 public class ValidationImpl implements Validation {
-
-    private final static String HIBERNATE_VALIDATION_PREFIX = "org.hibernate.";
-
-    private final static String JAVAX_VALIDATION_PREFIX = "javax.validation.";
 
     private final Map<String, List<ConstraintViolation>> violations = Maps.newHashMap();
 

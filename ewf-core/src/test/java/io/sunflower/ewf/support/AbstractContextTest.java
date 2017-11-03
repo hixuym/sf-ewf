@@ -16,6 +16,7 @@
 package io.sunflower.ewf.support;
 
 import com.google.common.collect.Maps;
+import com.google.common.net.HttpHeaders;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Result;
@@ -82,7 +83,6 @@ public class AbstractContextTest {
                 bodyParserEngineManager,
                 configuration,
                 validation,
-                null,
                 new ParamParsers(new HashSet<>()),
                 flashScope,
                 session);
@@ -116,7 +116,7 @@ public class AbstractContextTest {
 
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
 //        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
-        doReturn("2.2.2.2").when(context).getHeader(Context.X_FORWARD_HEADER);
+        doReturn("2.2.2.2").when(context).getHeader(HttpHeaders.X_FORWARDED_FOR);
 
         assertThat(context.getRemoteAddr(), is("2.2.2.2"));
     }
@@ -128,7 +128,7 @@ public class AbstractContextTest {
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
 //        doReturn("1.1.1.1").when(context).getRealRemoteAddr();
         doReturn("192.168.1.1, 192.168.1.2, 192.168.1.3").when(context)
-                .getHeader(Context.X_FORWARD_HEADER);
+                .getHeader(HttpHeaders.X_FORWARDED_FOR);
 
         //make sure this is correct
         assertThat(context.getRemoteAddr(), is("192.168.1.1"));
@@ -140,7 +140,7 @@ public class AbstractContextTest {
 
         when(configuration.isUsageOfXForwardedHeaderEnabled()).thenReturn(Boolean.TRUE);
         doReturn("1.1.1.1").when(context).getRealRemoteAddr();
-        doReturn("I_AM_NOT_A_VALID_ADDRESS").when(context).getHeader(Context.X_FORWARD_HEADER);
+        doReturn("I_AM_NOT_A_VALID_ADDRESS").when(context).getHeader(HttpHeaders.X_FORWARDED_FOR);
 
         assertThat(context.getRemoteAddr(), is("1.1.1.1"));
     }
@@ -304,28 +304,28 @@ public class AbstractContextTest {
     public void getAcceptContentType() {
         AbstractContextImpl context = spy(abstractContext);
 
-        doReturn(null).when(context).getHeader("accept");
-        assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
-
-        doReturn("").when(context).getHeader("accept");
-        assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
-
-        doReturn("totally_unknown").when(context).getHeader("accept");
-        assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
-
-        doReturn("application/json").when(context).getHeader("accept");
+        doReturn(null).when(context).getHeader(HttpHeaders.ACCEPT);
         assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
 
-        doReturn("text/html, application/json").when(context).getHeader("accept");
+        doReturn("").when(context).getHeader(HttpHeaders.ACCEPT);
+        assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
+
+        doReturn("totally_unknown").when(context).getHeader(HttpHeaders.ACCEPT);
+        assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
+
+        doReturn("application/json").when(context).getHeader(HttpHeaders.ACCEPT);
+        assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
+
+        doReturn("text/html, application/json").when(context).getHeader(HttpHeaders.ACCEPT);
+        assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
+
+        doReturn("application/xhtml").when(context).getHeader(HttpHeaders.ACCEPT);
         assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
 
-        doReturn("application/xhtml, application/json").when(context).getHeader("accept");
-        assertEquals(Result.TEXT_HTML, context.getAcceptContentType());
-
-        doReturn("text/plain").when(context).getHeader("accept");
+        doReturn("text/plain").when(context).getHeader(HttpHeaders.ACCEPT);
         assertEquals(Result.TEXT_PLAIN, context.getAcceptContentType());
 
-        doReturn("text/plain, application/json").when(context).getHeader("accept");
+        doReturn("text/plain, application/json").when(context).getHeader(HttpHeaders.ACCEPT);
         assertEquals(Result.APPLICATION_JSON, context.getAcceptContentType());
     }
 
@@ -334,15 +334,15 @@ public class AbstractContextTest {
         AbstractContextImpl context = spy(abstractContext);
 
         String encoding = "compress, gzip";
-        doReturn(encoding).when(context).getHeader("accept-encoding");
+        doReturn(encoding).when(context).getHeader(HttpHeaders.ACCEPT_ENCODING);
         assertEquals(encoding, context.getAcceptEncoding());
 
         encoding = null;
-        doReturn(encoding).when(context).getHeader("accept-encoding");
+        doReturn(encoding).when(context).getHeader(HttpHeaders.ACCEPT_ENCODING);
         assertNull(context.getAcceptEncoding());
 
         encoding = "gzip;q=1.0, identity; q=0.5, *;q=0";
-        doReturn(encoding).when(context).getHeader("accept-encoding");
+        doReturn(encoding).when(context).getHeader(HttpHeaders.ACCEPT_ENCODING);
         assertEquals(encoding, context.getAcceptEncoding());
     }
 
@@ -351,15 +351,15 @@ public class AbstractContextTest {
         AbstractContextImpl context = spy(abstractContext);
 
         String language = "de";
-        doReturn(language).when(context).getHeader("accept-language");
+        doReturn(language).when(context).getHeader(HttpHeaders.ACCEPT_LANGUAGE);
         assertEquals(language, context.getAcceptLanguage());
 
         language = null;
-        doReturn(language).when(context).getHeader("accept-language");
+        doReturn(language).when(context).getHeader(HttpHeaders.ACCEPT_LANGUAGE);
         assertNull(context.getAcceptLanguage());
 
         language = "da, en-gb;q=0.8, en;q=0.7";
-        doReturn(language).when(context).getHeader("accept-language");
+        doReturn(language).when(context).getHeader(HttpHeaders.ACCEPT_LANGUAGE);
         assertEquals(language, context.getAcceptLanguage());
     }
 
@@ -368,15 +368,15 @@ public class AbstractContextTest {
         AbstractContextImpl context = spy(abstractContext);
 
         String charset = "UTF-8";
-        doReturn(charset).when(context).getHeader("accept-charset");
+        doReturn(charset).when(context).getHeader(HttpHeaders.ACCEPT_CHARSET);
         assertEquals(charset, context.getAcceptCharset());
 
         charset = null;
-        doReturn(charset).when(context).getHeader("accept-charset");
+        doReturn(charset).when(context).getHeader(HttpHeaders.ACCEPT_CHARSET);
         assertNull(context.getAcceptCharset());
 
         charset = "iso-8859-5, unicode-1-1;q=0.8";
-        doReturn(charset).when(context).getHeader("accept-charset");
+        doReturn(charset).when(context).getHeader(HttpHeaders.ACCEPT_CHARSET);
         assertEquals(charset, context.getAcceptCharset());
     }
 

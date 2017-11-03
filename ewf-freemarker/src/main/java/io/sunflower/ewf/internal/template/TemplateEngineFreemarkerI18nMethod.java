@@ -55,8 +55,7 @@ public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx
         if (args.size() == 1 && args.get(0) instanceof StringModel
                 && ((StringModel) args.get(0)).getWrappedObject() instanceof ConstraintViolation) {
 
-            ConstraintViolation violation = (ConstraintViolation)
-                    ((StringModel) args.get(0)).getWrappedObject();
+            ConstraintViolation violation = (ConstraintViolation) ((StringModel) args.get(0)).getWrappedObject();
 
             String messageValue = messages
                     .get(violation.getMessageKey(), context, result, violation.getMessageParams())
@@ -87,7 +86,7 @@ public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx
                 if (o instanceof SimpleScalar) {
                     strings.add(((SimpleScalar) o).getAsString());
                 } else if (o instanceof SimpleNumber) {
-                    strings.add(((SimpleNumber) o).toString());
+                    strings.add(o.toString());
                 }
 
             }
@@ -99,16 +98,14 @@ public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx
                     messageKey,
                     context,
                     result,
-                    strings.subList(1, strings.size()).toArray())
-                    .orElse(messageKey);
+                    strings.subList(1, strings.size()).toArray()).orElse(messageKey);
 
             logIfMessageKeyIsMissing(messageKey, messageValue);
 
             return new SimpleScalar(messageValue);
 
         } else {
-            throw new TemplateModelException(
-                    "Using i18n without any key is not possible.");
+            throw new TemplateModelException("Using i18n without any key is not possible.");
         }
 
     }
@@ -120,10 +117,8 @@ public class TemplateEngineFreemarkerI18nMethod implements TemplateMethodModelEx
         // If key equals value then Messages gave us back the key as value
         // We have to tell the user...
         if (messageKey.equals(messageValue)) {
-            logger.error(
-                    "Message key {} missing. Using key as value inside template"
-                            + " - but this is most likely not what you want."
-                    , messageKey);
+            logger.error("Message key {} missing. Using key as value inside template"
+                            + " - but this is most likely not what you want.", messageKey);
         }
 
     }

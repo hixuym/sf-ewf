@@ -33,14 +33,15 @@ public interface Lang {
      * Retrieve the current language or null if not set. It will try to determine the language by: 1)
      * Checking if result contains a forced language 2) Checking if context has a NINJA_LANG cookie
      * with a forced language 3) Getting the first language from the Accept-Language header
-     *
+     * @param context
+     * @param result
      * @return The current language (fr, ja, it ...) - may be absent
      */
     Optional<String> getLanguage(Context context, Optional<Result> result);
 
 
     /**
-     * Force a language in RouteHandler framwork. This is usually done by a cookie NINJA_LANG.
+     * Force a language in RequestHandler framwork. This is usually done by a cookie NINJA_LANG.
      * <p>
      * This overrides any Accept-Language languages.
      *

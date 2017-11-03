@@ -15,10 +15,7 @@
 
 package io.sunflower.ewf;
 
-import io.sunflower.ewf.internal.Route;
-
-import java.util.List;
-import java.util.Optional;
+import io.sunflower.ewf.internal.RouteBuilder;
 
 /**
  * @author michael
@@ -26,36 +23,12 @@ import java.util.Optional;
 public interface Router {
 
     /**
-     * Get the route for the given method and URI
+     * sub router serving prefix with path
      *
-     * @param httpMethod The method
-     * @param uri        The URI
-     * @return The route
+     * @param path
+     * @return
      */
-    Route getRouteFor(String httpMethod, String uri);
-
-    /**
-     * Compile all the routes that have been registered with the router. This should be called once,
-     * during initialization, before the application starts serving requests.
-     */
-    void compileRoutes();
-
-    /**
-     * Returns the list of compiled routes.
-     *
-     * @return application routes
-     */
-    List<Route> getRoutes();
-
-    /**
-     * get route by resource class and method name.
-     *
-     * @param resourceClass
-     * @param resourceMethodName
-     * @return optional route
-     */
-    Optional<Route> getRouteForResourceClassAndMethod(
-            Class<?> resourceClass, String resourceMethodName);
+    Router subRouter(String path);
 
     /**
      * convenience methods to use the route in a DSL like way router.GET().route("/index").with(.....)

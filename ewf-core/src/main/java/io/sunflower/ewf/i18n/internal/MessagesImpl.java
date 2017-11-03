@@ -261,8 +261,7 @@ public class MessagesImpl implements Messages {
                         return configuration;
                     }
                 }
-                configuration = langToKeyAndValuesMapping
-                        .get(languageWithoutCountry);
+                configuration = langToKeyAndValuesMapping.get(languageWithoutCountry);
 
                 if (configuration != null) {
 

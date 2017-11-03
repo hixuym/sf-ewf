@@ -24,7 +24,7 @@ import io.sunflower.ewf.internal.ValidationImpl;
 import io.sunflower.ewf.params.ParamParser;
 import io.sunflower.ewf.params.ControllerMethodInvokerTest.Dep;
 import io.sunflower.ewf.params.ControllerMethodInvokerTest.NeedingInjectionParamParser;
-import io.sunflower.ewf.spi.internal.BodyParserEnginePost;
+import io.sunflower.ewf.spi.support.BodyParserEnginePost;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.validation.ConstraintViolation;

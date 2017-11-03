@@ -45,13 +45,13 @@ public class CookieEncryption {
     private final Optional<SecretKeySpec> secretKeySpec;
 
     @Inject
-    public CookieEncryption(Settings configuration) {
+    public CookieEncryption(Settings settings) {
 
         Optional<SecretKeySpec> secretKeySpec = Optional.empty();
 
-        if (configuration.isCookieEncrypted()) {
+        if (settings.isCookieEncrypted()) {
 
-            String secret = configuration.getApplicationSecret();
+            String secret = settings.getApplicationSecret();
 
             try {
                 int maxKeyLengthBits = Cipher.getMaxAllowedKeyLength(ALGORITHM);
@@ -62,7 +62,7 @@ public class CookieEncryption {
                 secretKeySpec = Optional.of(
                         new SecretKeySpec(secret.getBytes(), 0, maxKeyLengthBits / Byte.SIZE, ALGORITHM));
 
-                logger.info("RouteHandler session encryption is using {} / {} bit.",
+                logger.info("RequestHandler session encryption is using {} / {} bit.",
                         secretKeySpec.get().getAlgorithm(), maxKeyLengthBits);
 
             } catch (Exception exception) {
@@ -147,7 +147,7 @@ public class CookieEncryption {
         sb.append("Invalid key provided. Check if application secret is properly set.")
                 .append(System.lineSeparator());
         sb.append("You can remove gizmo.applicationSecret key in configuration file ");
-        sb.append("and restart application. RouteHandler will generate new key for you.");
+        sb.append("and restart application. RequestHandler will generate new key for you.");
         return sb.toString();
     }
 }

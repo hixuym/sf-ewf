@@ -20,10 +20,7 @@ import com.google.inject.Inject;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.session.Session;
-import io.sunflower.ewf.session.internal.support.Clock;
-import io.sunflower.ewf.session.internal.support.CookieDataCodec;
-import io.sunflower.ewf.session.internal.support.CookieEncryption;
-import io.sunflower.ewf.session.internal.support.Crypto;
+import io.sunflower.ewf.session.internal.support.*;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.util.Duration;
@@ -64,15 +61,14 @@ public class SessionImpl implements Session {
     private final String sessionCookieName;
 
     @Inject
-    public SessionImpl(Crypto crypto, CookieEncryption encryption, Settings configuration,
-                       Clock clock) {
+    public SessionImpl(Crypto crypto, CookieEncryption encryption, Settings settings, Clock clock) {
 
         this.crypto = crypto;
         this.encryption = encryption;
         this.time = clock;
 
         // read configuration stuff:
-        Duration sessionExpireTimeInSeconds = configuration.getSessionExpireTime();
+        Duration sessionExpireTimeInSeconds = settings.getSessionExpireTime();
 
         if (sessionExpireTimeInSeconds != null) {
             this.defaultSessionExpireTimeInMs = sessionExpireTimeInSeconds.toMilliseconds();
@@ -82,13 +78,13 @@ public class SessionImpl implements Session {
 
         this.sessionExpireTimeInMs = defaultSessionExpireTimeInMs;
 
-        this.sessionSendOnlyIfChanged = configuration.isSessionSendOnlyIfChanged();
-        this.sessionTransferredOverHttpsOnly = configuration.isSessionTransferredOverHttpsOnly();
-        this.sessionHttpOnly = configuration.isSessionHttpOnly();
+        this.sessionSendOnlyIfChanged = settings.isSessionSendOnlyIfChanged();
+        this.sessionTransferredOverHttpsOnly = settings.isSessionTransferredOverHttpsOnly();
+        this.sessionHttpOnly = settings.isSessionHttpOnly();
 
-        this.applicationCookieDomain = configuration.getCookieDomain();
+        this.applicationCookieDomain = settings.getCookieDomain();
 
-        String applicationCookiePrefix = configuration.getCookiePrefix();
+        String applicationCookiePrefix = settings.getCookiePrefix();
         this.sessionCookieName = applicationCookiePrefix + Constants.SESSION_SUFFIX;
     }
 

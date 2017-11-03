@@ -20,7 +20,6 @@ import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.spi.BodyParserEngine;
-import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
 import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.uploads.FileItem;
 import io.sunflower.ewf.validation.Validation;
@@ -50,15 +49,24 @@ public interface Context {
         void setRoute(Route route);
     }
 
-    /**
-     * Content-Type: ... parameter for response.
-     */
-    String CONTENT_TYPE = "Content-Type";
+    boolean isAsync();
 
     /**
-     * X Forwarded for header, used when behind fire walls and proxies.
+     * Indicate that this request is going to be handled asynchronously
      */
-    String X_FORWARD_HEADER = "X-Forwarded-For";
+    void handleAsync();
+
+    /**
+     * Indicate that request processing of an async request is complete.
+     */
+    void returnResultAsync(Result result);
+
+    /**
+     * Indicate that processing this request is complete.
+     */
+    void asyncRequestComplete();
+
+    Result controllerReturned();
 
     /**
      * The Content-Type header field indicates the media type of the request body sent to the
@@ -100,7 +108,7 @@ public interface Context {
     String getRemoteAddr();
 
     /**
-     * Returns the path that RouteHandler should act upon.
+     * Returns the path that RequestHandler should act upon.
      * <p>
      * For instance in servlets you could have soemthing like a context prefix. /myContext/app
      * <p>
@@ -369,7 +377,7 @@ public interface Context {
      * This will give you the request body nicely parsed. You can register your own parsers depending
      * on the request type.
      * <p>
-     * Have a look at {@link BodyParserEngine} {@link BodyParserEngineJson} and {@link
+     * Have a look at {@link BodyParserEngine} {@link io.sunflower.ewf.spi.support.BodyParserEngineJson} and {@link
      * BodyParserEngineManager}
      *
      * @param classOfT The class of the result.
@@ -378,7 +386,7 @@ public interface Context {
     <T> T parseBody(Class<T> classOfT);
 
     /**
-     * Finalizing the headers copies all stuff into the headers. It of course also handles RouteHandler
+     * Finalizing the headers copies all stuff into the headers. It of course also handles RequestHandler
      * session and Flash information.
      * <p>
      * After finalizing the headers you can access the responseStreams.
@@ -390,7 +398,7 @@ public interface Context {
      * <p>
      * After finalizing the headers you can access the responseStreams.
      * <p>
-     * This method does not set any RouteHandler session of flash information. Eg. When serving static assets
+     * This method does not set any RequestHandler session of flash information. Eg. When serving static assets
      * this is the method you may want to use. Otherwise you'd get a race condition with a lot of
      * requests setting scopes and deleting them immediately.
      */
@@ -564,14 +572,14 @@ public interface Context {
     /**
      * Adds a cookie to the response
      *
-     * @param cookie RouteHandler cookie
+     * @param cookie RequestHandler cookie
      */
     void addCookie(Cookie cookie);
 
     /**
      * Removes a cookie from the response
      *
-     * @param cookie RouteHandler Cookie
+     * @param cookie RequestHandler Cookie
      */
     void unsetCookie(Cookie cookie);
 

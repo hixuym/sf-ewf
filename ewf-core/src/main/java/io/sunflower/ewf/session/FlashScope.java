@@ -42,18 +42,18 @@ import java.util.Map;
 public interface FlashScope {
 
     /**
-     * Intended for use by implementations only. Initializes the FlashScope from the context.  RouteHandler
+     * Intended for use by implementations only. Initializes the FlashScope from the context.  RequestHandler
      * will call this when a new request is being handled.
      *
-     * @param context The RouteHandler context
+     * @param context The RequestHandler context
      */
     void init(Context context);
 
     /**
      * Intended for use by implementations only. Saves the FlashScope to the context.  Will
-     * write/delete cookies, etc. RouteHandler will call this when a request will be completed.
+     * write/delete cookies, etc. RequestHandler will call this when a request will be completed.
      *
-     * @param context The RouteHandler context
+     * @param context The RequestHandler context
      */
     void save(Context context);
 

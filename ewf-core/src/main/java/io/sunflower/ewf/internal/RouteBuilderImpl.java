@@ -15,6 +15,7 @@
 
 package io.sunflower.ewf.internal;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -23,6 +24,7 @@ import io.sunflower.ewf.*;
 import io.sunflower.ewf.params.internal.ControllerMethodInvoker;
 import io.sunflower.ewf.support.ControllerMethods;
 import io.sunflower.ewf.support.LambdaRoute;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +35,18 @@ import java.util.*;
 /**
  * @author michael
  */
-public class RouteBuilderImpl implements RouteBuilder {
+class RouteBuilderImpl implements RouteBuilder {
 
     private static final Logger log = LoggerFactory.getLogger(RouteBuilder.class);
 
     private String httpMethod;
     private String uri;
     private Method functionalMethod;
+
+    private boolean wsRoute = false;
+
+    private String prefix = "";
+
     /**
      * method to use for parameter/annotation extraction
      */
@@ -65,6 +72,11 @@ public class RouteBuilderImpl implements RouteBuilder {
         this.targetObject = Optional.empty();
         this.globalFiltersOptional = Optional.empty();
         this.localFilters = Lists.newArrayList();
+    }
+
+    public RouteBuilderImpl prefix(String prefix) {
+        this.prefix = prefix;
+        return this;
     }
 
     public RouteBuilderImpl GET() {
@@ -99,6 +111,7 @@ public class RouteBuilderImpl implements RouteBuilder {
 
     public RouteBuilderImpl WS() {
         httpMethod = Route.HTTP_METHOD_GET;
+        this.wsRoute = true;
         return this;
     }
 
@@ -123,22 +136,22 @@ public class RouteBuilderImpl implements RouteBuilder {
     }
 
     @Override
-    public RouteBuilder globalFilters(List<Class<? extends Filter>> filtersToAdd) {
+    public RouteBuilder overrideGlobalFilters(List<Class<? extends Filter>> filtersToAdd) {
         this.globalFiltersOptional = Optional.of(filtersToAdd);
         return this;
     }
 
     @SafeVarargs
     @Override
-    public final RouteBuilder globalFilters(Class<? extends Filter>... filtersToAdd) {
+    public final RouteBuilder overrideGlobalFilters(Class<? extends Filter>... filtersToAdd) {
         List<Class<? extends Filter>> globalFiltersTemp = Lists.newArrayList(filtersToAdd);
-        globalFilters(globalFiltersTemp);
+        overrideGlobalFilters(globalFiltersTemp);
         return this;
     }
 
     @Override
-    public RouteBuilder noGlobalFilters() {
-        return globalFilters(Lists.newArrayList());
+    public RouteBuilder ignoreGlobalFilters() {
+        return overrideGlobalFilters(Lists.newArrayList());
     }
 
     @Override
@@ -157,7 +170,11 @@ public class RouteBuilderImpl implements RouteBuilder {
 
     @Override
     public RouteBuilder route(String uri) {
-        this.uri = uri;
+        if (Strings.isNullOrEmpty(prefix)) {
+            this.uri = uri;
+        } else {
+            this.uri = StringUtils.removeEnd(prefix, "/") + uri;
+        }
         return this;
     }
 
@@ -209,7 +226,7 @@ public class RouteBuilderImpl implements RouteBuilder {
             log.error("Error in route configuration!!!");
             log.error("Can not find Resource " + controllerClass.getName() + " and method " + controllerMethod);
             log.error("Hint: make sure the resource method returns a Result!");
-            log.error("Hint: RouteHandler does not allow more than one method with the same name!");
+            log.error("Hint: RequestHandler does not allow more than one method with the same name!");
         }
         return null;
     }
@@ -242,14 +259,14 @@ public class RouteBuilderImpl implements RouteBuilder {
 
         FilterChain filterChain = buildFilterChain(injector, allFilters);
 
-        return new Route(httpMethod, uri, functionalMethod, filterChain);
+        return new Route(httpMethod, uri, wsRoute, functionalMethod, filterChain);
     }
 
     private List<Class<? extends Filter>> calculateGlobalFilters(Optional<List<Class<? extends Filter>>> globalFiltersList) {
 
         List<Class<? extends Filter>> allFilters = Lists.newArrayList();
 
-        // Setting globalFilters in route will deactivate the filters defined by globalFilters
+        // Setting overrideGlobalFilters in route will deactivate the filters defined by overrideGlobalFilters
         if (globalFiltersList.isPresent()) {
             allFilters.addAll(globalFiltersList.get());
         } else {

@@ -17,7 +17,7 @@ package io.sunflower.ewf.internal.template;
 
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.spi.internal.TemplateEngineText;
+import io.sunflower.ewf.spi.support.TemplateEngineText;
 import io.sunflower.ewf.support.ResponseStreams;
 import org.junit.Before;
 import org.junit.Test;

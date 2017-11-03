@@ -57,11 +57,14 @@ public class Route {
     private final FilterChain filterChain;
     private final Map<String, RouteParameter> parameters;
     private final Pattern regex;
+    private final boolean wsRoute;
 
     public Route(String httpMethod,
                  String uri,
+                 boolean wsRoute,
                  Method controllerMethod,
                  FilterChain filterChain) {
+        this.wsRoute = wsRoute;
         this.httpMethod = httpMethod;
         this.uri = uri;
         this.controllerMethod = controllerMethod;
@@ -96,6 +99,10 @@ public class Route {
 
     public boolean isHttpMethodOptions() {
         return this.isHttpMethod(Route.HTTP_METHOD_OPTIONS);
+    }
+
+    public boolean isHttpMethodWebSocket() {
+        return this.wsRoute;
     }
 
     public String getHttpMethod() {

@@ -18,8 +18,10 @@ package io.sunflower.ewf.support;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.Results;
-import io.sunflower.ewf.internal.ResultHandler;
+import io.sunflower.ewf.i18n.Messages;
+import io.sunflower.ewf.spi.support.ResultHandlerImpl;
 import io.sunflower.ewf.internal.template.TemplateEngineManager;
+import io.sunflower.ewf.spi.ResultHandler;
 import io.sunflower.ewf.spi.TemplateEngine;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,10 +71,13 @@ public class ResultHandlerTest {
     @Mock
     Logger logger;
 
+    @Mock
+    Messages messages;
+
     @Before
     public void init() throws Exception {
 
-        resultHandler = new ResultHandler(templateEngineManager);
+        resultHandler = new ResultHandlerImpl(templateEngineManager, messages);
         when(responseStreams.getOutputStream()).thenReturn(outputStream);
 //        when(responseStreams.getWriter()).thenReturn(writer);
         when(context.finalizeHeaders(any(Result.class)))

@@ -21,8 +21,8 @@ import io.sunflower.Configuration;
 import io.sunflower.ewf.ApplicationRoutes;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Router;
-import io.sunflower.ewf.WebApplicationModule;
-import io.sunflower.ewf.jaxy.JaxyRoutes;
+import io.sunflower.ewf.internal.WebApplicationModule;
+import io.sunflower.ewf.internal.InternalRouter;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.undertow.support.EwfHttpHandlerProvider;
 import io.sunflower.guice.Injectors;
@@ -58,7 +58,7 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
             Collections.sort(routesList);
 
-            Router router = injector.getInstance(Router.class);
+            InternalRouter router = (InternalRouter) injector.getInstance(Router.class);
 
             for (ApplicationRoutes routes : routesList) {
                 routes.init(router);
@@ -72,12 +72,8 @@ public class EwfBundle<T extends Configuration> extends UndertowBundle<T> {
 
         environment.guice().register(settings);
 
-        if (settings.isJaxyRouteEnabled()) {
-            environment.guice().register(JaxyRoutes.class);
-        }
-
         undertowModule
-                .registryApplicationHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
+                .registerAppHandler(settings.getHandlerPath(), EwfHttpHandlerProvider.class);
 
         WebApplicationModule webApplicationModule = new WebApplicationModule() {
 

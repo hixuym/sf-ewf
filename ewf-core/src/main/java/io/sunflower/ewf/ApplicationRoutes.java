@@ -38,7 +38,6 @@ public interface ApplicationRoutes extends Comparable<ApplicationRoutes> {
         return 10;
     }
 
-
     /**
      * compare tow routes, big order at last.
      *

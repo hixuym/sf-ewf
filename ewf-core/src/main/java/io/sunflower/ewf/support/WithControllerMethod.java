@@ -20,6 +20,7 @@ import io.sunflower.ewf.support.ControllerMethods.*;
  * Interface that exposes multiple with methods that accept a large number of various argument
  * combinations.
  *
+ * @author michael
  * @param <T> The result to return
  */
 public interface WithControllerMethod<T> {

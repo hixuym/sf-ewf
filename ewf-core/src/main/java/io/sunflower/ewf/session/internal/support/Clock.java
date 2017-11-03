@@ -29,4 +29,5 @@ public interface Clock {
      * @return
      */
     long currentTimeMillis();
+
 }

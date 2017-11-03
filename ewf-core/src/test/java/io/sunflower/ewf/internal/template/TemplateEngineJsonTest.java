@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
-import io.sunflower.ewf.spi.internal.TemplateEngineJson;
+import io.sunflower.ewf.spi.support.TemplateEngineJson;
 import io.sunflower.ewf.support.ResponseStreams;
 import org.junit.Before;
 import org.junit.Test;

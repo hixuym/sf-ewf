@@ -23,7 +23,7 @@ package io.sunflower.ewf.errors;
  * <p>
  * Useful inside resources or filters for instance.
  * <p>
- * RouteHandler is supposed to pick it up and render an appropriate error page.
+ * RequestHandler is supposed to pick it up and render an appropriate error page.
  *
  * @author michael
  */

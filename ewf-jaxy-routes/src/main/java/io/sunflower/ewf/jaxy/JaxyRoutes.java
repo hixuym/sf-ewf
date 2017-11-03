@@ -15,7 +15,6 @@
 
 package io.sunflower.ewf.jaxy;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -27,8 +26,6 @@ import io.sunflower.ewf.support.Settings;
 import io.sunflower.guice.Mode;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;

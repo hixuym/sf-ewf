@@ -15,12 +15,12 @@
 
 package io.sunflower.ewf.support;
 
-import io.sunflower.ewf.internal.ResultHandler;
+import io.sunflower.ewf.spi.support.ResultHandlerImpl;
 
 /**
- * This is a marker class used to handle Results in {@link ResultHandler}.
+ * This is a marker class used to handle Results in {@link ResultHandlerImpl}.
  * <p>
- * It causes the ResultHandler to render no body, just the header. Useful when issuing a redirect
+ * It causes the ResultHandlerImpl to render no body, just the header. Useful when issuing a redirect
  * and no corresponding content should be shown.
  * <p>
  * You might want to use Result.NO_HTTP_BODY as static shortcut.

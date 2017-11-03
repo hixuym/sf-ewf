@@ -17,6 +17,7 @@ package io.sunflower.ewf.assets;
 
 import io.sunflower.ewf.ApplicationRoutes;
 import io.sunflower.ewf.Router;
+import io.sunflower.ewf.internal.Route;
 
 /**
  * AssetsRoutes
@@ -27,11 +28,14 @@ public class AssetsRoutes implements ApplicationRoutes {
 
     @Override
     public void init(Router router) {
+
+        Router subRouter = router.subRouter("/assets");
+
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)
         ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsController::serveWebJars);
-        router.GET().route("/assets/{fileName: .*}").with(AssetsController::serveStatic);
+        subRouter.GET().route("/webjars/{fileName: .*}").with(AssetsController::serveWebJars);
+        subRouter.GET().route("/{fileName: .*}").with(AssetsController::serveStatic);
     }
 
     @Override

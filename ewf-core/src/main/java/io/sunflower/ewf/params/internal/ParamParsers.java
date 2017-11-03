@@ -141,8 +141,7 @@ public class ParamParsers {
                 try {
                     return Size.parse(parameterValue);
                 } catch (IllegalArgumentException e) {
-                    validation
-                            .addViolation(new ConstraintViolation(
+                    validation.addViolation(new ConstraintViolation(
                                     Constants.SIZE_KEY, field, Constants.SIZE_MESSAGE, parameterValue));
                     return null;
                 }

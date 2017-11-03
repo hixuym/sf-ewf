@@ -21,7 +21,7 @@ package io.sunflower.ewf.support;
 public interface Constants {
 
     /**
-     * i18n keys and default messages of RouteHandler create the keys in your own messages.properties
+     * i18n keys and default messages of RequestHandler create the keys in your own messages.properties
      * file to customize the message
      */
     String I18N_SYSTEM_BAD_REQUEST_TEXT_KEY = "ewf.system.bad_request.text";
@@ -40,18 +40,18 @@ public interface Constants {
     String I18N_SYSTEM_FORBIDDEN_REQUEST_TEXT_DEFAULT = "Oops. That''s forbidden and all we know.";
 
     /**
-     * A cookie that helps RouteHandler to set a default language. Usually resolves to a cookie called
+     * A cookie that helps RequestHandler to set a default language. Usually resolves to a cookie called
      * EWF_LANG. The cookie then looks like: "EWF_LANG=en"
      */
     String LANG_COOKIE_SUFFIX = "_LANG";
 
     /**
-     * Suffix used for RouteHandler cookies. Usually results in cookies like "EWF_SESSION
+     * Suffix used for RequestHandler cookies. Usually results in cookies like "EWF_SESSION
      */
     String SESSION_SUFFIX = "_SESSION";
 
     /**
-     * Suffix used for RouteHandler cookies. Usually results in cookies like "EWF_FLASH
+     * Suffix used for RequestHandler cookies. Usually results in cookies like "EWF_FLASH
      */
     String FLASH_SUFFIX = "_FLASH";
 

@@ -30,7 +30,7 @@ public interface Validator<T> {
      *
      * @param value   The value, may be null
      * @param field   The name of the field being validated, if applicable
-     * @param context The RouteHandler request context
+     * @param context The RequestHandler request context
      */
     void validate(T value, String field, Context context);
 

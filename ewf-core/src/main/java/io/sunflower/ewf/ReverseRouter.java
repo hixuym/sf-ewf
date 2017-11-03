@@ -15,6 +15,7 @@
 package io.sunflower.ewf;
 
 import io.sunflower.ewf.ReverseRouter.Builder;
+import io.sunflower.ewf.internal.InternalRouter;
 import io.sunflower.ewf.internal.Route;
 import io.sunflower.ewf.internal.RouteParameter;
 import io.sunflower.ewf.support.*;
@@ -105,13 +106,13 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
             String s = context.getScheme();
             String h = context.getHostname();
 
-//            if (this.route.isHttpMethodWebSocket()) {
-//                if ("https".equalsIgnoreCase(s)) {
-//                    s = "wss";
-//                } else {
-//                    s = "ws";
-//                }
-//            }
+            if (this.route.isHttpMethodWebSocket()) {
+                if ("https".equalsIgnoreCase(s)) {
+                    s = "wss";
+                } else {
+                    s = "ws";
+                }
+            }
 
             return this.absolute(s, h);
         }
@@ -279,7 +280,7 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         /**
          * Builds the result as a <code>Result</code> redirect.
          *
-         * @return A RouteHandler redirect result
+         * @return A RequestHandler redirect result
          */
         public Result redirect() {
             return Results.redirect(build());
@@ -291,14 +292,14 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
         }
     }
 
-    private final Settings configuration;
-    private final Router router;
+    private final Settings settings;
+    private final InternalRouter router;
 
     @Inject
-    public ReverseRouter(Settings configuration,
+    public ReverseRouter(Settings settings,
                          Router router) {
-        this.configuration = configuration;
-        this.router = router;
+        this.settings = settings;
+        this.router = (InternalRouter) router;
     }
 
     /**
@@ -344,11 +345,10 @@ public class ReverseRouter implements WithControllerMethod<Builder> {
     }
 
     private Builder builder(Class<?> controllerClass, String methodName) {
-        Optional<Route> route = this.router.getRouteForResourceClassAndMethod(
-                controllerClass, methodName);
+        Optional<Route> route = this.router.getRouteForControllerClassAndMethod(controllerClass, methodName);
 
         if (route.isPresent()) {
-            return new Builder(this.configuration.getHandlerPath(), route.get());
+            return new Builder(this.settings.getHandlerPath(), route.get());
         }
 
         throw new IllegalArgumentException("Reverse route not found for " +

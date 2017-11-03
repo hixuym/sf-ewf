@@ -1,5 +1,14 @@
 Sunflower Web Application Framework
 ======================================
+1.3.0 - 
+
+    - add subRouter support
+    - add servlet support
+    - improve jaxy routes scan performance
+    - jaxy routes disable default, register JaxyRoutes in guice environment
+    - controller method return Results.badRequest(), ResultHandler auto send the Validation errors if have.
+    - UndertowContext creating out guice
+    
 1.2.0 - 2017-10-28
 
   - add ewf archetypes

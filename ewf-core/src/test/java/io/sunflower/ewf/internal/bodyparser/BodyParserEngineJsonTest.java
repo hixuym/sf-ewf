@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.errors.BadRequestException;
-import io.sunflower.ewf.spi.internal.BodyParserEngineJson;
+import io.sunflower.ewf.spi.support.BodyParserEngineJson;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;

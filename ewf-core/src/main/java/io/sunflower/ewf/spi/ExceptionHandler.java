@@ -19,6 +19,7 @@ import com.google.inject.ImplementedBy;
 import io.sunflower.ewf.Context;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.errors.BadRequestException;
+import io.sunflower.ewf.spi.support.ExceptionHandlerImpl;
 
 /**
  * @author michael

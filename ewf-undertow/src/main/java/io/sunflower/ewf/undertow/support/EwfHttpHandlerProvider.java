@@ -16,8 +16,7 @@
 package io.sunflower.ewf.undertow.support;
 
 import com.google.inject.Injector;
-import io.sunflower.ewf.spi.RouteHandler;
-import io.sunflower.ewf.support.Settings;
+import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.undertow.EwfHttpHandler;
 import io.sunflower.lifecycle.setup.StandardThreadExecutor;
 import io.sunflower.undertow.handler.StandardThreadExecutorBlockingHandler;
@@ -38,25 +37,20 @@ import javax.inject.Singleton;
 public class EwfHttpHandlerProvider implements Provider<HttpHandler> {
 
     private final Injector injector;
-    private final Settings settings;
-    private final RouteHandler routeHandler;
     private final StandardThreadExecutor executor;
 
     @Inject
-    public EwfHttpHandlerProvider(Injector injector, Settings settings,
-                                  RouteHandler routeHandler, StandardThreadExecutor executor) {
+    public EwfHttpHandlerProvider(Injector injector) {
         this.injector = injector;
-        this.settings = settings;
-        this.routeHandler = routeHandler;
-        this.executor = executor;
+        this.executor = injector.getInstance(StandardThreadExecutor.class);
     }
 
     @Override
     public HttpHandler get() {
-        HttpHandler h = new EwfHttpHandler(injector, settings, routeHandler);
+        HttpHandler h = new EwfHttpHandler(injector);
         // then eagerly parse form data (which is then included as an attachment)
         FormParserFactory.Builder formParserFactoryBuilder = FormParserFactory.builder();
-        formParserFactoryBuilder.setDefaultCharset("utf-8");
+        formParserFactoryBuilder.setDefaultCharset(Constants.UTF_8);
         h = new EagerFormParsingHandler(formParserFactoryBuilder.build()).setNext(h);
 
         return new StandardThreadExecutorBlockingHandler(executor, h);

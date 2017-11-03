@@ -73,6 +73,11 @@
                 <artifactId>sf-ewf-jaxy-routes</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.sunflower</groupId>
+                <artifactId>sf-ewf-servlet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -85,6 +90,7 @@
         <module>ewf-websocket</module>
         <module>ewf-undertow</module>
         <module>ewf-jaxy-routes</module>
+        <module>ewf-servlet</module>
         <module>ewf-archetypes</module>
     </modules>
 

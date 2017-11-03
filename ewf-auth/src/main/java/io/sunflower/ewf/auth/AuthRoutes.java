@@ -29,10 +29,12 @@ public class AuthRoutes implements ApplicationRoutes {
     @Override
     public void init(Router router) {
 
-        router.POST().route("/api/auth/get_token")
-                .noGlobalFilters().with(TokenAuthController::auth);
+        Router sub = router.subRouter("/api/auth");
 
-        router.POST().route("/api/auth/refresh_token")
+        sub.POST().route("/get_token")
+                .ignoreGlobalFilters().with(TokenAuthController::auth);
+
+        sub.POST().route("/refresh_token")
                 .with(TokenAuthController::refresh);
 
     }

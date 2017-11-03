@@ -77,7 +77,7 @@ public class ControllerMethodInvoker {
     private void checkNullArgumentsAndThrowBadRequestException(Object[] arguments) {
         for (Object object : arguments) {
             if (object == null) {
-                throw new BadRequestException();
+                throw new BadRequestException("use Optional<> type for optional argument value.");
             }
         }
     }

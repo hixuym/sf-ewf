@@ -20,9 +20,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import io.sunflower.ewf.RouteBuilder;
 import io.sunflower.ewf.Router;
 import io.sunflower.ewf.support.MethodReference;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ import java.util.*;
 /**
  * @author michael
  */
-public class RouterImpl implements Router {
+public class RouterImpl implements InternalRouter {
 
     static private final Logger logger = LoggerFactory.getLogger(RouterImpl.class);
 
@@ -58,8 +58,7 @@ public class RouterImpl implements Router {
     @Override
     public Route getRouteFor(String httpMethod, String uri) {
         if (routes == null) {
-            throw new IllegalStateException(
-                    "Attempt to get route when routes not compiled");
+            throw new IllegalStateException("Attempt to get route when routes not compiled");
         }
 
         for (Route route : routes) {
@@ -77,6 +76,7 @@ public class RouterImpl implements Router {
         if (routes != null) {
             throw new IllegalStateException("Routes already compiled");
         }
+
         List<Route> routesLocal = new ArrayList<>();
 
         for (RouteBuilderImpl routeBuilder : allRouteBuilders) {
@@ -91,15 +91,14 @@ public class RouterImpl implements Router {
         for (Route route : this.routes) {
             // its possible this route is a Result instead of a resource method
             if (route.getControllerClass() != null) {
-                MethodReference resourceMethodRef
+                MethodReference controllerMethodRef
                         = new MethodReference(
                         route.getControllerClass(),
                         route.getControllerMethod().getName());
 
-                if (this.reverseRoutes.containsKey(resourceMethodRef)) {
-                    // the first one wins with reverse routing so we ignore this route
-                } else {
-                    this.reverseRoutes.put(resourceMethodRef, route);
+                // the first one wins with reverse routing so we ignore when contains
+                if (!this.reverseRoutes.containsKey(controllerMethodRef)) {
+                    this.reverseRoutes.put(controllerMethodRef, route);
                 }
             }
         }
@@ -187,18 +186,93 @@ public class RouterImpl implements Router {
     }
 
     @Override
-    public Optional<Route> getRouteForResourceClassAndMethod(
-            Class<?> resourceClass,
-            String resourceMethodName) {
+    public Optional<Route> getRouteForControllerClassAndMethod(
+            Class<?> controllerClass,
+            String controllerMethodName) {
 
         verifyRoutesCompiled();
 
         MethodReference reverseRouteKey
-                = new MethodReference(resourceClass, resourceMethodName);
+                = new MethodReference(controllerClass, controllerMethodName);
 
         Route route = this.reverseRoutes.get(reverseRouteKey);
 
         return Optional.ofNullable(route);
+    }
+
+    @Override
+    public Router subRouter(String path) {
+        return new SubRouter(this, path);
+    }
+
+    private static class SubRouter implements Router {
+
+        private final Router rootRouter;
+
+        private final String prefix;
+
+        public SubRouter(Router rootRouter, String prefix) {
+            this.rootRouter = rootRouter;
+            this.prefix = prefix;
+        }
+
+        @Override
+        public Router subRouter(String path) {
+            return new SubRouter(rootRouter, StringUtils.removeEnd(prefix, "/") + path);
+        }
+
+        @Override
+        public RouteBuilder GET() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.GET();
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder WS() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.WS();
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder POST() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.POST();
+
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder PUT() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.PUT();
+
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder DELETE() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.GET();
+
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder OPTIONS() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.OPTIONS();
+
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder HEAD() {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.HEAD();
+            return routeBuilder.prefix(prefix);
+        }
+
+        @Override
+        public RouteBuilder METHOD(String method) {
+            RouteBuilderImpl routeBuilder = (RouteBuilderImpl) rootRouter.METHOD(method);
+
+            return routeBuilder.prefix(prefix);
+        }
     }
 
     private void logRoutes() {

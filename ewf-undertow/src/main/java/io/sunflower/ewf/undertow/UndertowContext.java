@@ -16,7 +16,6 @@
 package io.sunflower.ewf.undertow;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import io.sunflower.ewf.Cookie;
 import io.sunflower.ewf.Result;
 import io.sunflower.ewf.internal.ParameterFileItem;
@@ -25,6 +24,7 @@ import io.sunflower.ewf.params.internal.ParamParsers;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.support.AbstractContext;
+import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.support.Settings;
 import io.sunflower.ewf.undertow.support.UndertowCookieHelper;
@@ -43,6 +43,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.*;
 
+import static io.sunflower.ewf.internal.Route.HTTP_METHOD_POST;
+
 /**
  * @author michael
  * created on 17/9/13
@@ -58,18 +60,16 @@ public class UndertowContext extends AbstractContext {
     @Inject
     public UndertowContext(
             BodyParserEngineManager bodyParserEngineManager,
-            Settings configuration,
+            Settings settings,
             Validation validation,
-            Injector injector,
             ParamParsers paramParsers,
             FlashScope flashScope,
             Session session) {
 
         super(
                 bodyParserEngineManager,
-                configuration,
+                settings,
                 validation,
-                injector,
                 paramParsers,
                 flashScope,
                 session);
@@ -312,18 +312,14 @@ public class UndertowContext extends AbstractContext {
         }
 
         // charset in use
-        final String charset = Optional.ofNullable(result.getCharset()).orElse("utf-8");
+        final String charset = Optional.ofNullable(result.getCharset()).orElse(Constants.UTF_8);
 
         // build content-type header (but only if it does not yet exist)
         if (result.getContentType() != null) {
-            String contentTypeHeader = new StringBuilder()
-                    .append(result.getContentType())
-                    .append("; charset=")
-                    .append(charset)
-                    .toString();
+            String contentTypeHeader = result.getContentType() +
+                    "; charset=" + charset;
 
-            exchange.getResponseHeaders().put(
-                    Headers.CONTENT_TYPE, contentTypeHeader);
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, contentTypeHeader);
         }
 
         return new ResponseStreams() {
@@ -342,13 +338,13 @@ public class UndertowContext extends AbstractContext {
 
     @Override
     public String getRequestContentType() {
-        return exchange.getRequestHeaders().getFirst("Content-Type");
+        return exchange.getRequestHeaders().getFirst(Headers.CONTENT_TYPE);
     }
 
     @Override
     public boolean isMultipart() {
         // logic extracted from ServletFileUpload.isMultipartContent
-        if (!"post".equalsIgnoreCase(getMethod())) {
+        if (!HTTP_METHOD_POST.equalsIgnoreCase(getMethod())) {
             return false;
         }
 

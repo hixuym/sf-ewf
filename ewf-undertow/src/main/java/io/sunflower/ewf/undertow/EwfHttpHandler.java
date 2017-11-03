@@ -15,8 +15,15 @@
 package io.sunflower.ewf.undertow;
 
 import com.google.inject.Injector;
-import io.sunflower.ewf.Context;
-import io.sunflower.ewf.spi.RouteHandler;
+import io.sunflower.ewf.internal.ValidationImpl;
+import io.sunflower.ewf.internal.bodyparser.BodyParserEngineManager;
+import io.sunflower.ewf.params.internal.ParamParsers;
+import io.sunflower.ewf.session.internal.FlashScopeImpl;
+import io.sunflower.ewf.session.internal.SessionImpl;
+import io.sunflower.ewf.session.internal.support.Clock;
+import io.sunflower.ewf.session.internal.support.CookieEncryption;
+import io.sunflower.ewf.session.internal.support.Crypto;
+import io.sunflower.ewf.spi.RequestHandler;
 import io.sunflower.ewf.support.Settings;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -32,28 +39,43 @@ public class EwfHttpHandler implements HttpHandler {
 
     private static final Logger log = LoggerFactory.getLogger(EwfHttpHandler.class);
 
-    private final Injector injector;
     private final Settings settings;
-    private final RouteHandler routeHandler;
+    private final RequestHandler requestHandler;
+    private final BodyParserEngineManager bodyParserEngineManager;
+    private final ParamParsers paramParsers;
 
-    public EwfHttpHandler(Injector injector, Settings settings,
-                          RouteHandler routeHandler) {
-        this.injector = injector;
-        this.settings = settings;
-        this.routeHandler = routeHandler;
+    private final Crypto crypto;
+    private final CookieEncryption cookieEncryption;
+    private final Clock clock;
+
+    public EwfHttpHandler(Injector injector) {
+        this.settings = injector.getInstance(Settings.class);
+        this.requestHandler = injector.getInstance(RequestHandler.class);
+        this.bodyParserEngineManager = injector.getInstance(BodyParserEngineManager.class);
+        this.paramParsers = injector.getInstance(ParamParsers.class);
+
+        this.crypto = injector.getInstance(Crypto.class);
+        this.clock = injector.getInstance(Clock.class);
+        this.cookieEncryption = injector.getInstance(CookieEncryption.class);
     }
 
     @Override
     public void handleRequest(HttpServerExchange exchange) throws Exception {
-        // create Ninja compatible context element
-        UndertowContext undertowContext
-                = (UndertowContext) injector.getProvider(Context.class).get();
+        // create compatible context element
+        UndertowContext undertowContext =
+                new UndertowContext(
+                        bodyParserEngineManager,
+                        settings,
+                        new ValidationImpl(),
+                        paramParsers,
+                        new FlashScopeImpl(settings),
+                        new SessionImpl(crypto, cookieEncryption, settings, clock));
 
         // initialize it
         undertowContext.init(exchange, settings.getContextPath());
 
-        // invoke routeHandler on it
-        routeHandler.handleRequest(undertowContext);
+        // invoke requestHandler on it
+        requestHandler.handleRequest(undertowContext);
     }
 
 }

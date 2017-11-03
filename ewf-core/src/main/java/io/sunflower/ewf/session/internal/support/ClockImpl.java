@@ -15,6 +15,9 @@
 
 package io.sunflower.ewf.session.internal.support;
 
+/**
+ * @author michael
+ */
 public class ClockImpl implements Clock {
 
     @Override

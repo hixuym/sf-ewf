@@ -19,7 +19,7 @@ import io.sunflower.ewf.Result;
 import java.io.Serializable;
 
 /**
- * Functional interfaces for RouteHandler controller methods accepting up to X number of arguments with
+ * Functional interfaces for RequestHandler controller methods accepting up to X number of arguments with
  * type inference.
  *
  * @author michael

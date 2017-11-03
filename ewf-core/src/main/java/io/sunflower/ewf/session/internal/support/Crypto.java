@@ -24,6 +24,9 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author michael
+ */
 @Singleton
 public class Crypto {
 
@@ -33,8 +36,8 @@ public class Crypto {
      * Secret is a secret key. Usually something like: "Fxu6U5BTGIJZ06c8bD1xkhHc3Ct5JZXlst8tJ1K5uJJPaLdceDo6CUz0iWpjjQUY".
      */
     @Inject
-    public Crypto(Settings configuration) {
-        this.applicationSecret = configuration.getApplicationSecret();
+    public Crypto(Settings settings) {
+        this.applicationSecret = settings.getApplicationSecret();
     }
 
     public String signHmacSha1(String message) {
