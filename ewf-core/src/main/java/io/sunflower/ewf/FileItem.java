@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package io.sunflower.ewf.uploads;
+package io.sunflower.ewf;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,27 +32,32 @@ public interface FileItem {
      * Returns the original filename in the client's filesystem, as provided by the browser (or other
      * client software). In most cases, this will be the base file name, without path information.
      * However, some clients, such as the Opera browser, do include path information.
+     * @return
      */
     String getFileName();
 
     /**
      * Returns an {@link java.io.InputStream InputStream} that can be used to retrieve the contents of
      * the file.
+     * @return
      */
     InputStream getInputStream();
 
     /**
      * Returns an {@link File} that can be used to retrieve the contents of the file.
+     * @return
      */
     File getFile();
 
     /**
      * Returns the content type passed by the browser or <code>null</code> if not defined.
+     * @return
      */
     String getContentType();
 
     /**
      * Returns the file item headers.
+     * @return
      */
     Map<String, String> getHeaders();
 

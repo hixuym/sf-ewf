@@ -15,7 +15,7 @@
 package io.sunflower.ewf.undertow.support;
 
 import io.sunflower.ewf.internal.ParameterFileItem;
-import io.sunflower.ewf.uploads.FileItem;
+import io.sunflower.ewf.FileItem;
 import io.undertow.server.handlers.form.FormData.FormValue;
 import io.undertow.util.HeaderValues;
 

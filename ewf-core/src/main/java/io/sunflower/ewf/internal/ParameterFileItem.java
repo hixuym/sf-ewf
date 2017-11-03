@@ -17,7 +17,8 @@ package io.sunflower.ewf.internal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
-import io.sunflower.ewf.uploads.FileItem;
+import com.google.common.net.HttpHeaders;
+import io.sunflower.ewf.FileItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +82,7 @@ public class ParameterFileItem implements FileItem {
      */
     @Override
     public String getContentType() {
-        return headers.get("Content-Type");
+        return headers.get(HttpHeaders.CONTENT_TYPE);
     }
 
     /**

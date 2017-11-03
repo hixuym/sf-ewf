@@ -21,7 +21,6 @@ import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.spi.BodyParserEngine;
 import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.uploads.FileItem;
 import io.sunflower.ewf.validation.Validation;
 
 import java.io.BufferedReader;

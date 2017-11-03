@@ -14,7 +14,6 @@
  */
 package io.sunflower.ewf.servlet;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
@@ -33,13 +32,10 @@ import io.sunflower.ewf.support.AbstractContext;
 import io.sunflower.ewf.support.Constants;
 import io.sunflower.ewf.support.ResponseStreams;
 import io.sunflower.ewf.support.Settings;
-import io.sunflower.ewf.uploads.FileItem;
+import io.sunflower.ewf.FileItem;
 import io.sunflower.ewf.validation.Validation;
 import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

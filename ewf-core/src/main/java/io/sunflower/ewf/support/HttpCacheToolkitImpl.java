@@ -33,12 +33,11 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpCacheToolkitImpl.class);
 
-    private final Settings configuration;
+    private final Settings settings;
 
     @Inject
-    public HttpCacheToolkitImpl(Settings configuration) {
-        this.configuration = configuration;
-
+    public HttpCacheToolkitImpl(Settings settings) {
+        this.settings = settings;
     }
 
     @Override
@@ -77,10 +76,10 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
     @Override
     public void addEtag(Context context, Result result, Long lastModified) {
 
-        if (!configuration.isProd()) {
+        if (!settings.isProd()) {
             result.addHeader(CACHE_CONTROL, "no-cache");
         } else {
-            String maxAge = configuration.getHttpCacheMaxAge();
+            String maxAge = settings.getHttpCacheMaxAge();
 
             if ("0".equals(maxAge)) {
                 result.addHeader(CACHE_CONTROL, "no-cache");
@@ -92,7 +91,7 @@ public class HttpCacheToolkitImpl implements HttpCacheToolkit {
         // Use etag on demand:
         String etag = null;
 
-        if (configuration.isEtagEnable()) {
+        if (settings.isEtagEnable()) {
             // ETag right now is only lastModified long.
             // maybe we change that in the future.
             etag = "\""

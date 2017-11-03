@@ -21,6 +21,9 @@ import io.sunflower.ewf.Result;
 
 import java.util.Optional;
 
+/**
+ * @author michael
+ */
 @ImplementedBy(HttpCacheToolkitImpl.class)
 public interface HttpCacheToolkit {
 

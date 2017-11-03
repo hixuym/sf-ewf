@@ -22,7 +22,7 @@ import io.sunflower.ewf.internal.Route;
 import io.sunflower.ewf.session.FlashScope;
 import io.sunflower.ewf.session.Session;
 import io.sunflower.ewf.support.ResponseStreams;
-import io.sunflower.ewf.uploads.FileItem;
+import io.sunflower.ewf.FileItem;
 import io.sunflower.ewf.validation.Validation;
 
 import java.io.BufferedReader;
